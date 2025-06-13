@@ -33,7 +33,7 @@
   <div id="runas-lista"></div>
   <div id="detalle"></div>
 <script>
-const RUNAS_JSON = "runes.json"; // Debe estar generado
+const RUNAS_JSON = "runes.json"; // Archivo JSON generado
 const IMG_DIR = "images/";
 
 let runas = [];
@@ -48,7 +48,7 @@ function mostrarDetalle(runa) {
     </div>
     <h2>${runa.nombre}${runa.letra ? ' <span style="color:#b3983d;font-size:0.6em;">['+runa.letra+']</span>' : ''}</h2>
     <div class="campo">Clave:</div>
-    <div class="texto">${runa.subnombre || runa.palabra_clave || ''}</div>
+    <div class="texto">${runa.subnombre || ''}</div>
     <div class="campo">Significado:</div>
     <div class="texto">${runa.significado || ''}</div>
     ${runa.detalle ? '<div class="campo">Detalle:</div><div class="texto">'+runa.detalle+'</div>' : ''}
@@ -73,7 +73,7 @@ fetch(RUNAS_JSON)
       card.innerHTML = `
         <img src="${IMG_DIR}${runa.imagen || 'no-disponible.png'}" alt="${runa.nombre}">
         <div class="nombre">${runa.nombre}</div>
-        <div class="clave">${runa.subnombre || runa.palabra_clave || ''}</div>
+        <div class="clave">${runa.subnombre || ''}</div>
       `;
       lista.appendChild(card);
     });
