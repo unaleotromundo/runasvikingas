@@ -1,137 +1,69 @@
-const RUNA_NAMES = [
-  "FEHU", "URUZ", "THURISAZ", "ANSUZ", "RAIDHO", "KAUNAZ", "GEBO", "WUNJO",
-  "HAGALAZ", "NAUDHIZ", "ISA", "JERA", "EIHWAZ", "PERDHRO", "ALGIZ", "SOWILO",
-  "TIWAZ", "BERKANO", "EHWAZ", "MANNAZ", "LAGUZ", "INGWAZ", "DAGAZ", "OTHALAZ"
-];
-const IMAGE_FORMATS = ['png','jpg','jpeg','svg','webp'];
-
-function getRunaImgTag(name, className = 'runa-img') {
-  const src = `images/${name}.png`;
-  return `<img src="${src}" loading="lazy" alt="Runa ${name}" class="${className}" 
-    onerror="this.onerror=null;this.style.display='none';this.insertAdjacentHTML('afterend', window.backupRunaSVG('${name}','${className}'));">`;
+function getRunaImgTag(runa, className = '') {
+  const src = "images/" + (runa.imagen || (runa.nombre.toLowerCase() + '.png'));
+  return `<img src="${src}" alt="Runa ${runa.nombre}" class="${className}"
+    onerror="this.onerror=null;this.style.display='none';this.insertAdjacentHTML('afterend',window.backupRunaSVG('${runa.nombre}','${className}'));">`;
 }
-window.backupRunaSVG = (name, className='runa-img') =>
-  `<svg class="${className}" width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="#efe4c3" stroke="#b3983d" stroke-width="3"/><text x="50%" y="58%" text-anchor="middle" font-size="1.9em" font-family="Montserrat" fill="#b3983d" font-weight="bold">${name[0]}</text></svg>`;
+window.backupRunaSVG = (nombre, className='') =>
+  `<svg class="${className}" width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="#efe4c3" stroke="#b3983d" stroke-width="3"/><text x="50%" y="58%" text-anchor="middle" font-size="1.9em" font-family="Montserrat" fill="#b3983d" font-weight="bold">${nombre[0].toUpperCase()}</text></svg>`;
 
-function detectarSecciones(raw) {
-  const lines = raw.split(/\r?\n/);
-  let secciones = [], buffer = [], current = { name: "INICIO", lines: [] };
-  function pushCurrent() {
-    if (buffer.join('\n').trim().length > 10)
-      secciones.push({ name: current.name, content: buffer.join('\n').trim() });
-    buffer = [];
-  }
-  for (let i = 0; i < lines.length; ++i) {
-    const l = lines[i].trim();
-    const runaMatch = RUNA_NAMES.find(r => l.toUpperCase().startsWith(r + ',') || l.toUpperCase().startsWith(r + ' '));
-    const capituloMatch = l.match(/^(Dedicatorias|Pr[óo]logo|Indice|Primera parte|Segunda parte|Tercera parte|Recorrido por el primer octeto|Octeto \d|Pasaje por las últimas ocho runas|Visi[óo]n del p[óo]rtico|Que las runas te murmuren el secreto)/i);
-    const tiradaMatch = l.toUpperCase().includes("TIRADA");
-    const ritualMatch = l.toUpperCase().includes("RITUAL");
-
-    if (runaMatch) {
-      pushCurrent(); current = { name: `RUNA_${runaMatch}`, lines: [] };
-    } else if (tiradaMatch && !current.name.startsWith("TIRADAS")) {
-      pushCurrent(); current = { name: "TIRADAS", lines: [] };
-    } else if (ritualMatch && !current.name.startsWith("RITUAL")) {
-      pushCurrent(); current = { name: "RITUALES", lines: [] };
-    } else if (capituloMatch) {
-      pushCurrent(); current = { name: capituloMatch[1].toUpperCase().replace(/ /g, '_'), lines: [] };
-    }
-    buffer.push(lines[i]); current.lines.push(lines[i]);
-  }
-  pushCurrent();
-  return secciones.filter(s => s.content.length > 10);
+function showSection(id) {
+  document.querySelectorAll('.main-section').forEach(s=>s.style.display='none');
+  document.getElementById(id).style.display = '';
+  document.querySelectorAll('#main-nav a').forEach(a=>a.classList.remove('active'));
+  document.querySelector(`#main-nav a[data-section="${id}"]`).classList.add('active');
 }
 
-function buildLibroMenu(secciones) {
-  const menu = document.getElementById('secciones-menu');
-  menu.innerHTML = secciones.map(sec => {
-    if (sec.name === "INICIO") return '';
-    let pretty = sec.name.replace(/^RUNA_/, '').replace(/_/g, ' ');
-    if (sec.name === "TIRADAS") pretty = "Tiradas";
-    if (sec.name === "RITUALES") pretty = "Rituales";
-    return `<a href="#libro-${sec.name}">${pretty.charAt(0).toUpperCase() + pretty.slice(1).toLowerCase()}</a>`;
-  }).join('');
-}
+document.addEventListener('DOMContentLoaded', () => {
+  // Navegación
+  document.querySelectorAll('#main-nav a').forEach(a => {
+    a.onclick = e => {
+      e.preventDefault();
+      showSection(a.dataset.section);
+      window.scrollTo({top:0});
+    };
+  });
 
-function buildLibroContent(secciones) {
-  const main = document.getElementById('libro-content');
-  main.innerHTML = secciones.map(sec => {
-    let pretty = sec.name.replace(/^RUNA_/, '').replace(/_/g, ' ');
-    if (sec.name === "INICIO") return '';
-    let img = '';
-    if (sec.name.startsWith("RUNA_")) {
-      const runa = sec.name.replace(/^RUNA_/, '');
-      img = `<div style="text-align:center;margin-bottom:14px;">${getRunaImgTag(runa,'runa-img-large')}</div>`;
-    }
-    return `<section id="libro-${sec.name}">
-      <h3>${pretty.charAt(0).toUpperCase() + pretty.slice(1).toLowerCase()}</h3>
-      ${img}
-      <div>${sec.content.replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>')}</div>
-    </section>`;
-  }).join('');
-}
-
-function detectarRunasYTextos(txt) {
-  const lines = txt.split(/\r?\n/);
-  let runas = {};
-  let current = null, buffer = [];
-  for (let i = 0; i < lines.length; i++) {
-    const l = lines[i].trim();
-    const runa = RUNA_NAMES.find(rn => l.toUpperCase().startsWith(rn + ',') || l.toUpperCase().startsWith(rn + ' '));
-    if (runa) {
-      if (current) runas[current] = buffer.join('\n').trim();
-      current = runa;
-      buffer = [lines[i]];
-    } else if (current) {
-      buffer.push(lines[i]);
-    }
-  }
-  if (current) runas[current] = buffer.join('\n').trim();
-  return runas;
-}
-
-function mostrarGaleria(runas) {
-  const galeria = document.getElementById('galeria-runas');
-  galeria.innerHTML = RUNA_NAMES.map(name =>
-    `<div class="runa-card">
-      <div class="runa-titulo">${name}</div>
-      ${getRunaImgTag(name)}
-      <div class="runa-content">${(runas[name]||"").replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>')}</div>
-    </div>`).join('');
-}
-
-function runaAzar() {
-  return RUNA_NAMES[Math.floor(Math.random() * RUNA_NAMES.length)];
-}
-
-function mostrarTirada(runas) {
-  const btn = document.getElementById('tirar-runa');
-  const familia = document.getElementById('familia-vikinga');
-  const runaGrande = document.getElementById('runa-grande');
-  const respuesta = document.getElementById('respuesta-tirada');
-  btn.onclick = () => {
+  // Tirada
+  document.getElementById('tirar-runa').onclick = () => {
     const pregunta = document.getElementById('pregunta').value;
-    const runa = runaAzar();
-    runaGrande.innerHTML = getRunaImgTag(runa, 'runa-img-xxl') + '<br><b>' + runa + '</b>';
-    runaGrande.style.display = 'block';
-    familia.classList.add('brillando');
-    setTimeout(() => familia.classList.remove('brillando'), 1800);
-    respuesta.innerHTML = `<blockquote>${(runas[runa]||"").replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>')}</blockquote>`;
-    if (pregunta) {
-      respuesta.innerHTML = `<div style='font-weight:bold;font-size:1.1em;margin-bottom:8px;'>Pregunta: ${pregunta}</div>` + respuesta.innerHTML;
-    }
-    respuesta.scrollIntoView({behavior:'smooth',block:'center'});
+    const runa = runas[Math.floor(Math.random() * runas.length)];
+    let html = getRunaImgTag(runa, 'tirada-img');
+    html += `<div style="font-size:1.2em;font-weight:bold;">${runa.nombre} <span style="color:#b3983d">${runa.subnombre||''}</span></div>`;
+    html += `<div style="margin:8px 0 10px 0;">${runa.significado}</div>`;
+    html += `<div style="font-size:0.98em;">${runa.detalle||''}</div>`;
+    if (runa.invertida && runa.invertida.length > 5) html += `<div style="margin-top:10px;"><b>Invertida:</b> ${runa.invertida}</div>`;
+    if (runa.ritual && runa.ritual.length > 5) html += `<div style="margin-top:10px;"><b>Ritual:</b> ${runa.ritual}</div>`;
+    if (runa.postura_corporal && runa.postura_corporal.length > 5) html += `<div style="margin-top:10px;"><b>Postura corporal:</b> ${runa.postura_corporal}</div>`;
+    if (pregunta) html = `<div style='font-weight:bold;font-size:1.1em;margin-bottom:8px;'>Pregunta: ${pregunta}</div>` + html;
+    document.getElementById('resultado-tirada').innerHTML = html;
   };
-}
 
-fetch('document.txt')
-.then(r=>r.text())
-.then(txt=>{
-  const secciones = detectarSecciones(txt);
-  buildLibroMenu(secciones);
-  buildLibroContent(secciones);
-  const runas = detectarRunasYTextos(txt);
-  mostrarGaleria(runas);
-  mostrarTirada(runas);
+  // Galería - TODO el contenido
+  document.getElementById('galeria-runas').innerHTML = runas.map(r =>
+    `<div class="runa-card">
+      ${getRunaImgTag(r)}
+      <div class="runa-nombre">${r.nombre}</div>
+      <div class="runa-subnombre">${r.subnombre || ''}</div>
+      <div class="runa-content"><b>Letra:</b> ${r.letra || ''}</div>
+      <div class="runa-content"><b>Significado:</b> ${r.significado || ''}</div>
+      <div class="runa-content"><b>Detalle:</b> ${r.detalle || ''}</div>
+      ${r.invertida && r.invertida.length > 3 ? `<div class="runa-content"><b>Invertida:</b> ${r.invertida}</div>` : ""}
+      ${r.ritual && r.ritual.length > 3 ? `<div class="runa-content"><b>Ritual:</b> ${r.ritual}</div>` : ""}
+      ${r.postura_corporal && r.postura_corporal.length > 3 ? `<div class="runa-content"><b>Postura corporal:</b> ${r.postura_corporal}</div>` : ""}
+    </div>`
+  ).join('');
+
+  // Libro: muestra todas las runas con todo su contenido
+  document.getElementById('libro-runas').innerHTML = runas.map(r =>
+    `<div class="libro-runa">
+      <h3>${r.nombre}${r.subnombre ? ' – <span style="color:#b3983d">'+r.subnombre+'</span>' : ''}</h3>
+      ${getRunaImgTag(r)}
+      <div><b>Letra:</b> ${r.letra || ''}</div>
+      <div><b>Significado:</b> ${r.significado}</div>
+      <div><b>Detalle:</b> ${r.detalle||''}</div>
+      ${r.invertida && r.invertida.length>5 ? `<div><b>Invertida:</b> ${r.invertida}</div>` : ''}
+      ${r.ritual && r.ritual.length>5 ? `<div><b>Ritual:</b> ${r.ritual}</div>` : ''}
+      ${r.postura_corporal && r.postura_corporal.length>5 ? `<div><b>Postura corporal:</b> ${r.postura_corporal}</div>` : ''}
+    </div>`
+  ).join('');
 });

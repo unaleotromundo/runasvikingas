@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Galería de Runas Vikingas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { background: #f7f6f2; color: #332c23; font-family: 'Roboto', Arial, sans-serif; margin: 0; }
+    h1 { font-family: 'Montserrat', sans-serif; color: #b3983d; text-align: center; margin-top: 32px;}
+    .galeria { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding: 30px; max-width: 1200px; margin: 0 auto;}
+    .runa-card { background: #fff; border-radius: 15px; box-shadow: 0 2px 16px #b3983d16; padding: 13px 13px 19px 13px; border-left: 5px solid #efb84c; }
+    .runa-card img { display:block; margin: 0 auto 10px auto; width: 60px; height: 60px; object-fit: contain; }
+    .runa-nombre { font-family: 'Montserrat', sans-serif; color: #b3983d; font-weight: bold; font-size: 1.15em; text-align: center;}
+    .runa-significado { font-size: 1em; margin: 6px 0 2px 0; }
+    .runa-subnombre { color: #8a752d; font-size: 0.99em; text-align: center; margin: 0 0 7px 0;}
+    @media (max-width: 600px) { .galeria { padding: 3vw; } }
+  </style>
+</head>
+<body>
+  <h1>Galería de Runas Vikingas</h1>
+  <div class="galeria" id="galeria"></div>
+  <script>
+    // Pega aquí tu array de runas, o cárgalo desde runas.js si prefieres
+    const runas = /* PEGA AQUÍ TU ARRAY (el que enviaste arriba) */;
+    // Si lo pones en un archivo aparte, reemplaza la línea de arriba por: import {runas} from './runas.js';
+
+    function getImg(nombre, imagen) {
+      // Busca la imagen en /images/ (nombre debe estar en minúsculas)
+      const src = "images/" + imagen;
+      // Si no existe, muestra un SVG de respaldo con la inicial
+      return `<img src="${src}" alt="Runa ${nombre}" onerror="this.onerror=null;this.style.display='none';this.insertAdjacentHTML('afterend','<svg width=60 height=60><circle cx=30 cy=30 r=28 fill=#efe4c3 stroke=#b3983d stroke-width=3></circle><text x=50% y=58% text-anchor=middle font-size=2em font-family=Montserrat fill=#b3983d font-weight=bold>${nombre[0].toUpperCase()}</text></svg>')">`;
+    }
+
+    document.getElementById('galeria').innerHTML = runas.map(r =>
+      `<div class="runa-card">
+        ${getImg(r.nombre, r.imagen)}
+        <div class="runa-nombre">${r.nombre}</div>
+        <div class="runa-subnombre">${r.subnombre ? r.subnombre : ''}</div>
+        <div class="runa-significado">${r.significado}</div>
+      </div>`
+    ).join('');
+  </script>
+</body>
+</html>

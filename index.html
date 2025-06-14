@@ -2,39 +2,47 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Libro de Runas Vikingas</title>
+  <title>Runas Vikingas | Sistema integral</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="estilos.css">
+  <script defer src="runas.js"></script>
   <script defer src="main.js"></script>
 </head>
 <body>
   <header>
-    <h1>Libro de Runas Vikingas</h1>
-    <nav id="main-nav"></nav>
+    <h1>Runas Vikingas</h1>
+    <nav id="main-nav">
+      <a href="#" data-section="inicio" class="active">Inicio</a>
+      <a href="#" data-section="tirada">Tirada mágica</a>
+      <a href="#" data-section="galeria">Galería</a>
+      <a href="#" data-section="libro">Libro</a>
+    </nav>
   </header>
   <main>
-    <section id="tirada" class="tirada-interactiva">
+    <section id="inicio" class="main-section">
+      <img src="familia-vikinga.jpg" alt="Familia Vikinga" class="familia-img">
+      <h2>Bienvenido al Oráculo de las Runas</h2>
+      <p>Explora el mundo de las runas vikingas: consulta el oráculo, descubre el significado de cada runa y accede al libro completo para profundizar en su sabiduría.</p>
+    </section>
+    <section id="tirada" class="main-section" style="display:none">
       <h2>Tirada mágica de runas</h2>
-      <div class="familia-vikinga" id="familia-vikinga">
-        <img src="familia-vikinga.jpg" alt="Familia Vikinga" id="familia-img">
-        <div class="runa-grande" id="runa-grande" style="display:none"></div>
+      <div class="tirada-box">
+        <input type="text" id="pregunta" placeholder="Haz tu pregunta al oráculo...">
+        <button id="tirar-runa">Tirar la runa</button>
+        <div id="resultado-tirada"></div>
       </div>
-      <div style="text-align:center;">
-        <input type="text" id="pregunta" placeholder="Haz tu pregunta al oráculo..." style="margin-bottom:18px;width:70%;max-width:350px;">
-        <br>
-        <button id="tirar-runa">Tirar las Runas</button>
-      </div>
-      <div class="respuesta-tirada" id="respuesta-tirada"></div>
     </section>
-    <section id="libro">
-      <h2>Libro completo</h2>
-      <nav id="secciones-menu"></nav>
-      <div id="libro-content"></div>
-    </section>
-    <section id="galeria">
+    <section id="galeria" class="main-section" style="display:none">
       <h2>Galería de Runas</h2>
       <div id="galeria-runas"></div>
+    </section>
+    <section id="libro" class="main-section" style="display:none">
+      <h2>Libro de Runas</h2>
+      <div class="libro-intro">
+        <p>Este libro recopila la sabiduría y el uso de las runas, sus posturas, rituales y mensajes para la vida.</p>
+        <div id="libro-runas"></div>
+      </div>
     </section>
   </main>
   <footer>
