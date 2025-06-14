@@ -10,13 +10,32 @@
 </head>
 <body>
   <header>
-    <div class="container">
-      <h1>Runas Vikingas</h1>
-      <nav id="main-nav"></nav>
-    </div>
+    <h1>Libro de Runas Vikingas</h1>
+    <nav id="main-nav"></nav>
   </header>
-  <main id="main-content">
-    <!-- El contenido se genera automáticamente -->
+  <main>
+    <section id="tirada" class="tirada-interactiva">
+      <h2>Tirada mágica de runas</h2>
+      <div class="familia-vikinga" id="familia-vikinga">
+        <img src="familia_vikinga.png" alt="Familia Vikinga" id="familia-img">
+        <div class="runa-grande" id="runa-grande" style="display:none"></div>
+      </div>
+      <div style="text-align:center;">
+        <input type="text" id="pregunta" placeholder="Haz tu pregunta al oráculo..." style="margin-bottom:18px;width:70%;max-width:350px;">
+        <br>
+        <button id="tirar-runa">Tirar las Runas</button>
+      </div>
+      <div class="respuesta-tirada" id="respuesta-tirada"></div>
+    </section>
+    <section id="libro">
+      <h2>Libro completo</h2>
+      <nav id="secciones-menu"></nav>
+      <div id="libro-content"></div>
+    </section>
+    <section id="galeria">
+      <h2>Galería de Runas</h2>
+      <div id="galeria-runas"></div>
+    </section>
   </main>
   <footer>
     <p>&copy; 2025 Cecilia Bergoboy. Proyecto web sobre runas.</p>

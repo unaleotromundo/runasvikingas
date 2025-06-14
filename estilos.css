@@ -1,150 +1,149 @@
-:root {
-  --main-gold: #b3983d;
-  --main-dark: #332c23;
-  --main-bg: #f7f6f2;
-  --white: #fff;
-  --accent: #efb84c;
-  --shadow: 0 4px 24px #b3983d22;
-  --radius: 16px;
-  --card-radius: 22px;
-  --modal-bg: rgba(38,33,24,0.85);
-}
-
 body {
   font-family: 'Roboto', Arial, sans-serif;
-  background: var(--main-bg);
-  color: var(--main-dark);
   margin: 0;
-  padding: 0;
-}
-
-header {
-  background: var(--main-gold);
-  color: var(--white);
-  padding: 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: var(--shadow);
-}
-
-header .container {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 20px 24px 0 24px;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-header h1 {
-  font-family: 'Montserrat', Arial, sans-serif;
-  font-size: 2.4em;
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: 2px;
-  text-shadow: 1px 2px 0 #7c6827aa;
-}
-
-nav {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.nav-btn {
-  background: none;
-  color: #fff;
-  border: 2px solid #fff7;
-  border-radius: 8px;
-  padding: 8px 20px;
-  font-family: 'Montserrat', Arial, sans-serif;
-  font-weight: 600;
-  font-size: 1.07em;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s;
-  cursor: pointer;
-}
-.nav-btn:hover, .nav-btn.active {
-  background: var(--accent);
+  background: #f7f6f2;
   color: #332c23;
-  border-color: var(--accent);
 }
-
+header {
+  background: #b3983d;
+  color: #fff;
+  padding: 0.5em 0 0.5em 0;
+  text-align: center;
+}
+header nav, #secciones-menu {
+  margin-top: 10px;
+  text-align: center;
+}
+header nav a, #secciones-menu a {
+  color: #fff;
+  margin: 0 12px;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 1.1em;
+  background: #b3983d;
+  border-radius: 8px;
+  padding: 5px 14px;
+  transition: background .2s;
+}
+header nav a:hover, #secciones-menu a:hover {
+  text-decoration: underline;
+  background: #efb84c;
+  color: #332c23;
+}
 main {
-  max-width: 1100px;
-  margin: 30px auto 0 auto;
-  padding: 0 16px 60px 16px;
+  max-width: 980px;
+  margin: 20px auto;
+  padding: 0 10px 60px 10px;
 }
-
 h2 {
   font-family: 'Montserrat', Arial, sans-serif;
-  font-weight: 700;
-  font-size: 2em;
-  margin-top: 36px;
-  margin-bottom: 16px;
-  color: var(--main-gold);
-  text-shadow: 1px 2px 0 #b3983d18;
-  letter-spacing: 1.6px;
+  color: #b3983d;
+  margin-top: 30px;
+  margin-bottom: 12px;
+  font-size: 1.7em;
 }
-
-.seccion {
-  margin-bottom: 36px;
+.tirada-interactiva {
+  background: #fdf6e4;
+  border-radius: 24px;
+  padding: 28px 0 24px 0;
+  margin-bottom: 32px;
+  box-shadow: 0 6px 32px #b3983d18;
 }
-
-.galeria-runas {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
-  gap: 28px;
-  margin-bottom: 30px;
-}
-
-.runa-card {
-  background: var(--white);
-  border-radius: var(--card-radius);
-  box-shadow: 0 2px 16px #b3983d22;
-  margin: 0;
-  padding: 18px 22px 18px 22px;
-  border-left: 5px solid var(--main-gold);
+.familia-vikinga {
   position: relative;
-  transition: box-shadow 0.23s;
+  width: 380px; height: 300px;
+  margin: 0 auto 16px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-.runa-card .runa-titulo {
-  font-family: 'Montserrat', Arial, sans-serif;
-  font-size: 1.3em;
-  color: var(--main-gold);
-  margin: 0;
+.familia-vikinga img {
+  width: 100%; height: auto;
+  transition: filter 0.8s;
+  border-radius: 18px;
+  box-shadow: 0 2px 32px #b3983d33;
 }
-
-.runa-card .runa-content {
-  margin-top: 14px;
-  font-size: 1.04em;
-  line-height: 1.55;
-  white-space: pre-wrap;
+.familia-vikinga.brillando img {
+  filter: drop-shadow(0 0 48px #ffe066) brightness(1.22);
+  animation: brillar 1.2s ease-in;
 }
-
-blockquote, .relato, .texto-autora {
+@keyframes brillar {
+  0% { filter: brightness(1) drop-shadow(0 0 0 #ffe066);}
+  60% { filter: brightness(1.4) drop-shadow(0 0 48px #fff4b3);}
+  100% { filter: brightness(1.2) drop-shadow(0 0 16px #ffe066);}
+}
+.runa-grande {
+  position: absolute;
+  left: 50%; top: 53%;
+  transform: translate(-50%,-50%);
+  font-size: 3.5em;
+  background: #fff8e6;
+  border-radius: 19px;
+  padding: 14px 28px;
+  box-shadow: 0 8px 32px #b3983d44;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: saltar 0.75s;
+  border: 2px solid #b3983d44;
+  z-index: 2;
+}
+@keyframes saltar {
+  0% { transform: translate(-50%,60%) scale(0.7);}
+  60% { transform: translate(-50%,-60%) scale(1.15);}
+  100% { transform: translate(-50%,-50%) scale(1);}
+}
+.respuesta-tirada {
+  margin: 32px 0 10px 0;
+  font-size: 1.08em;
+  background: #fff8ea;
+  border-radius: 19px;
+  box-shadow: 0 0 0 #0000;
+  padding: 22px;
+  min-height: 80px;
+  text-align: center;
+}
+blockquote {
   background: #f3ede0;
   border-left: 5px solid #b3983d;
-  margin: 18px 0 8px 0;
-  padding: 13px 18px;
+  padding: 11px 14px;
+  margin: 0 0 8px 0;
   font-style: italic;
   color: #6a5a2b;
   border-radius: 9px;
+  font-size: 1.11em;
 }
-
-.tiradas-block {
-  background: #fff8e4;
-  border-radius: var(--card-radius);
-  box-shadow: 0 2px 16px #b3983d22;
-  margin: 18px 0;
-  padding: 24px 26px 24px 26px;
-  border-left: 5px solid var(--main-gold);
-  font-size: 1.07em;
+#galeria-runas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 40px;
 }
-
+.runa-card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 2px 16px #b3983d1a;
+  padding: 13px 11px 13px 11px;
+  border-left: 5px solid #b3983d;
+  margin-bottom: 0;
+}
+.runa-card .runa-titulo {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 1.1em;
+  color: #b3983d;
+  margin: 0 0 7px 0;
+  text-align: center;
+}
+.runa-card .runa-img {
+  display: block;
+  margin: 0 auto 6px auto;
+  height: 54px;
+}
+.runa-card .runa-content {
+  font-size: 0.98em;
+  text-align: left;
+}
 footer {
   background: #ede1be;
   color: #7c6827;
@@ -155,12 +154,20 @@ footer {
   margin-top: 50px;
   letter-spacing: 0.2px;
 }
-
-@media (max-width: 800px) {
-  main { max-width: 99vw; }
-  header .container { flex-direction: column; gap: 8px;}
-  .galeria-runas { grid-template-columns: 1fr; }
+#libro-content section {
+  margin-bottom: 36px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px #b3983d12;
+  padding: 18px 18px 11px 18px;
+  border-left: 5px solid #efb84c;
+}
+#libro-content h3 {
+  color: #b3983d;
+  font-family: 'Montserrat', Arial, sans-serif;
+  margin-top: 0;
 }
 @media (max-width: 600px) {
-  .runa-card, .tiradas-block { padding: 13px 7px 12px 12px; }
+  .familia-vikinga { width: 97vw; height: 190px; }
+  .runa-grande { font-size: 2.1em; padding: 7px 7px;}
 }
