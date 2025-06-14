@@ -1,0 +1,230 @@
+<section class="seccion" id="tiradas">
+  <h2 class="resaltado" id="tiradas-titulo">Tiradas de Runas</h2>
+  <div>
+    <label for="tipo-tirada" id="tipo-tirada-label"><b>Tipo de tirada:</b></label>
+    <select id="tipo-tirada">
+      <option value="1">Tirada de una runa</option>
+      <option value="3">Tirada de tres runas</option>
+      <option value="cruz">Cruz rúnica (5 runas)</option>
+    </select>
+    <label style="margin-left:2em;">
+      <input type="checkbox" id="incluir-invertidas" checked>
+      <span id="label-invertidas">Permitir runas invertidas</span>
+    </label>
+    <button id="tirar-runas">Tirar runas</button>
+  </div>
+  <div id="resultado-tirada" style="margin-top:2em;"></div>
+</section>
+<script>
+const LANGS = {
+  es: {
+    "tiradas-titulo": "Tiradas de Runas",
+    "tipo-tirada-label": "Tipo de tirada:",
+    "label-invertidas": "Permitir runas invertidas",
+    "tirar-runas": "Tirar runas",
+    "invertida-label": "Invertida",
+    posiciones: ["Pasado", "Presente", "Futuro", "Ayuda", "Situación Actual", "Dificulta", "Futuro"]
+  },
+  en: {
+    "tiradas-titulo": "Rune Spreads",
+    "tipo-tirada-label": "Spread type:",
+    "label-invertidas": "Allow reversed runes",
+    "tirar-runas": "Draw runes",
+    "invertida-label": "Reversed",
+    posiciones: ["Past", "Present", "Future", "Help", "Present", "Obstacle", "Future"]
+  },
+  pt: {
+    "tiradas-titulo": "Tiragens de Runas",
+    "tipo-tirada-label": "Tipo de tiragem:",
+    "label-invertidas": "Permitir runas invertidas",
+    "tirar-runas": "Sortear runas",
+    "invertida-label": "Invertida",
+    posiciones: ["Passado", "Presente", "Futuro", "Ajuda", "Situação Atual", "Dificulta", "Futuro"]
+  },
+  fr: {
+    "tiradas-titulo": "Tirages de Runes",
+    "tipo-tirada-label": "Type de tirage :",
+    "label-invertidas": "Permettre les runes inversées",
+    "tirar-runas": "Tirer les runes",
+    "invertida-label": "Renversée",
+    posiciones: ["Passé", "Présent", "Futur", "Aide", "Situation Actuelle", "Difficulté", "Futur"]
+  },
+  de: {
+    "tiradas-titulo": "Runen-Ziehungen",
+    "tipo-tirada-label": "Ziehungsart:",
+    "label-invertidas": "Umgekehrte Runen zulassen",
+    "tirar-runas": "Runen ziehen",
+    "invertida-label": "Umgekehrt",
+    posiciones: ["Vergangenheit", "Gegenwart", "Zukunft", "Hilfe", "Gegenwart", "Hindernis", "Zukunft"]
+  }
+};
+const RUNAS = [
+  {
+    key: "fehu",
+    es: {
+      nombre: "Fehu", significado: "Riqueza, inicio, fertilidad",
+      desc: "Representa el ganado, la riqueza, los inicios y la energía creadora.",
+      invertido: "Pérdida material, estancamiento, codicia."
+    },
+    en: {
+      nombre: "Fehu", significado: "Wealth, beginning, fertility",
+      desc: "Represents cattle, wealth, beginnings, and creative energy.",
+      invertido: "Material loss, stagnation, greed."
+    },
+    pt: {
+      nombre: "Fehu", significado: "Riqueza, início, fertilidade",
+      desc: "Representa o gado, a riqueza e a energia criadora.",
+      invertido: "Perda material, estagnação, ganância."
+    },
+    fr: {
+      nombre: "Fehu", significado: "Richesse, début, fertilité",
+      desc: "Représente le bétail, la richesse, les débuts et l’énergie créatrice.",
+      invertido: "Perte matérielle, stagnation, avidité."
+    },
+    de: {
+      nombre: "Fehu", significado: "Reichtum, Anfang, Fruchtbarkeit",
+      desc: "Steht für Vieh, Reichtum, Neubeginn und schöpferische Energie.",
+      invertido: "Materieller Verlust, Stillstand, Gier."
+    }
+  },
+  {
+    key: "uruz",
+    es: {
+      nombre: "Uruz", significado: "Fuerza, vitalidad, salud",
+      desc: "Simboliza la fuerza bruta, la vitalidad y la energía de la vida.",
+      invertido: "Debilidad, inercia, oportunidad perdida."
+    },
+    en: {
+      nombre: "Uruz", significado: "Strength, vitality, health",
+      desc: "Symbolizes raw strength, vitality, and life force.",
+      invertido: "Weakness, inertia, missed opportunity."
+    },
+    pt: {
+      nombre: "Uruz", significado: "Força, vitalidade, saúde",
+      desc: "Simboliza a força bruta e a energia vital.",
+      invertido: "Fraqueza, inércia, oportunidade perdida."
+    },
+    fr: {
+      nombre: "Uruz", significado: "Force, vitalité, santé",
+      desc: "Symbole de force brute, vitalité et énergie de vie.",
+      invertido: "Faiblesse, inertie, occasion manquée."
+    },
+    de: {
+      nombre: "Uruz", significado: "Stärke, Vitalität, Gesundheit",
+      desc: "Symbolisiert rohe Kraft, Vitalität, Lebensenergie.",
+      invertido: "Schwäche, Trägheit, verpasste Chance."
+    }
+  },
+  {
+    key: "thurisaz",
+    es: {
+      nombre: "Thurisaz", significado: "Protección, límite, desafío",
+      desc: "Es la defensa ante peligros, los desafíos y los cambios bruscos.",
+      invertido: "Vulnerabilidad, peligro, impulsividad."
+    },
+    en: {
+      nombre: "Thurisaz", significado: "Protection, boundary, challenge",
+      desc: "Defense against dangers, challenges, and sudden changes.",
+      invertido: "Vulnerability, danger, impulsiveness."
+    },
+    pt: {
+      nombre: "Thurisaz", significado: "Proteção, limite, desafio",
+      desc: "A defesa contra perigos e mudanças repentinas.",
+      invertido: "Vulnerabilidade, risco, impulsividade."
+    },
+    fr: {
+      nombre: "Thurisaz", significado: "Protection, limite, défi",
+      desc: "La défense contre les dangers et les changements soudains.",
+      invertido: "Vulnérabilité, danger, impulsivité."
+    },
+    de: {
+      nombre: "Thurisaz", significado: "Schutz, Grenze, Herausforderung",
+      desc: "Verteidigung gegen Gefahren, Herausforderungen, plötzliche Veränderungen.",
+      invertido: "Verletzlichkeit, Gefahr, Impulsivität."
+    }
+  },
+  {
+    key: "ansuz",
+    es: {
+      nombre: "Ansuz", significado: "Comunicación, inspiración, sabiduría",
+      desc: "La runa de la palabra, el mensaje y la conciencia divina.",
+      invertido: "Malentendidos, engaños, falsa información."
+    },
+    en: {
+      nombre: "Ansuz", significado: "Communication, inspiration, wisdom",
+      desc: "Rune of speech, message, and divine consciousness.",
+      invertido: "Misunderstandings, deception, false information."
+    },
+    pt: {
+      nombre: "Ansuz", significado: "Comunicação, inspiração, sabedoria",
+      desc: "Runa da palavra, mensagem, consciência divina.",
+      invertido: "Mal-entendidos, enganos, falsa informação."
+    },
+    fr: {
+      nombre: "Ansuz", significado: "Communication, inspiration, sagesse",
+      desc: "Rune de la parole, du message, de la conscience divine.",
+      invertido: "Malentendus, tromperies, fausse information."
+    },
+    de: {
+      nombre: "Ansuz", significado: "Kommunikation, Inspiration, Weisheit",
+      desc: "Rune des Wortes, der Botschaft und des göttlichen Bewusstseins.",
+      invertido: "Missverständnisse, Täuschung, falsche Information."
+    }
+  },
+  // ...continúa el listado con las 20 runas restantes, en el mismo formato...
+];
+
+let idioma = document.getElementById('idioma-select')
+  ? document.getElementById('idioma-select').value
+  : "es";
+if (document.getElementById('idioma-select')) {
+  document.getElementById('idioma-select').onchange = function() {
+    idioma = this.value;
+    document.getElementById("tiradas-titulo").textContent = LANGS[idioma]["tiradas-titulo"];
+    document.getElementById("tipo-tirada-label").textContent = LANGS[idioma]["tipo-tirada-label"];
+    document.getElementById("label-invertidas").textContent = LANGS[idioma]["label-invertidas"];
+    document.getElementById("tirar-runas").textContent = LANGS[idioma]["tirar-runas"];
+  };
+}
+
+function tirarRunas(n, permitirInvertidas) {
+  let runas = [];
+  let usados = new Set();
+  while (runas.length < n) {
+    let i = Math.floor(Math.random() * RUNAS.length);
+    if (!usados.has(i)) {
+      usados.add(i);
+      let invertida = permitirInvertidas ? (Math.random()<0.5) : false;
+      runas.push({r:RUNAS[i], invertida});
+    }
+  }
+  return runas;
+}
+document.getElementById('tirar-runas').onclick = function() {
+  const tipo = document.getElementById('tipo-tirada').value;
+  const permitirInvertidas = document.getElementById('incluir-invertidas').checked;
+  let n = 1;
+  let posiciones = [];
+  if (tipo === "3") { n = 3; posiciones = [LANGS[idioma].posiciones[0],LANGS[idioma].posiciones[1],LANGS[idioma].posiciones[2]]; }
+  else if (tipo === "cruz") { n = 5; posiciones = [LANGS[idioma].posiciones[0], LANGS[idioma].posiciones[3], LANGS[idioma].posiciones[4], LANGS[idioma].posiciones[5], LANGS[idioma].posiciones[6]]; }
+  const runas = tirarRunas(n, permitirInvertidas);
+  let html = '';
+  runas.forEach((x, idx) => {
+    const r = x.r[idioma];
+    html += `<div style="margin-bottom:2em;">
+      <div>
+        <img src="images/${x.r.key}.png" alt="${r.nombre}" class="runa-img${x.invertida?' invertida':''}" style="width:70px;height:100px;">
+      </div>
+      <div style="font-weight:bold;font-size:1.2em;margin-top:.7em;">
+        ${r.nombre}${posiciones[idx]? ' - <span style="color:#ffd700">'+posiciones[idx]+'</span>':''}
+        ${x.invertida?`<span class="invertida-label">${LANGS[idioma]["invertida-label"]}</span>`:""}
+      </div>
+      <div style="font-style:italic;color:#7b5c25;">${r.significado}</div>
+      <div style="color:#ccc;margin-top:.5em;">
+        ${x.invertida ? (r.invertido||"<em>No hay interpretación invertida</em>") : r.desc}
+      </div>
+    </div>`;
+  });
+  document.getElementById('resultado-tirada').innerHTML = html;
+};
+</script>

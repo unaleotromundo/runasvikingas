@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Portal Rúnico | Runas, Tiradas y Rituales</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explora el mundo de las runas: libro rúnico, tiradas, rituales, significados y más.">
+  <style>
+    body { margin: 0; background: #232323; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; }
+    header { background: #111; padding: 2em 0 1em 0; text-align: center; position: relative; }
+    h1 { margin: 0; font-size: 2.5em; font-weight: bold; letter-spacing: 0.04em; }
+    nav { margin: 2em auto 0 auto; text-align: center; }
+    nav a { text-decoration: none; color: #fff; background: #444; margin: 0 1em; padding: 0.8em 2.2em; border-radius: 30px; font-size: 1.2em; box-shadow: 0 2px 10px #0004; transition: background 0.2s; display: inline-block; }
+    nav a:hover, nav a:focus { background: #7b5c25; color: #fff; }
+    main { max-width: 1200px; margin: 2em auto; background: #222; border-radius: 14px; box-shadow: 0 6px 32px #0006; padding: 2.5em 2em; }
+    .seccion { margin-bottom: 2.5em; }
+    .seccion h2 { color: #ffd700; font-size: 1.5em; margin-top: 0; }
+    .runas-muestra { display: flex; flex-wrap: wrap; gap: 1.2em; margin-top: 1em; }
+    .runa-img { width: 50px; height: 70px; background: #fff; border-radius: 6px; padding: 8px; box-shadow: 0 1px 6px #0002; object-fit: contain; display: block; margin: auto;}
+    .runa-nombre { font-size: 1em; color: #fff; text-align: center; margin-top: 0.3em; }
+    .pie { text-align: center; color: #bbb; margin: 2em 0 0 0; font-size: 0.97em; }
+    .resaltado { color: #ffd700; }
+    .bloque-ejemplo, .bloque-ritual { background: #1d1d1d; border-left: 5px solid #ffd700; padding: 1em; margin: 1em 0; border-radius: 8px; }
+    .tabla-rapida { width: 100%; border-collapse: collapse; margin: 1.5em 0; }
+    .tabla-rapida th, .tabla-rapida td { border: 1px solid #444; padding: 0.5em; text-align: center; }
+    .tabla-rapida th { background: #333; color: #ffd700; }
+    .tabla-rapida td { background: #272727; }
+    .runas-grid { display: flex; flex-wrap: wrap; gap: 2em; justify-content: center; margin-top:2em; }
+    .runa-card { background: #f9f7f4; border-radius: 8px; box-shadow: 0 1px 6px #0002; padding: 1.5em; width: 220px; text-align: center; color: #222;}
+    .postura-img { width: 80px; height: 110px; background: #eee; border-radius: 6px; padding: 4px; object-fit: contain; display: block; margin: auto;}
+    .runa-significado { color: #795548; font-style: italic; font-size: 1em; margin-bottom: 0.6em; }
+    .runa-desc { font-size: 0.97em; color: #444; }
+    .idioma-switcher {
+      position: absolute; top: 20px; right: 30px; z-index: 10;
+      background: #222; border-radius: 18px; padding: 0.4em 1em;
+      border: 1px solid #ffd700; color: #ffd700; font-weight: bold;
+    }
+    .idioma-switcher select {
+      background: #222; color: #ffd700; border: none; font-size: 1.05em; font-weight: bold;
+    }
+    @media (max-width: 650px) {
+      nav a { display: block; margin: 0.8em auto; width: 90vw; }
+      main { padding: 1.3em 0.3em; }
+      .runas-muestra { justify-content: center; }
+      .runas-grid { flex-direction: column; align-items: center; }
+      .runa-card { width: 90vw; }
+      .idioma-switcher { right: 10px; }
+    }
+    .invertida {
+      filter: grayscale(0.8) brightness(0.7) invert(0.2) rotate(180deg);
+      border: 2px dashed #b16464;
+    }
+    .invertida-label {
+      color: #b16464 !important;
+      font-style: italic;
+      font-size: 1.06em;
+      margin-left: 0.4em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="idioma-switcher">
+      <label for="idioma-select" style="margin-right:0.5em;">🌐</label>
+      <select id="idioma-select">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+        <option value="pt">Português</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+      </select>
+    </div>
+    <h1 id="titulo-pagina">Portal Rúnico</h1>
+    <p id="subtitulo-pagina">Tu acceso a las Runas, Tiradas, Rituales y Sabiduría Nórdica</p>
+    <nav>
+      <a href="#libro" id="nav-libro">Libro de Runas</a>
+      <a href="#tiradas" id="nav-tiradas">Tiradas</a>
+      <a href="#rituales" id="nav-rituales">Rituales</a>
+      <a href="#recursos" id="nav-recursos">Recursos</a>
+    </nav>
+  </header>
+  <main>
+    <section class="seccion" id="intro">
+      <h2 id="bienvenida-titulo">Bienvenido/a</h2>
+      <p id="bienvenida-texto">
+        Explora el fascinante universo de las runas: su origen, significado, usos mágicos y adivinatorios.<br>
+        Accede al <span class="resaltado">libro completo de runas</span>, aprende a hacer <span class="resaltado">tiradas</span> y descubre <span class="resaltado">rituales</span> ancestrales.
+      </p>
+    </section>
+
+    <!-- LIBRO DE RUNAS (solo muestra el grid/carta, traducción por JS) -->
+    <section class="seccion" id="libro">
+      <h2 class="resaltado" id="libro-titulo">Libro de Runas</h2>
+      <div class="runas-muestra" id="runas-muestra"></div>
+      <div class="runas-grid" id="libro-runas-grid"></div>
+    </section>
+
+    <!-- TIRADAS INTERACTIVAS -->
+    <section class="seccion" id="tiradas">
+      <h2 class="resaltado" id="tiradas-titulo">Tiradas de Runas</h2>
+      <div>
+        <label for="tipo-tirada" id="tipo-tirada-label"><b>Tipo de tirada:</b></label>
+        <select id="tipo-tirada">
+          <option value="1">Tirada de una runa</option>
+          <option value="3">Tirada de tres runas</option>
+          <option value="cruz">Cruz rúnica (5 runas)</option>
+        </select>
+        <label style="margin-left:2em;">
+          <input type="checkbox" id="incluir-invertidas" checked>
+          <span id="label-invertidas">Permitir runas invertidas</span>
+        </label>
+        <button id="tirar-runas">Tirar runas</button>
+      </div>
+      <div id="resultado-tirada" style="margin-top:2em;"></div>
+    </section>
+
+    <!-- RITUALES -->
+    <section class="seccion" id="rituales">
+      <h2 class="resaltado" id="rituales-titulo">Rituales con Runas</h2>
+      <div id="rituales-bloques"></div>
+      <p id="rituales-nota">
+        <b>Nota:</b> Puedes crear tus propios rituales combinando runas según su significado y tu intuición.
+      </p>
+    </section>
+
+    <!-- RECURSOS -->
+    <section class="seccion" id="recursos">
+      <h2 class="resaltado" id="recursos-titulo">Recursos Rúnicos</h2>
+      <div id="tabla-recursos"></div>
+      <h2 id="enlaces-utiles-titulo" style="margin-top:2em;">Enlaces útiles</h2>
+      <ul id="enlaces-utiles-lista"></ul>
+    </section>
+  </main>
+  <div class="pie" id="pie-pagina">
+    © 2025 Portal Rúnico. Creado por <a href="https://github.com/unaleotromundo" style="color:#ffd700;">unaleotromundo</a>
+  </div>
+  <script>
+  // Traducciones
+  const LANGS = {
+    es: {
+      name: "Español",
+      "titulo-pagina": "Portal Rúnico",
+      "subtitulo-pagina": "Tu acceso a las Runas, Tiradas, Rituales y Sabiduría Nórdica",
+      "nav-libro": "Libro de Runas",
+      "nav-tiradas": "Tiradas",
+      "nav-rituales": "Rituales",
+      "nav-recursos": "Recursos",
+      "bienvenida-titulo": "Bienvenido/a",
+      "bienvenida-texto": `Explora el fascinante universo de las runas: su origen, significado, usos mágicos y adivinatorios.<br>
+        Accede al <span class="resaltado">libro completo de runas</span>, aprende a hacer <span class="resaltado">tiradas</span> y descubre <span class="resaltado">rituales</span> ancestrales.`,
+      "libro-titulo": "Libro de Runas",
+      "tiradas-titulo": "Tiradas de Runas",
+      "tipo-tirada-label": "Tipo de tirada:",
+      "label-invertidas": "Permitir runas invertidas",
+      "tirar-runas": "Tirar runas",
+      "rituales-titulo": "Rituales con Runas",
+      "rituales-nota": "<b>Nota:</b> Puedes crear tus propios rituales combinando runas según su significado y tu intuición.",
+      "recursos-titulo": "Recursos Rúnicos",
+      "enlaces-utiles-titulo": "Enlaces útiles",
+      "pie-pagina": '© 2025 Portal Rúnico. Creado por <a href="https://github.com/unaleotromundo" style="color:#ffd700;">unaleotromundo</a>',
+      // Para tabla recursos y rituales, ver abajo
+    },
+    en: {
+      name: "English",
+      "titulo-pagina": "Runic Portal",
+      "subtitulo-pagina": "Your gateway to Runes, Spreads, Rituals and Nordic Wisdom",
+      "nav-libro": "Rune Book",
+      "nav-tiradas": "Spreads",
+      "nav-rituales": "Rituals",
+      "nav-recursos": "Resources",
+      "bienvenida-titulo": "Welcome",
+      "bienvenida-texto": `Explore the fascinating world of runes: their origin, meaning, magical and divinatory uses.<br>
+        Access the <span class="resaltado">complete rune book</span>, learn to make <span class="resaltado">spreads</span>, and discover ancient <span class="resaltado">rituals</span>.`,
+      "libro-titulo": "Rune Book",
+      "tiradas-titulo": "Rune Spreads",
+      "tipo-tirada-label": "Spread type:",
+      "label-invertidas": "Allow reversed runes",
+      "tirar-runas": "Draw runes",
+      "rituales-titulo": "Rune Rituals",
+      "rituales-nota": "<b>Note:</b> You can create your own rituals by combining runes according to their meaning and your intuition.",
+      "recursos-titulo": "Rune Resources",
+      "enlaces-utiles-titulo": "Useful links",
+      "pie-pagina": '© 2025 Runic Portal. Created by <a href="https://github.com/unaleotromundo" style="color:#ffd700;">unaleotromundo</a>',
+    },
+    pt: {
+      name: "Português",
+      "titulo-pagina": "Portal Rúnico",
+      "subtitulo-pagina": "Seu acesso às Runas, Tiragens, Rituais e Sabedoria Nórdica",
+      "nav-libro": "Livro de Runas",
+      "nav-tiradas": "Tiragens",
+      "nav-rituales": "Rituais",
+      "nav-recursos": "Recursos",
+      "bienvenida-titulo": "Bem-vindo(a)",
+      "bienvenida-texto": `Explore o fascinante universo das runas: sua origem, significado, usos mágicos e divinatórios.<br>
+        Acesse o <span class="resaltado">livro completo das runas</span>, aprenda a fazer <span class="resaltado">tiragens</span> e descubra <span class="resaltado">rituais</span> ancestrais.`,
+      "libro-titulo": "Livro de Runas",
+      "tiradas-titulo": "Tiragens de Runas",
+      "tipo-tirada-label": "Tipo de tiragem:",
+      "label-invertidas": "Permitir runas invertidas",
+      "tirar-runas": "Sortear runas",
+      "rituales-titulo": "Rituais com Runas",
+      "rituales-nota": "<b>Nota:</b> Você pode criar seus próprios rituais combinando runas conforme o significado e intuição.",
+      "recursos-titulo": "Recursos Rúnicos",
+      "enlaces-utiles-titulo": "Links úteis",
+      "pie-pagina": '© 2025 Portal Rúnico. Criado por <a href="https://github.com/unaleotromundo" style="color:#ffd700;">unaleotromundo</a>',
+    },
+    fr: {
+      name: "Français",
+      "titulo-pagina": "Portail Runique",
+      "subtitulo-pagina": "Votre accès aux Runes, Tirages, Rituels et Sagesse Nordique",
+      "nav-libro": "Livre des Runes",
+      "nav-tiradas": "Tirages",
+      "nav-rituales": "Rituels",
+      "nav-recursos": "Ressources",
+      "bienvenida-titulo": "Bienvenue",
+      "bienvenida-texto": `Découvrez l’univers fascinant des runes : leur origine, signification, usages magiques et divinatoires.<br>
+        Accédez au <span class="resaltado">livre complet des runes</span>, apprenez à faire des <span class="resaltado">tirages</span> et découvrez des <span class="resaltado">rituels</span> ancestraux.`,
+      "libro-titulo": "Livre des Runes",
+      "tiradas-titulo": "Tirages de Runes",
+      "tipo-tirada-label": "Type de tirage :",
+      "label-invertidas": "Permettre les runes inversées",
+      "tirar-runas": "Tirer les runes",
+      "rituales-titulo": "Rituels avec Runes",
+      "rituales-nota": "<b>Note :</b> Vous pouvez créer vos propres rituels en combinant les runes selon leur signification et votre intuition.",
+      "recursos-titulo": "Ressources Runiques",
+      "enlaces-utiles-titulo": "Liens utiles",
+      "pie-pagina": '© 2025 Portail Runique. Créé par <a href="https://github.com/unaleotromundo" style="color:#ffd700;">unaleotromundo</a>',
+    },
+    de: {
+      name: "Deutsch",
+      "titulo-pagina": "Runen-Portal",
+      "subtitulo-pagina": "Dein Zugang zu Runen, Ziehungen, Ritualen und nordischer Weisheit",
+      "nav-libro": "Runenbuch",
+      "nav-tiradas": "Ziehungen",
+      "nav-rituales": "Rituale",
+      "nav-recursos": "Ressourcen",
+      "bienvenida-titulo": "Willkommen",
+      "bienvenida-texto": `Entdecke die faszinierende Welt der Runen: Herkunft, Bedeutung, magische und wahrsagerische Nutzung.<br>
+        Greife auf das <span class="resaltado">komplette Runenbuch</span> zu, lerne <span class="resaltado">Ziehungen</span> und entdecke <span class="resaltado">Rituale</span>.`,
+      "libro-titulo": "Runenbuch",
+      "tiradas-titulo": "Runen-Ziehungen",
+      "tipo-tirada-label": "Ziehungsart:",
+      "label-invertidas": "Umgekehrte Runen zulassen",
+      "tirar-runas": "Runen ziehen",
+      "rituales-titulo": "Rituale mit Runen",
+      "rituales-nota": "<b>Hinweis:</b> Du kannst eigene Rituale erschaffen, indem du Runen nach Bedeutung und Intuition kombinierst.",
+      "recursos-titulo": "Runen-Ressourcen",
+      "enlaces-utiles-titulo": "Nützliche Links",
+      "pie-pagina": '© 2025 Runen-Portal. Erstellt von <a href="https://github.com/unaleotromundo" style="color:#ffd700;">unaleotromundo</a>',
+    }
+  };
+
+  // Datos de runas: nombre, img, significado, desc, desc invertida (por idioma)
+  const RUNAS = [
+    {
+      key: "fehu", unicode:"ᚠ",
+      es: {
+        nombre: "Fehu", significado: "Riqueza, inicio, fertilidad",
+        desc: "Representa el ganado, la riqueza, los inicios y la energía creadora.",
+        invertido: "Pérdida material, estancamiento, codicia."
+      }, en: {
+        nombre: "Fehu", significado: "Wealth, beginning, fertility",
+        desc: "Represents cattle, wealth, beginnings, and creative energy.",
+        invertido: "Material loss, stagnation, greed."
+      }, pt: {
+        nombre: "Fehu", significado: "Riqueza, início, fertilidade",
+        desc: "Representa o gado, a riqueza e a energia criadora.",
+        invertido: "Perda material, estagnação, ganância."
+      }, fr: {
+        nombre: "Fehu", significado: "Richesse, début, fertilité",
+        desc: "Représente le bétail, la richesse, les débuts et l’énergie créatrice.",
+        invertido: "Perte matérielle, stagnation, avidité."
+      }, de: {
+        nombre: "Fehu", significado: "Reichtum, Anfang, Fruchtbarkeit",
+        desc: "Steht für Vieh, Reichtum, Neubeginn und schöpferische Energie.",
+        invertido: "Materieller Verlust, Stillstand, Gier."
+      }
+    },
+    {
+      key: "uruz", unicode:"ᚢ",
+      es: {
+        nombre: "Uruz", significado: "Fuerza, vitalidad, salud",
+        desc: "Simboliza la fuerza bruta, la vitalidad y la energía de la vida.",
+        invertido: "Debilidad, inercia, oportunidad perdida."
+      }, en: {
+        nombre: "Uruz", significado: "Strength, vitality, health",
+        desc: "Symbolizes raw strength, vitality, and life force.",
+        invertido: "Weakness, inertia, missed opportunity."
+      }, pt: {
+        nombre: "Uruz", significado: "Força, vitalidade, saúde",
+        desc: "Simboliza a força bruta e a energia vital.",
+        invertido: "Fraqueza, inércia, oportunidade perdida."
+      }, fr: {
+        nombre: "Uruz", significado: "Force, vitalité, santé",
+        desc: "Symbole de force brute, vitalité et énergie de vie.",
+        invertido: "Faiblesse, inertie, occasion manquée."
+      }, de: {
+        nombre: "Uruz", significado: "Stärke, Vitalität, Gesundheit",
+        desc: "Symbolisiert rohe Kraft, Vitalität, Lebensenergie.",
+        invertido: "Schwäche, Trägheit, verpasste Chance."
+      }
+    },
+    {
+      key: "thurisaz", unicode:"ᚦ",
+      es: {
+        nombre: "Thurisaz", significado: "Protección, límite, desafío",
+        desc: "Es la defensa ante peligros, los desafíos y los cambios bruscos.",
+        invertido: "Vulnerabilidad, peligro, impulsividad."
+      }, en: {
+        nombre: "Thurisaz", significado: "Protection, boundary, challenge",
+        desc: "Defense against dangers, challenges, and sudden changes.",
+        invertido: "Vulnerability, danger, impulsiveness."
+      }, pt: {
+        nombre: "Thurisaz", significado: "Proteção, limite, desafio",
+        desc: "A defesa contra perigos e mudanças repentinas.",
+        invertido: "Vulnerabilidade, risco, impulsividade."
+      }, fr: {
+        nombre: "Thurisaz", significado: "Protection, limite, défi",
+        desc: "La défense contre les dangers et les changements soudains.",
+        invertido: "Vulnérabilité, danger, impulsivité."
+      }, de: {
+        nombre: "Thurisaz", significado: "Schutz, Grenze, Herausforderung",
+        desc: "Verteidigung gegen Gefahren, Herausforderungen, plötzliche Veränderungen.",
+        invertido: "Verletzlichkeit, Gefahr, Impulsivität."
+      }
+    },
+    // ...continúa para las 21 runas restantes...
+    // Por espacio solo hay 3, pero sigue el mismo formato, copia las traducciones o pídemelas completitas si las necesitas.
+  ];
+
+  // Ritual y recursos traducibles
+  const RITUALES = [
+    {
+      es: {titulo:"Ritual de protección", texto:"Traza la runa <b>Algiz</b> sobre una vela blanca. Visualiza una luz que te rodea.<br>Enciende la vela pidiendo protección a los dioses y tu Yo Superior."},
+      en: {titulo:"Protection ritual", texto:"Draw the rune <b>Algiz</b> on a white candle. Visualize a light surrounding you.<br>Light the candle asking for protection from the gods and your Higher Self."},
+      pt: {titulo:"Ritual de proteção", texto:"Trace a runa <b>Algiz</b> em uma vela branca. Visualize uma luz ao seu redor.<br>Acenda a vela pedindo proteção aos deuses e ao seu Eu Superior."},
+      fr: {titulo:"Rituel de protection", texto:"Tracez la rune <b>Algiz</b> sur une bougie blanche. Visualisez une lumière vous entourant.<br>Allumez la bougie en demandant la protection des dieux et de votre Soi supérieur."},
+      de: {titulo:"Schutzritual", texto:"Zeichne die Rune <b>Algiz</b> auf eine weiße Kerze. Visualisiere ein Licht, das dich umgibt.<br>Zünde die Kerze an und bitte um Schutz von den Göttern und deinem Höheren Selbst."}
+    },
+    {
+      es: {titulo:"Ritual de prosperidad", texto:"Graba la runa <b>Fehu</b> en una moneda u objeto dorado.<br>Llévalo contigo o colócalo en tu altar para atraer abundancia."},
+      en: {titulo:"Prosperity ritual", texto:"Engrave the rune <b>Fehu</b> on a coin or golden object.<br>Carry it with you or place it on your altar to attract abundance."},
+      pt: {titulo:"Ritual de prosperidade", texto:"Grave a runa <b>Fehu</b> em uma moeda ou objeto dourado.<br>Leve com você ou coloque no altar para atrair abundância."},
+      fr: {titulo:"Rituel de prospérité", texto:"Gravez la rune <b>Fehu</b> sur une pièce ou un objet doré.<br>Portez-la ou placez-la sur votre autel pour attirer l’abondance."},
+      de: {titulo:"Wohlstandsritual", texto:"Graviere die Rune <b>Fehu</b> auf eine Münze oder einen goldenen Gegenstand.<br>Trage sie bei dir oder platziere sie auf deinem Altar, um Wohlstand anzuziehen."}
+    },
+    {
+      es: {titulo:"Ritual de sanación", texto:"Dibuja la runa <b>Berkano</b> sobre agua. Bebe visualizando salud y bienestar.<br>Puedes combinarla con <b>Laguz</b> para potenciar el efecto."},
+      en: {titulo:"Healing ritual", texto:"Draw the rune <b>Berkano</b> over water. Drink visualizing health and well-being.<br>You can combine it with <b>Laguz</b> for greater effect."},
+      pt: {titulo:"Ritual de cura", texto:"Desenhe a runa <b>Berkano</b> sobre a água. Beba visualizando saúde e bem-estar.<br>Pode combinar com <b>Laguz</b> para potencializar."},
+      fr: {titulo:"Rituel de guérison", texto:"Dessinez la rune <b>Berkano</b> sur de l’eau. Buvez en visualisant la santé et le bien-être.<br>Peut être combiné avec <b>Laguz</b>."},
+      de: {titulo:"Heilritual", texto:"Zeichne die Rune <b>Berkano</b> auf Wasser. Trinke und visualisiere Gesundheit und Wohlbefinden.<br>Kann mit <b>Laguz</b> kombiniert werden."}
+    },
+    {
+      es: {titulo:"Consagración de runas", texto:"Pasa tus runas por humo de incienso, visualizando que se cargan de energía y propósito."},
+      en: {titulo:"Rune consecration", texto:"Pass your runes through incense smoke, visualizing them being charged with energy and purpose."},
+      pt: {titulo:"Consagração das runas", texto:"Passe suas runas na fumaça do incenso, visualizando energia e propósito."},
+      fr: {titulo:"Consécration des runes", texto:"Faites passer vos runes dans la fumée d’encens, visualisant qu’elles se chargent d’énergie."},
+      de: {titulo:"Runenweihung", texto:"Führe deine Runen durch Weihrauchrauch und visualisiere, wie sie mit Energie geladen werden."}
+    }
+  ];
+  const RECURSOS_TABLA = [
+    {key:"fehu", unicode:"ᚠ"},
+    {key:"uruz", unicode:"ᚢ"},
+    {key:"thurisaz", unicode:"ᚦ"},
+    // ...agrega las otras runas igual
+  ];
+  const RECURSOS_SIGN = {
+    es: {
+      fehu:"Riqueza, inicio", uruz:"Fuerza, vitalidad", thurisaz:"Protección, desafío"
+    }, en: {
+      fehu:"Wealth, beginning", uruz:"Strength, vitality", thurisaz:"Protection, challenge"
+    }, pt: {
+      fehu:"Riqueza, início", uruz:"Força, vitalidade", thurisaz:"Proteção, desafio"
+    }, fr: {
+      fehu:"Richesse, début", uruz:"Force, vitalité", thurisaz:"Protection, défi"
+    }, de: {
+      fehu:"Reichtum, Anfang", uruz:"Stärke, Vitalität", thurisaz:"Schutz, Herausforderung"
+    }
+  };
+  const ENLACES = [
+    {es:"Historia de las runas",en:"History of runes",pt:"História das runas",fr:"Histoire des runes",de:"Geschichte der Runen", url:"https://es.wikipedia.org/wiki/Runas"},
+    {es:"Viking Rune",en:"Viking Rune",pt:"Viking Rune",fr:"Viking Rune",de:"Viking Rune", url:"https://www.vikingrune.com/"},
+    {es:"Futhark",en:"Futhark",pt:"Futhark",fr:"Futhark",de:"Futhark", url:"https://www.runemaker.com/futhark/"}
+  ];
+
+  // Render idioma
+  function renderIdioma(lang) {
+    for(const k in LANGS[lang]) {
+      const el = document.getElementById(k);
+      if(el) {
+        if(k.endsWith("-texto") || k.endsWith("-nota")) el.innerHTML = LANGS[lang][k];
+        else el.textContent = LANGS[lang][k];
+      }
+    }
+    // Menú nav
+    document.querySelector('nav #nav-libro').textContent = LANGS[lang]["nav-libro"];
+    document.querySelector('nav #nav-tiradas').textContent = LANGS[lang]["nav-tiradas"];
+    document.querySelector('nav #nav-rituales').textContent = LANGS[lang]["nav-rituales"];
+    document.querySelector('nav #nav-recursos').textContent = LANGS[lang]["nav-recursos"];
+    // Runas muestra
+    document.getElementById('runas-muestra').innerHTML = RUNAS.map(r=>
+      `<div><img class="runa-img" data-runa="${r.key}" alt="${r[lang].nombre}"><div class="runa-nombre">${r[lang].nombre}</div></div>`
+    ).join('');
+    // Libro de runas completo
+    document.getElementById('libro-runas-grid').innerHTML = RUNAS.map(r=>
+      `<article class="runa-card">
+        <img class="runa-img" data-runa="${r.key}" alt="${r[lang].nombre}">
+        <div class="runa-nombre">${r[lang].nombre}</div>
+        <div class="runa-significado">${r[lang].significado}</div>
+        <div class="runa-desc">${r[lang].desc}<br><b>${LANGS[lang]['postura']||'Postura'}:</b></div>
+        <img class="postura-img" data-runa="${r.key}" alt="Postura ${r[lang].nombre}">
+      </article>`
+    ).join('');
+    // Rituales
+    document.getElementById('rituales-bloques').innerHTML = RITUALES.map(r=>`<div class="bloque-ritual"><b>${r[lang].titulo}</b><br>${r[lang].texto}</div>`).join('');
+    // Recursos tabla
+    document.getElementById('tabla-recursos').innerHTML = `<table class="tabla-rapida">
+      <tr><th>Runa</th><th>${LANGS[lang]['nav-libro']}</th><th>${LANGS[lang]['recursos-titulo']}</th></tr>`+
+      RECURSOS_TABLA.map(r=>`<tr><td>${r.unicode}</td><td>${RUNAS.find(x=>x.key===r.key)[lang].nombre}</td><td>${RECURSOS_SIGN[lang][r.key]}</td></tr>`).join('')+
+      `</table>`;
+    // Recursos enlaces
+    document.getElementById('enlaces-utiles-lista').innerHTML = ENLACES.map(l=>`<li><a href="${l.url}" target="_blank" style="color:#ffd700;">${l[lang]}</a></li>`).join('');
+    // Botón tirada
+    document.getElementById('tirar-runas').textContent = LANGS[lang]["tirar-runas"];
+    document.getElementById('tipo-tirada-label').textContent = LANGS[lang]["tipo-tirada-label"];
+    document.getElementById('label-invertidas').textContent = LANGS[lang]["label-invertidas"];
+    // Pie
+    document.getElementById('pie-pagina').innerHTML = LANGS[lang]["pie-pagina"];
+  }
+  // Idioma inicial
+  let idioma = "es";
+  renderIdioma(idioma);
+  document.getElementById('idioma-select').value = idioma;
+  document.getElementById('idioma-select').onchange = function() {
+    idioma = this.value;
+    renderIdioma(idioma);
+  };
+
+  // Imágenes runas y posturas
+  function cargarImagenes() {
+    document.querySelectorAll('img.runa-img[data-runa]').forEach(el => {
+      const nombreRuna = el.getAttribute('data-runa').toLowerCase();
+      el.src = `images/${nombreRuna}.png`;
+      el.onerror = () => { el.alt = "Imagen no encontrada"; el.style.opacity = "0.5"; };
+    });
+    document.querySelectorAll('img.postura-img[data-runa]').forEach(el => {
+      const nombreRuna = el.getAttribute('data-runa').toLowerCase();
+      el.src = `images/posturas/${nombreRuna}.png`;
+      el.onerror = () => { el.alt = "Imagen no encontrada"; el.style.opacity = "0.5"; };
+    });
+  }
+  setTimeout(cargarImagenes, 400); // Para que se rendericen primero
+
+  // TIRADAS INTERACTIVAS
+  const POSICIONES_CRUZ = {
+    es: ["Pasado", "Ayuda", "Situación Actual", "Dificulta", "Futuro"],
+    en: ["Past", "Help", "Present", "Obstacle", "Future"],
+    pt: ["Passado","Ajuda","Situação Atual","Dificulta","Futuro"],
+    fr:["Passé","Aide","Situation Actuelle","Difficulté","Futur"],
+    de:["Vergangenheit","Hilfe","Gegenwart","Hindernis","Zukunft"]
+  };
+  function tirarRunas(n, permitirInvertidas) {
+    let runas = [];
+    let usados = new Set();
+    while (runas.length < n) {
+      let i = Math.floor(Math.random() * RUNAS.length);
+      if (!usados.has(i)) {
+        usados.add(i);
+        let invertida = permitirInvertidas ? (Math.random()<0.5) : false;
+        runas.push({r:RUNAS[i], invertida});
+      }
+    }
+    return runas;
+  }
+  document.getElementById('tirar-runas').onclick = function() {
+    const tipo = document.getElementById('tipo-tirada').value;
+    const permitirInvertidas = document.getElementById('incluir-invertidas').checked;
+    let n = 1;
+    let posiciones = [];
+    if (tipo === "3") { n = 3; posiciones = [LANGS[idioma]["pasado"]||"Pasado",LANGS[idioma]["presente"]||"Presente",LANGS[idioma]["futuro"]||"Futuro"]; }
+    else if (tipo === "cruz") { n = 5; posiciones = POSICIONES_CRUZ[idioma]; }
+    const runas = tirarRunas(n, permitirInvertidas);
+    let html = '';
+    runas.forEach((x, idx) => {
+      const r = x.r[idioma];
+      html += `<div style="margin-bottom:2em;">
+        <div>
+          <img src="images/${x.r.key}.png" alt="${r.nombre}" class="runa-img${x.invertida?' invertida':''}" style="width:70px;height:100px;">
+        </div>
+        <div style="font-weight:bold;font-size:1.2em;margin-top:.7em;">
+          ${r.nombre}${posiciones[idx]? ' - <span style="color:#ffd700">'+posiciones[idx]+'</span>':''}
+          ${x.invertida?`<span class="invertida-label">${LANGS[idioma]["invertida-label"]||"Invertida"}</span>`:""}
+        </div>
+        <div style="font-style:italic;color:#7b5c25;">${r.significado}</div>
+        <div style="color:#ccc;margin-top:.5em;">
+          ${x.invertida ? (r.invertido||"<em>No hay interpretación invertida</em>") : r.desc}
+        </div>
+      </div>`;
+    });
+    document.getElementById('resultado-tirada').innerHTML = html;
+  };
+  // Traducción de invertida
+  for (const l in LANGS) LANGS[l]["invertida-label"] = ({
+    es:"Invertida", en:"Reversed", pt:"Invertida", fr:"Renversée", de:"Umgekehrt"
+  })[l];
+
+  </script>
+</body>
+</html>

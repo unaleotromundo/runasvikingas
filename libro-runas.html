@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Libro de Runas – Portal Rúnico</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #232323; color: #fff; margin: 0; }
+    header { background: #111; color: #fff; text-align: center; padding: 1.8em 0 1em 0; }
+    main { max-width: 1200px; margin: 2em auto; background: #222; border-radius: 10px; box-shadow: 0 4px 24px #0001; padding: 2em; }
+    .runas-grid { display: flex; flex-wrap: wrap; gap: 2em; justify-content: center; }
+    .runa-card { background: #f9f7f4; border-radius: 8px; box-shadow: 0 1px 6px #0002; padding: 1.5em; width: 220px; text-align: center; color: #222;}
+    .runa-svg, .postura-svg { margin: 0 auto 1em auto; display: block; width: 100px; height: 140px; }
+    .postura-svg { width: 80px; height: 110px; }
+    .runa-nombre { font-size: 1.2em; font-weight: bold; letter-spacing: 0.05em; margin-bottom: 0.4em; }
+    .runa-significado { color: #795548; font-style: italic; font-size: 1em; margin-bottom: 0.6em; }
+    .runa-desc { font-size: 0.97em; color: #444; }
+    a.volver { display: inline-block; margin: 1.5em 0 0 0; color: #ffd700; font-size: 1.1em; }
+    @media (max-width: 950px) {
+      .runa-card { width: 46vw; }
+    }
+    @media (max-width: 650px) {
+      .runas-grid { flex-direction: column; align-items: center; }
+      .runa-card { width: 90vw; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Libro de Runas</h1>
+    <nav><a href="index.html" class="volver">← Volver al inicio</a></nav>
+  </header>
+  <main>
+    <section class="runas-grid">
+      <!-- AQUI PEGAS LOS 24 BLOQUES, UNO POR RUNA -->
+      <!-- Ejemplo de bloque para una runa: -->
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="fehu"></div>
+        <div class="runa-nombre">Fehu</div>
+        <div class="runa-significado">Riqueza, inicio, fertilidad</div>
+        <div class="runa-desc">Representa el ganado, la riqueza, los inicios y la energía creadora.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="fehu"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="uruz"></div>
+        <div class="runa-nombre">Uruz</div>
+        <div class="runa-significado">Fuerza, vitalidad, salud</div>
+        <div class="runa-desc">Simboliza la fuerza bruta, la vitalidad y la energía de la vida.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="uruz"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="thurisaz"></div>
+        <div class="runa-nombre">Thurisaz</div>
+        <div class="runa-significado">Protección, límite, desafío</div>
+        <div class="runa-desc">Es la defensa ante peligros, los desafíos y los cambios bruscos.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="thurisaz"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="ansuz"></div>
+        <div class="runa-nombre">Ansuz</div>
+        <div class="runa-significado">Comunicación, inspiración, sabiduría</div>
+        <div class="runa-desc">La runa de la palabra, el mensaje y la conciencia divina.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="ansuz"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="raidho"></div>
+        <div class="runa-nombre">Raidho</div>
+        <div class="runa-significado">Viaje, movimiento justo, ritmo</div>
+        <div class="runa-desc">Representa el viaje físico o espiritual, el ciclo y el movimiento correcto.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="raidho"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="kaunaz"></div>
+        <div class="runa-nombre">Kaunaz</div>
+        <div class="runa-significado">Antorcha, revelación, creatividad</div>
+        <div class="runa-desc">Ilumina, revela lo oculto y da claridad e inspiración.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="kaunaz"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="gebo"></div>
+        <div class="runa-nombre">Gebo</div>
+        <div class="runa-significado">Regalo, intercambio, amor</div>
+        <div class="runa-desc">Es la generosidad, la reciprocidad y las relaciones equilibradas.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="gebo"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="wunjo"></div>
+        <div class="runa-nombre">Wunjo</div>
+        <div class="runa-significado">Alegría, armonía, bienestar</div>
+        <div class="runa-desc">La felicidad, el gozo interior y la realización.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="wunjo"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="hagalaz"></div>
+        <div class="runa-nombre">Hagalaz</div>
+        <div class="runa-significado">Disrupción, transformación, cambio súbito</div>
+        <div class="runa-desc">La fuerza natural que transforma y cambia todo a su paso.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="hagalaz"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="naudhiz"></div>
+        <div class="runa-nombre">Naudhiz</div>
+        <div class="runa-significado">Necesidad, restricción, resistencia</div>
+        <div class="runa-desc">Las dificultades, la superación y el aprendizaje a través de la necesidad.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="naudhiz"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="isa"></div>
+        <div class="runa-nombre">Isa</div>
+        <div class="runa-significado">Hielo, quietud, detención</div>
+        <div class="runa-desc">La inmovilidad, la paciencia y la concentración.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="isa"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="jera"></div>
+        <div class="runa-nombre">Jera</div>
+        <div class="runa-significado">Cosecha, ciclo, recompensa</div>
+        <div class="runa-desc">El tiempo de la retribución, la cosecha y el ciclo anual.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="jera"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="eihwaz"></div>
+        <div class="runa-nombre">Eihwaz</div>
+        <div class="runa-significado">Defensa, tránsito, puente</div>
+        <div class="runa-desc">El eje, la columna vertebral y la transición.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="eihwaz"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="perdhro"></div>
+        <div class="runa-nombre">Perdhro</div>
+        <div class="runa-significado">Destino, misterio, lo oculto</div>
+        <div class="runa-desc">El secreto, el azar y la iniciación.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="perdhro"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="algiz"></div>
+        <div class="runa-nombre">Algiz</div>
+        <div class="runa-significado">Protección, conexión divina, escudo</div>
+        <div class="runa-desc">La defensa espiritual, la guía y la conexión con lo divino.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="algiz"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="sowilo"></div>
+        <div class="runa-nombre">Sowilo</div>
+        <div class="runa-significado">Sol, éxito, realización</div>
+        <div class="runa-desc">La luz, la victoria, el logro y el sentido.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="sowilo"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="tiwaz"></div>
+        <div class="runa-nombre">Tiwaz</div>
+        <div class="runa-significado">Justicia, honor, coraje</div>
+        <div class="runa-desc">El sacrificio, la rectitud y la valentía.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="tiwaz"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="berkano"></div>
+        <div class="runa-nombre">Berkano</div>
+        <div class="runa-significado">Nacimiento, madre, protección</div>
+        <div class="runa-desc">El crecimiento, el nacimiento y la nutrición.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="berkano"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="ehwo"></div>
+        <div class="runa-nombre">Ehwo</div>
+        <div class="runa-significado">Caballo, movimiento, confianza</div>
+        <div class="runa-desc">El viaje, la asociación y la colaboración.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="ehwo"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="mannaz"></div>
+        <div class="runa-nombre">Mannaz</div>
+        <div class="runa-significado">Humanidad, yo, sociedad</div>
+        <div class="runa-desc">El ser humano, la individualidad y la cooperación.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="mannaz"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="laguz"></div>
+        <div class="runa-nombre">Laguz</div>
+        <div class="runa-significado">Agua, intuición, lo inconsciente</div>
+        <div class="runa-desc">La fluidez, la emoción profunda y la conexión con el inconsciente.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="laguz"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="ingwaz"></div>
+        <div class="runa-nombre">Ingwaz</div>
+        <div class="runa-significado">Semilla, potencial, gestación</div>
+        <div class="runa-desc">El inicio de algo nuevo, la fertilidad y la incubación.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="ingwaz"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="dagaz"></div>
+        <div class="runa-nombre">Dagaz</div>
+        <div class="runa-significado">Amanecer, transformación, claridad</div>
+        <div class="runa-desc">El cambio total, el despertar y la revelación.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="dagaz"></div>
+      </article>
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="othalaz"></div>
+        <div class="runa-nombre">Othalaz</div>
+        <div class="runa-significado">Patrimonio, hogar, herencia</div>
+        <div class="runa-desc">El legado, la propiedad, la familia y el sentido de pertenencia.<br><b>Postura:</b></div>
+        <div class="postura-svg" data-runa="othalaz"></div>
+      </article>
+      <!-- FIN DE LOS 24 BLOQUES -->
+    </section>
+    <nav><a href="index.html" class="volver">← Volver al inicio</a></nav>
+  </main>
+  <script src="incrustar-svgs.js"></script>
+</body>
+</html>

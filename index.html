@@ -2,85 +2,130 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Runas Vikingas – Explorador</title>
+  <title>Portal Rúnico</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: 'Marcellus', 'Inter', serif; background: #f5f4ec; color: #212; margin: 0; }
-    h1 { text-align: center; margin-top: 30px; font-family: 'Marcellus', serif; }
-    #runas-lista { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; margin: 30px auto; max-width: 1200px; }
-    .runa-card { background: #fff; border-radius: 18px; box-shadow: 0 4px 18px #cabf8b33; width: 195px; padding: 18px 14px 8px 14px; cursor: pointer; transition: box-shadow .18s; }
-    .runa-card:hover { box-shadow: 0 6px 32px #cabf8b55; background: #f8f7ef;}
-    .runa-card img { width: 100%; height: 110px; object-fit: contain; border-radius: 8px; margin-bottom: 8px; background: #fcf6e3 }
-    .runa-card .nombre { font-family: 'Marcellus', serif; font-size: 1.12em; font-weight: bold; text-align: center; margin-bottom: 6px; }
-    .runa-card .clave { color: #8b7926; font-size: 0.98em; text-align: center; margin-bottom: 5px; }
-    #detalle { max-width: 560px; margin: 45px auto 30px auto; background: #fffbe8; border-radius: 25px; padding: 32px 24px; box-shadow: 0 6px 32px #cfc7a880; display: none;}
-    #detalle h2 { text-align: center; font-size: 1.7em; margin-top: 0; }
-    #detalle .grande { text-align: center; }
-    #detalle img { width: 120px; max-width: 90vw; margin-bottom: 15px; background: #fcf6e3; border-radius: 14px; box-shadow: 0 2px 18px #cabf8b33;}
-    #detalle .campo { margin: 12px 0 6px 0; font-weight: bold; color: #8b7926;}
-    #detalle .texto { margin-bottom: 13px; }
-    #detalle .cerrar { float: right; font-size: 1.3em; cursor: pointer; margin-top: -12px;}
-    @media (max-width: 700px) {
-      #runas-lista { gap: 13px; }
-      .runa-card { width: 140px; padding: 10px 3px 3px 3px;}
+    body { background: #232323; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; margin:0;}
+    header { background: #111; padding: 2em 0 1em 0; text-align: center; position: relative;}
+    h1 { margin: 0; font-size: 2.5em; font-weight: bold; letter-spacing: 0.04em; }
+    nav { margin: 2em auto 0 auto; text-align: center; }
+    nav a { text-decoration: none; color: #fff; background: #444; margin: 0 1em; padding: 0.8em 2.2em; border-radius: 30px; font-size: 1.2em; box-shadow: 0 2px 10px #0004; transition: background 0.2s; display: inline-block; }
+    nav a:hover, nav a:focus { background: #7b5c25; color: #fff; }
+    main { max-width: 1200px; margin: 2em auto; background: #222; border-radius: 14px; box-shadow: 0 6px 32px #0006; padding: 2.5em 2em; }
+    .seccion { margin-bottom: 2.5em; }
+    .seccion h2 { color: #ffd700; font-size: 1.5em; margin-top: 0; }
+    .runas-muestra { display: flex; flex-wrap: wrap; gap: 1.2em; margin-top: 1em; }
+    .runa-img { width: 50px; height: 70px; background: #fff; border-radius: 6px; padding: 8px; box-shadow: 0 1px 6px #0002; object-fit: contain; display: block; margin: auto;}
+    .runa-nombre { font-size: 1em; color: #fff; text-align: center; margin-top: 0.3em; }
+    .pie { text-align: center; color: #bbb; margin: 2em 0 0 0; font-size: 0.97em; }
+    .resaltado { color: #ffd700; }
+    .runas-grid { display: flex; flex-wrap: wrap; gap: 2em; justify-content: center; margin-top:2em; }
+    .runa-card { background: #f9f7f4; border-radius: 8px; box-shadow: 0 1px 6px #0002; padding: 1.5em; width: 220px; text-align: center; color: #222;}
+    .postura-img { width: 80px; height: 110px; background: #eee; border-radius: 6px; padding: 4px; object-fit: contain; display: block; margin: auto;}
+    .runa-significado { color: #795548; font-style: italic; font-size: 1em; margin-bottom: 0.6em; }
+    .runa-desc { font-size: 0.97em; color: #444; }
+    .idioma-switcher {
+      position: absolute; top: 20px; right: 30px; z-index: 10;
+      background: #222; border-radius: 18px; padding: 0.4em 1em;
+      border: 1px solid #ffd700; color: #ffd700; font-weight: bold;
     }
-    @media (max-width: 480px) {
-      #detalle { padding: 9vw 3vw; }
+    .idioma-switcher select {
+      background: #222; color: #ffd700; border: none; font-size: 1.05em; font-weight: bold;
+    }
+    .invertida {
+      filter: grayscale(0.8) brightness(0.7) invert(0.2) rotate(180deg);
+      border: 2px dashed #b16464;
+    }
+    .invertida-label {
+      color: #b16464 !important;
+      font-style: italic;
+      font-size: 1.06em;
+      margin-left: 0.4em;
+    }
+    @media (max-width: 650px) {
+      nav a { display: block; margin: 0.8em auto; width: 90vw; }
+      main { padding: 1.3em 0.3em; }
+      .runas-muestra { justify-content: center; }
+      .runas-grid { flex-direction: column; align-items: center; }
+      .runa-card { width: 90vw; }
+      .idioma-switcher { right: 10px; }
     }
   </style>
 </head>
 <body>
-  <h1>Runas Vikingas</h1>
-  <div id="runas-lista"></div>
-  <div id="detalle"></div>
-<script>
-const RUNAS_JSON = "runes.json"; // Archivo JSON generado
-const IMG_DIR = "images/";
-
-let runas = [];
-const lista = document.getElementById('runas-lista');
-const detalle = document.getElementById('detalle');
-
-function mostrarDetalle(runa) {
-  detalle.innerHTML = `
-    <span class="cerrar" onclick="detalle.style.display='none'">&times;</span>
-    <div class="grande">
-      <img src="${IMG_DIR}${runa.imagen || 'no-disponible.png'}" alt="${runa.nombre}">
+  <header>
+    <div class="idioma-switcher">
+      <label for="idioma-select" style="margin-right:0.5em;">🌐</label>
+      <select id="idioma-select">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+        <option value="pt">Português</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+      </select>
     </div>
-    <h2>${runa.nombre}${runa.letra ? ' <span style="color:#b3983d;font-size:0.6em;">['+runa.letra+']</span>' : ''}</h2>
-    <div class="campo">Clave:</div>
-    <div class="texto">${runa.subnombre || ''}</div>
-    <div class="campo">Significado:</div>
-    <div class="texto">${runa.significado || ''}</div>
-    ${runa.detalle ? '<div class="campo">Detalle:</div><div class="texto">'+runa.detalle+'</div>' : ''}
-    ${runa.invertida ? '<div class="campo">Invertida:</div><div class="texto">'+runa.invertida+'</div>' : ''}
-    ${runa.ritual ? '<div class="campo">Ritual:</div><div class="texto">'+runa.ritual+'</div>' : ''}
-    ${runa.postura_corporal ? '<div class="campo">Postura corporal:</div><div class="texto">'+runa.postura_corporal+'</div>' : ''}
-    ${runa.nombre_alternativo && runa.nombre_alternativo.length ? '<div class="campo">Nombres alternativos:</div><div class="texto">'+runa.nombre_alternativo.join(", ")+'</div>' : ''}
-  `;
-  detalle.style.display = 'block';
-  detalle.scrollIntoView({behavior:"smooth"});
-}
-
-fetch(RUNAS_JSON)
-  .then(r => r.json())
-  .then(data => {
-    runas = data;
-    lista.innerHTML = '';
-    runas.forEach((runa, i) => {
-      const card = document.createElement('div');
-      card.className = 'runa-card';
-      card.onclick = () => mostrarDetalle(runa);
-      card.innerHTML = `
-        <img src="${IMG_DIR}${runa.imagen || 'no-disponible.png'}" alt="${runa.nombre}">
-        <div class="nombre">${runa.nombre}</div>
-        <div class="clave">${runa.subnombre || ''}</div>
-      `;
-      lista.appendChild(card);
-    });
-  })
-  .catch(e => {
-    lista.innerHTML = '<b style="color:#c00;">No se pudo cargar runes.json</b>';
-  });
-</script>
+    <h1 id="titulo-pagina">Portal Rúnico</h1>
+    <p id="subtitulo-pagina">Tu acceso a las Runas, Tiradas, Rituales y Sabiduría Nórdica</p>
+    <nav>
+      <a href="#libro" id="nav-libro">Libro de Runas</a>
+      <a href="#tiradas" id="nav-tiradas">Tiradas</a>
+      <a href="#rituales" id="nav-rituales">Rituales</a>
+      <a href="#recursos" id="nav-recursos">Recursos</a>
+    </nav>
+  </header>
+  <main>
+    <section class="seccion" id="intro">
+      <h2 id="bienvenida-titulo">Bienvenido/a</h2>
+      <p id="bienvenida-texto">
+        Explora el fascinante universo de las runas: su origen, significado, usos mágicos y adivinatorios.<br>
+        Accede al <span class="resaltado">libro completo de runas</span>, aprende a hacer <span class="resaltado">tiradas</span> y descubre <span class="resaltado">rituales</span> ancestrales.
+      </p>
+    </section>
+    <section class="seccion" id="libro">
+      <h2 class="resaltado" id="libro-titulo">Libro de Runas</h2>
+      <div class="runas-muestra" id="runas-muestra"></div>
+      <div class="runas-grid" id="libro-runas-grid"></div>
+    </section>
+    <!-- Tiradas -->
+    <section class="seccion" id="tiradas">
+      <h2 class="resaltado" id="tiradas-titulo">Tiradas de Runas</h2>
+      <div>
+        <label for="tipo-tirada" id="tipo-tirada-label"><b>Tipo de tirada:</b></label>
+        <select id="tipo-tirada">
+          <option value="1">Tirada de una runa</option>
+          <option value="3">Tirada de tres runas</option>
+          <option value="cruz">Cruz rúnica (5 runas)</option>
+        </select>
+        <label style="margin-left:2em;">
+          <input type="checkbox" id="incluir-invertidas" checked>
+          <span id="label-invertidas">Permitir runas invertidas</span>
+        </label>
+        <button id="tirar-runas">Tirar runas</button>
+      </div>
+      <div id="resultado-tirada" style="margin-top:2em;"></div>
+    </section>
+    <section class="seccion" id="rituales">
+      <h2 class="resaltado" id="rituales-titulo">Rituales con Runas</h2>
+      <div id="rituales-bloques"></div>
+      <p id="rituales-nota">
+        <b>Nota:</b> Puedes crear tus propios rituales combinando runas según su significado y tu intuición.
+      </p>
+    </section>
+    <section class="seccion" id="recursos">
+      <h2 class="resaltado" id="recursos-titulo">Recursos Rúnicos</h2>
+      <div id="tabla-recursos"></div>
+      <h2 id="enlaces-utiles-titulo" style="margin-top:2em;">Enlaces útiles</h2>
+      <ul id="enlaces-utiles-lista"></ul>
+    </section>
+  </main>
+  <div class="pie" id="pie-pagina">
+    © 2025 Portal Rúnico. Creado por <a href="https://github.com/unaleotromundo" style="color:#ffd700;">unaleotromundo</a>
+  </div>
+  <script src="runas.js"></script>
+  <script>
+  // ...Aquí va el mismo sistema de traducción/selector/recursos/rituales de mensajes anteriores...
+  // e.g. LANGS, POSICIONES_CRUZ, renderIdioma, cargarImagenes, tiradas interactivas, etc.
+  // Usa el array RUNAS cargado arriba.
+  </script>
 </body>
 </html>

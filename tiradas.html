@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tiradas de Runas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #232323; color: #fff; margin: 0; }
+    header { background: #111; color: #fff; text-align: center; padding: 1.5em 0 1em 0; }
+    main { max-width: 900px; margin: 2em auto; background: #222; border-radius: 10px; box-shadow: 0 4px 24px #0001; padding: 2em; }
+    h2 { color: #ffd700; }
+    a.volver { display: inline-block; margin: 1.5em 0 0 0; color: #ffd700; font-size: 1.1em; }
+    .tirada-ejemplo { background: #1d1d1d; border-left: 5px solid #ffd700; padding: 1em; margin: 1em 0; border-radius: 8px; }
+    .ejemplo-tirada { margin: 1.5em 0; display: flex; flex-wrap: wrap; gap: 1.2em; align-items: center;}
+    .runa-svg { width: 50px; height: 70px; background: #fff; border-radius: 6px; padding: 8px; box-shadow: 0 1px 6px #0002; }
+    .runa-nombre { font-size: 1em; color: #fff; text-align: center; margin-top: 0.3em; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Tiradas de Runas</h1>
+    <nav><a href="index.html" class="volver">← Volver al inicio</a></nav>
+  </header>
+  <main>
+    <h2>¿Cómo se tiran las runas?</h2>
+    <p>
+      Existen muchas formas de consultar las runas. Aquí tienes las tiradas más usadas:
+    </p>
+    <div class="tirada-ejemplo">
+      <b>Tirada de una runa</b><br>
+      Extrae una sola runa para obtener una respuesta clara y directa.<br>
+      <i>Ideal para preguntas de sí/no o consejos rápidos.</i>
+      <div class="ejemplo-tirada">
+        <div>
+          <div class="runa-svg" data-runa="ansuz"></div>
+          <div class="runa-nombre">Ansuz</div>
+        </div>
+      </div>
+    </div>
+    <div class="tirada-ejemplo">
+      <b>Tirada de tres runas</b><br>
+      Extrae tres runas y colócalas en línea:<br>
+      <b>Pasado – Presente – Futuro</b> o <b>Sitio – Desafío – Consejo</b>.
+      <div class="ejemplo-tirada">
+        <div>
+          <div class="runa-svg" data-runa="fehu"></div>
+          <div class="runa-nombre">Fehu<br><span style="font-size:0.95em;color:#ffd700;">Pasado</span></div>
+        </div>
+        <div>
+          <div class="runa-svg" data-runa="mannaz"></div>
+          <div class="runa-nombre">Mannaz<br><span style="font-size:0.95em;color:#ffd700;">Presente</span></div>
+        </div>
+        <div>
+          <div class="runa-svg" data-runa="berkano"></div>
+          <div class="runa-nombre">Berkano<br><span style="font-size:0.95em;color:#ffd700;">Futuro</span></div>
+        </div>
+      </div>
+      <i>Permite ver la evolución de la situación.</i>
+    </div>
+    <div class="tirada-ejemplo">
+      <b>Cruz rúnica</b><br>
+      Coloca cinco runas en cruz:<br>
+      Centro: situación actual<br>
+      Arriba: lo que ayuda<br>
+      Abajo: lo que dificulta<br>
+      Izquierda: pasado<br>
+      Derecha: futuro
+      <div class="ejemplo-tirada" style="flex-wrap:nowrap;gap:2.5em;">
+        <div>
+          <div class="runa-svg" data-runa="naudhiz"></div>
+          <div class="runa-nombre">Pasado</div>
+        </div>
+        <div>
+          <div class="runa-svg" data-runa="jera"></div>
+          <div class="runa-nombre">Ayuda</div>
+        </div>
+        <div>
+          <div class="runa-svg" data-runa="algiz"></div>
+          <div class="runa-nombre">Situación Actual</div>
+        </div>
+        <div>
+          <div class="runa-svg" data-runa="hagalaz"></div>
+          <div class="runa-nombre">Dificulta</div>
+        </div>
+        <div>
+          <div class="runa-svg" data-runa="sowilo"></div>
+          <div class="runa-nombre">Futuro</div>
+        </div>
+      </div>
+      <i>Da un panorama más completo.</i>
+    </div>
+    <div class="tirada-ejemplo">
+      <b>Tirada para consejo</b><br>
+      Pregunta “¿Qué necesito saber?” y extrae una runa para consejo espiritual.
+      <div class="ejemplo-tirada">
+        <div>
+          <div class="runa-svg" data-runa="othalaz"></div>
+          <div class="runa-nombre">Othalaz</div>
+        </div>
+      </div>
+    </div>
+    <p>
+      <b>Consejo:</b> Mezcla bien las runas. Concéntrate en tu pregunta. Saca las runas sin mirar y colócalas sobre una tela o superficie especial.
+    </p>
+    <nav><a href="index.html" class="volver">← Volver al inicio</a></nav>
+  </main>
+  <script src="incrustar-svgs.js"></script>
+</body>
+</html>

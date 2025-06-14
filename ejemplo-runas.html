@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Libro de Runas – Ejemplo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
+    header { background: #333; color: #fff; text-align: center; padding: 1.5em 0; }
+    h1 { margin: 0 0 0.2em 0; }
+    main { max-width: 900px; margin: 2em auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 24px #0001; padding: 2em; }
+    .runas-grid { display: flex; flex-wrap: wrap; gap: 2em; justify-content: center; }
+    .runa-card { background: #f9f7f4; border-radius: 8px; box-shadow: 0 1px 6px #0002; padding: 1.5em; width: 200px; text-align: center; }
+    .runa-svg, .postura-svg { margin: 0 auto 1em auto; display: block; width: 100px; height: 140px; }
+    .postura-svg { width: 80px; height: 110px; }
+    .runa-nombre { font-size: 1.2em; font-weight: bold; letter-spacing: 0.05em; margin-bottom: 0.4em; }
+    .runa-significado { color: #795548; font-style: italic; font-size: 1em; margin-bottom: 0.6em; }
+    .runa-desc { font-size: 0.97em; color: #444; }
+    @media (max-width: 650px) {
+      .runas-grid { flex-direction: column; align-items: center; }
+      .runa-card { width: 90vw; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Libro de Runas</h1>
+    <div>Significado · Símbolo · Postura</div>
+  </header>
+  <main>
+    <section class="runas-grid">
+      <!-- Primera runa de ejemplo -->
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="fehu"></div>
+        <div class="runa-nombre">Fehu</div>
+        <div class="runa-significado">Riqueza, inicio, fertilidad</div>
+        <div class="runa-desc">
+          Fehu representa el ganado y la prosperidad material.<br>
+          <b>Postura:</b>
+        </div>
+        <div class="postura-svg" data-runa="fehu"></div>
+      </article>
+      <!-- Segunda runa de ejemplo -->
+      <article class="runa-card">
+        <div class="runa-svg" data-runa="uruz"></div>
+        <div class="runa-nombre">Uruz</div>
+        <div class="runa-significado">Fuerza, vitalidad, salud</div>
+        <div class="runa-desc">
+          Uruz simboliza fuerza bruta y la energía de la vida.<br>
+          <b>Postura:</b>
+        </div>
+        <div class="postura-svg" data-runa="uruz"></div>
+      </article>
+      <!-- Puedes copiar y pegar más bloques .runa-card cambiando data-runa y el contenido -->
+    </section>
+  </main>
+  <script src="incrustar-svgs.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Portal Rúnico | Runas, Tiradas y Rituales</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explora el mundo de las runas: libro rúnico, tiradas, rituales, significados y más.">
+  <link rel="stylesheet" href="estilos.css">
+  <style>
+    body { margin: 0; background: #232323; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; }
+    header { background: #111; padding: 2em 0 1em 0; text-align: center; }
+    h1 { margin: 0; font-size: 2.5em; font-weight: bold; letter-spacing: 0.04em; }
+    nav { margin: 2em auto 0 auto; text-align: center; }
+    nav a { text-decoration: none; color: #fff; background: #444; margin: 0 1em; padding: 0.8em 2.2em; border-radius: 30px; font-size: 1.2em; box-shadow: 0 2px 10px #0004; transition: background 0.2s; display: inline-block; }
+    nav a:hover, nav a:focus { background: #7b5c25; color: #fff; }
+    main { max-width: 900px; margin: 2em auto; background: #222; border-radius: 14px; box-shadow: 0 6px 32px #0006; padding: 2.5em 2em; }
+    .seccion { margin-bottom: 2.5em; }
+    .seccion h2 { color: #ffd700; font-size: 1.5em; margin-top: 0; }
+    .runas-muestra { display: flex; flex-wrap: wrap; gap: 1.2em; margin-top: 1em; }
+    .runa-svg { width: 50px; height: 70px; background: #fff; border-radius: 6px; padding: 8px; box-shadow: 0 1px 6px #0002; }
+    .runa-nombre { font-size: 1em; color: #fff; text-align: center; margin-top: 0.3em; }
+    .pie { text-align: center; color: #bbb; margin: 2em 0 0 0; font-size: 0.97em; }
+    @media (max-width: 650px) {
+      nav a { display: block; margin: 0.8em auto; width: 90vw; }
+      main { padding: 1.3em 0.3em; }
+      .runas-muestra { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Portal Rúnico</h1>
+    <p>Tu acceso a las Runas, Tiradas, Rituales y Sabiduría Nórdica</p>
+    <nav>
+      <a href="libro-runas.html">Libro de Runas</a>
+      <a href="tiradas.html">Tiradas</a>
+      <a href="rituales.html">Rituales</a>
+      <a href="recursos.html">Más Recursos</a>
+    </nav>
+  </header>
+  <main>
+    <section class="seccion" id="intro">
+      <h2>Bienvenido/a</h2>
+      <p>
+        Explora el fascinante universo de las runas: su origen, significado, usos mágicos y adivinatorios.<br>
+        Accede a tu <b>libro completo de runas</b>, aprende a hacer <b>tiradas</b> para obtener respuestas y guía, y descubre <b>rituales</b> ancestrales.
+      </p>
+    </section>
+    <section class="seccion" id="libro">
+      <h2><a href="libro-runas.html" style="color:#ffd700;text-decoration:none;">Libro de Runas</a></h2>
+      <div class="runas-muestra">
+        <div>
+          <div class="runa-svg" data-runa="fehu"></div>
+          <div class="runa-nombre">Fehu</div>
+        </div>
+        <div>
+          <div class="runa-svg" data-runa="uruz"></div>
+          <div class="runa-nombre">Uruz</div>
+        </div>
+        <div>
+          <div class="runa-svg" data-runa="thurisaz"></div>
+          <div class="runa-nombre">Thurisaz</div>
+        </div>
+        <div>
+          <div class="runa-svg" data-runa="ansuz"></div>
+          <div class="runa-nombre">Ansuz</div>
+        </div>
+        <div>
+          <div class="runa-svg" data-runa="raidho"></div>
+          <div class="runa-nombre">Raidho</div>
+        </div>
+        <div style="align-self:center;font-size:1.4em;">...</div>
+      </div>
+      <p style="margin-top:0.7em;">
+        Consulta el <a href="libro-runas.html" style="color:#ffd700;">libro completo de runas</a> y accede a los símbolos, posturas, significados y usos de las 24 runas del Futhark antiguo.
+      </p>
+    </section>
+    <section class="seccion" id="tiradas">
+      <h2><a href="tiradas.html" style="color:#ffd700;text-decoration:none;">Tiradas de Runas</a></h2>
+      <p>
+        Aprende distintas formas de <b>tirar las runas</b>: tirada simple, de tres runas, cruz rúnica, para preguntas concretas, y más.<br>
+        Ejemplos detallados y consejos para interpretar tus lecturas.
+      </p>
+    </section>
+    <section class="seccion" id="rituales">
+      <h2><a href="rituales.html" style="color:#ffd700;text-decoration:none;">Rituales</a></h2>
+      <p>
+        Descubre rituales prácticos para protección, prosperidad, conexión espiritual y sanación usando runas.<br>
+        Incluye instrucciones paso a paso y recomendaciones de uso.
+      </p>
+    </section>
+    <section class="seccion" id="recursos">
+      <h2><a href="recursos.html" style="color:#ffd700;text-decoration:none;">Más Recursos</a></h2>
+      <p>
+        Accede a tablas de correspondencias, guías descargables, historia de las runas, preguntas frecuentes y enlaces a materiales complementarios.
+      </p>
+    </section>
+  </main>
+  <div class="pie">
+    © 2025 Portal Rúnico. Creado por <a href="https://github.com/unaleotromundo" style="color:#ffd700;">unaleotromundo</a>
+  </div>
+  <script src="incrustar-svgs.js"></script>
+</body>
+</html>
