@@ -6,8 +6,113 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="estilos.css">
-  <script defer src="runas.js"></script>
-  <script defer src="main.js"></script>
+  <style>
+    #galeria-runas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    #galeria-runas > div {
+      flex: 0 0 90px;
+      text-align: center;
+      background: #f9f6f2;
+      border-radius: 8px;
+      padding: 10px 0 8px;
+      margin-bottom: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    @media (max-width: 600px) {
+      #galeria-runas > div {
+        flex: 0 0 30vw;
+        min-width: 80px;
+        max-width: 31vw;
+        font-size: 0.92em;
+      }
+      .tirada-runas-flex { flex-direction: column !important; align-items: center !important; }
+      .tirada-runa-box { min-width: 110px !important; margin-bottom: 15px !important; }
+    }
+    .tirada-runas-flex {
+      display: flex; 
+      gap: 20px; 
+      justify-content: center; 
+      align-items: flex-start; 
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .tirada-runa-box {
+      text-align: center;
+      background: #fafaf7;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding: 12px 8px 10px;
+      min-width: 130px;
+      margin-bottom: 0;
+    }
+    .tirada-pos {
+      font-size: 0.98em;
+      color: #555;
+      font-weight: bold;
+      margin-bottom: 6px;
+      letter-spacing: 0.01em;
+    }
+    .tirada-simbolo {
+      font-size: 2.1em;
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.15em;
+    }
+    .tirada-nombre {
+      font-weight: bold;
+      font-size: 1.13em;
+      margin-bottom: 0.2em;
+      display: block;
+    }
+    .tirada-significado {
+      font-size: 0.98em;
+      margin-bottom: 0.6em;
+      color: #7b5a2b;
+    }
+    .tirada-adivinacion {
+      background: #f5f3eb;
+      padding: 0.8em 0.7em;
+      border-radius: 7px;
+      font-size: 0.98em;
+      margin-top: 0.4em;
+      color: #333;
+    }
+    .tirada-cruz-layout {
+      display: grid;
+      grid-template-areas:
+        ".  arriba ."
+        "izquierda centro derecha"
+        ".  abajo .";
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto auto auto;
+      gap: 8px;
+      justify-items: center;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .tirada-cruz-arriba   { grid-area: arriba; }
+    .tirada-cruz-centro   { grid-area: centro; }
+    .tirada-cruz-abajo    { grid-area: abajo; }
+    .tirada-cruz-izquierda{ grid-area: izquierda; }
+    .tirada-cruz-derecha  { grid-area: derecha; }
+    @media (max-width: 600px) {
+      .tirada-cruz-layout {
+        grid-template-areas:
+          "arriba"
+          "centro"
+          "izquierda"
+          "derecha"
+          "abajo";
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(5, auto);
+      }
+      .tirada-cruz-arriba, .tirada-cruz-centro, .tirada-cruz-abajo, .tirada-cruz-izquierda, .tirada-cruz-derecha { width: 100%; }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -26,12 +131,74 @@
       <p>Explora el mundo de las runas vikingas: consulta el oráculo, descubre el significado de cada runa y accede al libro completo para profundizar en su sabiduría.</p>
     </section>
     <section id="tirada" class="main-section" style="display:none">
-      <h2>Tirada mágica de runas</h2>
-      <div class="tirada-box">
-        <input type="text" id="pregunta" placeholder="Haz tu pregunta al oráculo...">
-        <button id="tirar-runa">Tirar la runa</button>
-        <div id="resultado-tirada"></div>
+      <h2>Ritual de Tirada Mágica de Runas</h2>
+      <div class="pregunta-oraculo" style="margin-bottom: 2em;">
+        <label for="pregunta" style="font-weight:bold;">Haz tu pregunta al oráculo:</label>
+        <input type="text" id="pregunta" placeholder="Escribe tu pregunta..." style="width:90%;max-width:370px;">
       </div>
+      <div class="ritual-ambiente">
+        <p>
+          <b>Prepara tu espacio:</b> Si puedes, enciende una vela y respira profundo.<br>
+          Elige el ritual que más resuene contigo.
+        </p>
+        <div class="tipos-tirada">
+          <button class="tipo-btn active" data-tirada="simple" title="Pregunta concreta, una respuesta directa. Medita y busca la interpretación en el libro de runas.">
+            Una Runa
+          </button>
+          <button class="tipo-btn" data-tirada="tres" title="Tres runas: pasado, presente y futuro, o situación, obstáculo y consejo.">
+            Tres Runas
+          </button>
+          <button class="tipo-btn" data-tirada="cruz" title="Cinco runas (cruz rúnica): centro (tú/ahora), arriba (guía), abajo (raíz), izquierda (obstáculo), derecha (futuro/solución).">
+            Cruz Rúnica
+          </button>
+        </div>
+        <div class="explicacion-tirada" id="explicacion-tirada" style="margin: 1em 0;">
+          <b>Ejemplo — Una Runa:</b> 
+          <ul>
+            <li>Perfecta para una pregunta concreta.</li>
+            <li>Pide claridad, cierra los ojos, respira y haz tu pregunta al oráculo.</li>
+            <li>La runa extraída te dará una respuesta directa. Busca el significado en el <b>Libro de Runas</b> para profundizar.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tirada-box" style="margin-top: 2em;">
+        <button id="iniciar-ritual" disabled>Tirar</button>
+        <div id="tirada-resultado" style="margin-top:2em;"></div>
+        <div class="mensaje-post-tirada" style="display:none;">
+          <p>Da las gracias a las runas por su guía.<br>Vuelve cuando necesites otra respuesta.</p>
+        </div>
+      </div>
+      <!-- Ejemplos de explicación para cada tirada -->
+      <template id="ejemplo-simple">
+        <b>Una Runa:</b>
+        <ul>
+          <li>Perfecta para una pregunta concreta.</li>
+          <li>Pide claridad, cierra los ojos, respira y haz tu pregunta al oráculo.</li>
+          <li>La runa extraída te dará una respuesta directa. Busca el significado en el <b>Libro de Runas</b> para profundizar.</li>
+        </ul>
+      </template>
+      <template id="ejemplo-tres">
+        <b>Tres Runas:</b>
+        <ul>
+          <li>Ideal para explorar una situación más compleja.</li>
+          <li>Extrae tres runas: representan <b>pasado</b>, <b>presente</b> y <b>futuro</b> (o <b>situación</b>, <b>obstáculo</b>, <b>consejo</b>).</li>
+          <li>Medita sobre cada posición y su mensaje, consulta el libro para interpretar cada runa.</li>
+        </ul>
+      </template>
+      <template id="ejemplo-cruz">
+        <b>Cruz Rúnica (cinco runas):</b>
+        <ul>
+          <li>Un ritual profundo para preguntas importantes.</li>
+          <li>Coloca las runas así:<br>
+            <b>Centro:</b> Tú / Ahora<br>
+            <b>Arriba:</b> Guía<br>
+            <b>Abajo:</b> Raíz<br>
+            <b>Izquierda:</b> Obstáculo<br>
+            <b>Derecha:</b> Futuro / Solución
+          </li>
+          <li>Interpreta el mensaje de cada runa y su posición, puedes ampliar consultando el <b>Libro de Runas</b>.</li>
+        </ul>
+      </template>
     </section>
     <section id="galeria" class="main-section" style="display:none">
       <h2>Galería de Runas</h2>
@@ -40,7 +207,7 @@
     <section id="libro" class="main-section" style="display:none">
       <h2>Libro de Runas</h2>
       <div class="libro-intro">
-        <p>Este libro recopila la sabiduría y el uso de las runas, sus posturas, rituales y mensajes para la vida.</p>
+        <p>Este libro recopila la sabiduría y el uso de las runas, sus posturas, rituales y mensajes para la vida. Incluye también información detallada sobre distintos métodos de tirada, como la tirada simple, de tres runas y la cruz rúnica.</p>
         <div id="libro-runas"></div>
       </div>
     </section>
@@ -48,5 +215,206 @@
   <footer>
     <p>&copy; 2025 Cecilia Bergoboy. Proyecto web sobre runas.</p>
   </footer>
+  <script>
+    // --- Runas y Diccionario ---
+    const runas = [
+      { nombre: 'Fehu', simbolo: 'ᚠ', img: 'fehu.png', significado: 'Riqueza, abundancia, inicio de proyectos y recursos.' },
+      { nombre: 'Uruz', simbolo: 'ᚢ', img: 'uruz.png', significado: 'Fuerza vital, poder, salud y energía para superar desafíos.' },
+      { nombre: 'Thurisaz', simbolo: 'ᚦ', img: 'thurisaz.png', significado: 'Desafío, protección, pruebas, oportunidad de aprendizaje.' },
+      { nombre: 'Ansuz', simbolo: 'ᚨ', img: 'ansuz.png', significado: 'Palabra, comunicación, inspiración divina, mensajes.' },
+      { nombre: 'Raidho', simbolo: 'ᚱ', img: 'raidho.png', significado: 'Viaje, movimiento, evolución, camino correcto.' },
+      { nombre: 'Kenaz', simbolo: 'ᚲ', img: 'kenaz.png', significado: 'Luz, creatividad, revelaciones, apertura de caminos.' },
+      { nombre: 'Gebo', simbolo: 'ᚷ', img: 'gebo.png', significado: 'Regalo, intercambio, generosidad, equilibrio en relaciones.' },
+      { nombre: 'Wunjo', simbolo: 'ᚹ', img: 'wunjo.png', significado: 'Alegría, bienestar, éxito, armonía interior.' },
+      { nombre: 'Hagalaz', simbolo: 'ᚺ', img: 'hagalaz.png', significado: 'Cambios bruscos, pruebas, transformación necesaria.' },
+      { nombre: 'Nauthiz', simbolo: 'ᚾ', img: 'nauthiz.png', significado: 'Necesidad, carencia, resistencia, superación de obstáculos.' },
+      { nombre: 'Isa', simbolo: 'ᛁ', img: 'isa.png', significado: 'Estancamiento, pausa, paciencia, introspección.' },
+      { nombre: 'Jera', simbolo: 'ᛃ', img: 'jera.png', significado: 'Ciclo, cosecha, resultados a largo plazo, recompensa.' },
+      { nombre: 'Eihwaz', simbolo: 'ᛇ', img: 'eihwaz.png', significado: 'Resistencia, transformación, conexión con lo profundo.' },
+      { nombre: 'Perthro', simbolo: 'ᛈ', img: 'perthro.png', significado: 'Misterio, destino, intuición, secretos revelados.' },
+      { nombre: 'Algiz', simbolo: 'ᛉ', img: 'algiz.png', significado: 'Protección, guía espiritual, conexión sagrada.' },
+      { nombre: 'Sowilo', simbolo: 'ᛋ', img: 'sowilo.png', significado: 'Éxito, poder solar, claridad, victoria.' },
+      { nombre: 'Tiwaz', simbolo: 'ᛏ', img: 'tiwaz.png', significado: 'Justicia, valentía, sacrificio, integridad.' },
+      { nombre: 'Berkano', simbolo: 'ᛒ', img: 'berkano.png', significado: 'Nacimiento, crecimiento, fertilidad, nuevos comienzos.' },
+      { nombre: 'Ehwaz', simbolo: 'ᛖ', img: 'ehwaz.png', significado: 'Movimiento, progreso, confianza mutua, apoyo.' },
+      { nombre: 'Mannaz', simbolo: 'ᛗ', img: 'mannaz.png', significado: 'Humanidad, cooperación, autoconocimiento, ayuda.' },
+      { nombre: 'Laguz', simbolo: 'ᛚ', img: 'laguz.png', significado: 'Intuición, emociones, flujo, adaptabilidad.' },
+      { nombre: 'Ingwaz', simbolo: 'ᛜ', img: 'ingwaz.png', significado: 'Potencial, paz interna, culminación, descanso.' },
+      { nombre: 'Dagaz', simbolo: 'ᛞ', img: 'dagaz.png', significado: 'Despertar, transformación, nuevos paradigmas.' },
+      { nombre: 'Othala', simbolo: 'ᛟ', img: 'othala.png', significado: 'Herencia, raíces, legado, pertenencia.' }
+    ];
+    const interpretacionesProfundas = {
+      'Fehu': "La energía de Fehu te invita a valorar los recursos presentes y a usarlos con sabiduría. Es momento de reconocer la abundancia en tu vida y actuar con generosidad.",
+      'Uruz': "Uruz representa la fuerza y el coraje que habitan en tu interior. Confía en tu poder para superar cualquier desafío y transforma la adversidad en crecimiento.",
+      'Thurisaz': "Thurisaz señala pruebas necesarias para tu evolución. Enfrenta los obstáculos con conciencia; cada desafío es una oportunidad de aprender y fortalecerte.",
+      'Ansuz': "Ansuz es la voz de la inspiración y la comunicación. Escucha los mensajes que llegan a tu vida, comunícate desde el corazón y permite que la verdad se exprese.",
+      'Raidho': "Raidho habla de un viaje, externo o interno. Confía en el proceso, cada paso es parte del aprendizaje. El movimiento te llevará hacia el equilibrio.",
+      'Kenaz': "Kenaz ilumina aquello que estaba oculto. Es tiempo de crear, de encender tu fuego interior y de dejar que tu luz guíe tu camino.",
+      'Gebo': "Gebo es el símbolo del regalo y el intercambio sano. Da y recibe con amor, busca el equilibrio en tus relaciones y acepta la ayuda que el universo te ofrece.",
+      'Wunjo': "Wunjo anuncia alegría y armonía. Permite que la gratitud y la confianza abran la puerta a la felicidad y el éxito.",
+      'Hagalaz': "Hagalaz aconseja aceptar los cambios repentinos y ver en ellos una oportunidad de transformación. Después de la tormenta, llega la calma.",
+      'Nauthiz': "Nauthiz señala momentos de necesidad. Acepta tus limitaciones y aprende de ellas. La paciencia y la resiliencia son tus aliadas.",
+      'Isa': "Isa te invita a la quietud y la reflexión. No fuerces el avance, aprovecha este tiempo para meditar y reencontrarte.",
+      'Jera': "Jera recompensa el esfuerzo sostenido. Todo ciclo llega a su fin y la cosecha será justa. Confía en los tiempos de la vida.",
+      'Eihwaz': "Eihwaz es transformación profunda. No temas a los cambios radicales; el renacimiento espiritual está cerca.",
+      'Perthro': "Perthro revela misterios y secretos. Confía en tu intuición, hay verdades ocultas que pronto saldrán a la luz.",
+      'Algiz': "Algiz te protege y conecta con lo sagrado. Deja que la guía espiritual te oriente y protege tu energía.",
+      'Sowilo': "Sowilo es el sol que ilumina tu camino. Éxito, claridad y vitalidad llegan a tu vida. Es momento de avanzar con seguridad.",
+      'Tiwaz': "Tiwaz exige justicia y sacrificio. Actúa con integridad, sé valiente y defiende lo que es correcto.",
+      'Berkano': "Berkano anuncia nuevos comienzos. Cuida de tus proyectos como una madre y permite que crezcan con amor.",
+      'Ehwaz': "Ehwaz habla de movimiento y colaboración. Confía en quienes te rodean y avanza hacia tus metas en compañía.",
+      'Mannaz': "Mannaz es la humanidad y el autoconocimiento. Reconoce tu valor y busca el apoyo de la comunidad.",
+      'Laguz': "Laguz fluye como el agua. Déjate llevar por la intuición y adapta tus emociones con sabiduría.",
+      'Ingwaz': "Ingwaz simboliza paz y culminación. Es tiempo de finalizar procesos y disfrutar del merecido descanso.",
+      'Dagaz': "Dagaz es despertar y transformación. Estás a punto de vivir un cambio positivo y revelador.",
+      'Othala': "Othala conecta con tus raíces. Honra tu herencia y construye tu propio legado."
+    };
+
+    // SPA navigation
+    document.addEventListener('DOMContentLoaded', function() {
+      const navLinks = document.querySelectorAll('#main-nav a[data-section]');
+      const sections = document.querySelectorAll('.main-section');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          navLinks.forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+          const sectionId = link.getAttribute('data-section');
+          sections.forEach(sec => {
+            if(sec.id === sectionId) {
+              sec.style.display = '';
+            } else {
+              sec.style.display = 'none';
+            }
+          });
+          if (sectionId !== 'tirada') {
+            const tiradaResultado = document.getElementById('tirada-resultado');
+            if (tiradaResultado) tiradaResultado.innerHTML = '';
+          }
+        });
+      });
+      sections.forEach((sec, i) => sec.style.display = i === 0 ? '' : 'none');
+    });
+
+    // Galería visual de runas
+    document.addEventListener('DOMContentLoaded', function() {
+      const galeria = document.getElementById('galeria-runas');
+      galeria.innerHTML = runas.map(r => `
+        <div>
+          <span style="font-size:2.4em;display:block;">${r.simbolo}</span>
+          <img src="img/runas/${r.img}" alt="${r.nombre}" style="max-width:60px;display:block;margin:0 auto 8px;">
+          <span style="font-weight:bold;">${r.nombre}</span>
+        </div>
+      `).join('');
+    });
+
+    // Tirada
+    document.addEventListener('DOMContentLoaded', function() {
+      const tiradaBtns = document.querySelectorAll('.tipo-btn');
+      const explicacion = document.getElementById('explicacion-tirada');
+      const preguntaInput = document.getElementById('pregunta');
+      const tirarBtn = document.getElementById('iniciar-ritual');
+      const tiradaResultado = document.getElementById('tirada-resultado');
+      const templates = {
+        simple: document.getElementById('ejemplo-simple').innerHTML,
+        tres: document.getElementById('ejemplo-tres').innerHTML,
+        cruz: document.getElementById('ejemplo-cruz').innerHTML
+      };
+      let tipoSeleccionado = 'simple';
+      tiradaBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tipoSeleccionado = btn.dataset.tirada;
+          explicacion.innerHTML = templates[tipoSeleccionado];
+          tiradaBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+      preguntaInput.addEventListener('input', () => {
+        tirarBtn.disabled = preguntaInput.value.trim().length === 0;
+      });
+
+      function sacarRunas(n) {
+        const baraja = [...runas];
+        const extraidas = [];
+        for (let i = 0; i < n; i++) {
+          const idx = Math.floor(Math.random() * baraja.length);
+          extraidas.push(baraja[idx]);
+          baraja.splice(idx, 1);
+        }
+        return extraidas;
+      }
+      tirarBtn.addEventListener('click', () => {
+        tiradaResultado.innerHTML = '';
+        const pregunta = preguntaInput.value.trim();
+        if (!pregunta) {
+          tirarBtn.disabled = true;
+          return;
+        }
+        if (tipoSeleccionado === 'simple') {
+          const runa = sacarRunas(1)[0];
+          tiradaResultado.innerHTML = `
+            <div class="tirada-runas-flex" style="justify-content:center;">
+              <div class="tirada-runa-box">
+                <span class="tirada-simbolo">${runa.simbolo}</span>
+                <span class="tirada-nombre">${runa.nombre}</span>
+                <img src="img/runas/${runa.img}" alt="${runa.nombre}" style="max-width:90px;display:block;margin:0 auto 10px;">
+                <div class="tirada-significado">${runa.significado}</div>
+                <div class="tirada-adivinacion">
+                  <b>Adivinación profunda:</b><br>
+                  ${interpretacionesProfundas[runa.nombre] || ''}
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (tipoSeleccionado === 'tres') {
+          const posiciones = ['Pasado', 'Presente', 'Futuro'];
+          const extraidas = sacarRunas(3);
+          tiradaResultado.innerHTML = `
+            <div class="tirada-runas-flex">
+              ${extraidas.map((runa, idx) => `
+                <div class="tirada-runa-box">
+                  <div class="tirada-pos">${posiciones[idx]}</div>
+                  <span class="tirada-simbolo">${runa.simbolo}</span>
+                  <span class="tirada-nombre">${runa.nombre}</span>
+                  <img src="img/runas/${runa.img}" alt="${runa.nombre}" style="max-width:90px;display:block;margin:0 auto 10px;">
+                  <div class="tirada-significado">${runa.significado}</div>
+                  <div class="tirada-adivinacion">
+                    <b>Análisis:</b><br>
+                    ${interpretacionesProfundas[runa.nombre] || ''}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        } else if (tipoSeleccionado === 'cruz') {
+          const posiciones = [
+            { pos: 'Centro', label: 'Tú / Ahora', class: 'tirada-cruz-centro' },
+            { pos: 'Arriba', label: 'Guía', class: 'tirada-cruz-arriba' },
+            { pos: 'Abajo', label: 'Raíz', class: 'tirada-cruz-abajo' },
+            { pos: 'Izquierda', label: 'Obstáculo', class: 'tirada-cruz-izquierda' },
+            { pos: 'Derecha', label: 'Futuro/Solución', class: 'tirada-cruz-derecha' }
+          ];
+          const extraidas = sacarRunas(5);
+          tiradaResultado.innerHTML = `
+            <div class="tirada-cruz-layout">
+              ${posiciones.map((p, idx) => `
+                <div class="${p.class}">
+                  <div class="tirada-pos">${p.pos}<br><span style="font-size:0.93em;font-weight:normal;">${p.label}</span></div>
+                  <span class="tirada-simbolo">${extraidas[idx].simbolo}</span>
+                  <span class="tirada-nombre">${extraidas[idx].nombre}</span>
+                  <img src="img/runas/${extraidas[idx].img}" alt="${extraidas[idx].nombre}" style="max-width:90px;display:block;margin:0 auto 10px;">
+                  <div class="tirada-significado">${extraidas[idx].significado}</div>
+                  <div class="tirada-adivinacion">
+                    <b>Interpretación:</b><br>
+                    ${interpretacionesProfundas[extraidas[idx].nombre] || ''}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
