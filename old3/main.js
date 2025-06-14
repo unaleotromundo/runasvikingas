@@ -3,15 +3,17 @@ const RUNA_NAMES = [
   "HAGALAZ", "NAUDHIZ", "ISA", "JERA", "EIHWAZ", "PERDHRO", "ALGIZ", "SOWILO",
   "TIWAZ", "BERKANO", "EHWAZ", "MANNAZ", "LAGUZ", "INGWAZ", "DAGAZ", "OTHALAZ"
 ];
-const IMAGE_FORMATS = ['png','jpg','jpeg','svg','webp'];
+const TIRADA_KEYWORDS = [
+  "CÓMO EXTRAER LAS RUNAS", "INTERPRETACIÓN DE UNA TIRADA", "DESCRIPCIÓN DE OTRA TIRADA", "DIFERENTES FORMAS DE TIRAR LAS RUNAS"
+];
+const RITUAL_KEYWORDS = [
+  "RITUAL", "RITUALES"
+];
 
-function getRunaImgTag(name, className = 'runa-img') {
-  const src = `images/${name}.png`;
-  return `<img src="${src}" loading="lazy" alt="Runa ${name}" class="${className}" 
-    onerror="this.onerror=null;this.style.display='none';this.insertAdjacentHTML('afterend', window.backupRunaSVG('${name}','${className}'));">`;
+function getRunaSVG(name) {
+  // Puedes cambiar esto por SVGs artísticos de cada runa
+  return `<svg class="runa-img" width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="#efe4c3" stroke="#b3983d" stroke-width="3"/><text x="50%" y="58%" text-anchor="middle" font-size="1.9em" font-family="Montserrat" fill="#b3983d" font-weight="bold">${name[0]}</text></svg>`;
 }
-window.backupRunaSVG = (name, className='runa-img') =>
-  `<svg class="${className}" width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="#efe4c3" stroke="#b3983d" stroke-width="3"/><text x="50%" y="58%" text-anchor="middle" font-size="1.9em" font-family="Montserrat" fill="#b3983d" font-weight="bold">${name[0]}</text></svg>`;
 
 function detectarSecciones(raw) {
   const lines = raw.split(/\r?\n/);
@@ -24,13 +26,13 @@ function detectarSecciones(raw) {
   for (let i = 0; i < lines.length; ++i) {
     const l = lines[i].trim();
     const runaMatch = RUNA_NAMES.find(r => l.toUpperCase().startsWith(r + ',') || l.toUpperCase().startsWith(r + ' '));
-    const capituloMatch = l.match(/^(Dedicatorias|Pr[óo]logo|Indice|Primera parte|Segunda parte|Tercera parte|Recorrido por el primer octeto|Octeto \d|Pasaje por las últimas ocho runas|Visi[óo]n del p[óo]rtico|Que las runas te murmuren el secreto)/i);
-    const tiradaMatch = l.toUpperCase().includes("TIRADA");
-    const ritualMatch = l.toUpperCase().includes("RITUAL");
+    const capituloMatch = l.match(/^(Dedicatorias|Pr[óo]logo|Indice|Primera parte|Segunda parte|Tercera parte|Recorrido por el primer octeto|Octeto \d|Pasaje por las œltimas ocho runas|Visi[óo]n del p[óo]rtico|Que las runas te murmuren el secreto)/i);
+    const tiradaMatch = TIRADA_KEYWORDS.find(word => l.toUpperCase().includes(word));
+    const ritualMatch = RITUAL_KEYWORDS.find(word => l.toUpperCase().includes(word));
 
     if (runaMatch) {
       pushCurrent(); current = { name: `RUNA_${runaMatch}`, lines: [] };
-    } else if (tiradaMatch && !current.name.startsWith("TIRADAS")) {
+    } else if (tiradaMatch) {
       pushCurrent(); current = { name: "TIRADAS", lines: [] };
     } else if (ritualMatch && !current.name.startsWith("RITUAL")) {
       pushCurrent(); current = { name: "RITUALES", lines: [] };
@@ -59,20 +61,15 @@ function buildLibroContent(secciones) {
   main.innerHTML = secciones.map(sec => {
     let pretty = sec.name.replace(/^RUNA_/, '').replace(/_/g, ' ');
     if (sec.name === "INICIO") return '';
-    let img = '';
-    if (sec.name.startsWith("RUNA_")) {
-      const runa = sec.name.replace(/^RUNA_/, '');
-      img = `<div style="text-align:center;margin-bottom:14px;">${getRunaImgTag(runa,'runa-img-large')}</div>`;
-    }
     return `<section id="libro-${sec.name}">
       <h3>${pretty.charAt(0).toUpperCase() + pretty.slice(1).toLowerCase()}</h3>
-      ${img}
       <div>${sec.content.replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>')}</div>
     </section>`;
   }).join('');
 }
 
 function detectarRunasYTextos(txt) {
+  // Divide el libro en bloques por runa
   const lines = txt.split(/\r?\n/);
   let runas = {};
   let current = null, buffer = [];
@@ -96,7 +93,7 @@ function mostrarGaleria(runas) {
   galeria.innerHTML = RUNA_NAMES.map(name =>
     `<div class="runa-card">
       <div class="runa-titulo">${name}</div>
-      ${getRunaImgTag(name)}
+      ${getRunaSVG(name)}
       <div class="runa-content">${(runas[name]||"").replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>')}</div>
     </div>`).join('');
 }
@@ -113,14 +110,18 @@ function mostrarTirada(runas) {
   btn.onclick = () => {
     const pregunta = document.getElementById('pregunta').value;
     const runa = runaAzar();
-    runaGrande.innerHTML = getRunaImgTag(runa, 'runa-img-xxl') + '<br><b>' + runa + '</b>';
-    runaGrande.style.display = 'block';
+    const svg = getRunaSVG(runa);
+    // Animación de familia
     familia.classList.add('brillando');
+    runaGrande.innerHTML = svg + '<br><b>' + runa + '</b>';
+    runaGrande.style.display = 'block';
     setTimeout(() => familia.classList.remove('brillando'), 1800);
+    // Muestra el texto literal del libro
     respuesta.innerHTML = `<blockquote>${(runas[runa]||"").replace(/\n{2,}/g, '</p><p>').replace(/\n/g, '<br>')}</blockquote>`;
     if (pregunta) {
       respuesta.innerHTML = `<div style='font-weight:bold;font-size:1.1em;margin-bottom:8px;'>Pregunta: ${pregunta}</div>` + respuesta.innerHTML;
     }
+    // Scroll suave a la respuesta
     respuesta.scrollIntoView({behavior:'smooth',block:'center'});
   };
 }
@@ -128,9 +129,11 @@ function mostrarTirada(runas) {
 fetch('document.txt')
 .then(r=>r.text())
 .then(txt=>{
+  // Libro completo
   const secciones = detectarSecciones(txt);
   buildLibroMenu(secciones);
   buildLibroContent(secciones);
+  // Galería y tirada
   const runas = detectarRunasYTextos(txt);
   mostrarGaleria(runas);
   mostrarTirada(runas);
