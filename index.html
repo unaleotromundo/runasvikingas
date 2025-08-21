@@ -4,371 +4,159 @@
   <meta charset="UTF-8">
   <title>El Hilo de las Nornas | Un Portal Rúnico</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Fuentes: Una para legibilidad (Roboto) y otra para el alma épica (Cinzel Decorative) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   
   <style>
-    /* --- FUNDAMENTOS Y AMBIENTE --- */
+    /* --- TEMA NOCHE (FUEGO Y SOMBRA) - POR DEFECTO --- */
     :root {
-      /* Paleta de colores inspirada en nuestra saga */
-      --color-background: #0d1a26; /* Azul noche profundo del fiordo */
-      --color-foreground: #f2e8d5; /* Pergamino, hueso, lino crudo */
-      --color-text-main: #c5b8a3;  /* Texto principal, legible y suave */
-      --color-text-header: #e6d9c1; /* Encabezados, más brillante */
-      --color-accent-gold: #d4af37; /* Oro viejo, para detalles y acentos */
-      --color-accent-wood: #6b4f35; /* Madera oscura, para contenedores */
-      --font-display: 'Cinzel Decorative', serif; /* Fuente épica para títulos */
-      --font-body: 'Roboto', sans-serif; /* Fuente legible para el cuerpo */
-    }
-
-    body {
-      background-color: var(--color-background);
-      color: var(--color-text-main);
-      font-family: var(--font-body);
-      margin: 0;
-      overflow-x: hidden;
-    }
-
-    .world-background {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: url('https://www.transparenttextures.com/patterns/dark-wood.png'), 
-                  linear-gradient(to bottom, #0d1a26, #1a2b3c);
-      background-size: auto, cover;
-      z-index: -1;
-    }
-
-    .world-background::before {
-      content: '';
-      position: absolute; top: 0; left: 0; width: 200%; height: 200%;
-      background: transparent url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="1" cy="1" r="0.4" fill="%23f2e8d5"/></svg>');
-      background-size: 70px 70px;
-      animation: pan-background 150s linear infinite;
-      opacity: 0.08;
-    }
-
-    .world-background::after {
-      content: '';
-      position: absolute; bottom: 0; left: 0; width: 100%; height: 40%;
-      background: linear-gradient(to top, rgba(13, 26, 38, 1), transparent);
-      animation: mist-flow 45s ease-in-out infinite alternate;
-    }
-
-    @keyframes pan-background {
-      from { transform: translate(0,0); }
-      to { transform: translate(-50%, -50%); }
-    }
-
-    @keyframes mist-flow {
-      from { opacity: 0.4; transform: translateY(10%); }
-      to { opacity: 0.7; transform: translateY(0); }
-    }
-
-    .app-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem;
-    }
-
-    /* --- HEADER Y NAVEGACIÓN REDISEÑADOS --- */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 0.5rem;
-      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-      margin-bottom: 2rem;
-    }
-
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .logo-rune {
-      font-size: 2.5rem;
-      color: var(--color-accent-gold);
-      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-    }
-
-    header h1 {
-      font-family: var(--font-display);
-      font-size: 1.5rem; /* Ajustado para móviles */
-      color: var(--color-text-header);
-      margin: 0;
-      letter-spacing: 2px;
-    }
-
-    #main-nav {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    #main-nav a {
-      color: var(--color-text-main);
-      text-decoration: none;
-      padding: 0.5rem 0.8rem;
-      position: relative;
-      transition: color 0.3s ease;
-      font-size: 0.9rem; /* Ajustado para móviles */
-    }
-
-    #main-nav a::after {
-      content: '';
-      position: absolute; bottom: 0; left: 50%;
-      transform: translateX(-50%);
-      width: 0; height: 2px;
-      background-color: var(--color-accent-gold);
-      transition: width 0.3s ease;
-    }
-
-    #main-nav a:hover, #main-nav a.active {
-      color: var(--color-text-header);
-    }
-    #main-nav a:hover::after, #main-nav a.active::after {
-      width: 60%;
-    }
-
-    /* --- ESTILOS GENERALES DE SECCIÓN --- */
-    .main-section {
-      background: rgba(10, 20, 30, 0.6);
-      border: 1px solid rgba(107, 79, 53, 0.4);
-      border-radius: 16px;
-      padding: 1.5rem;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-      animation: section-fade-in 0.8s ease forwards;
-    }
-
-    @keyframes section-fade-in {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    h2 {
-      font-family: var(--font-display);
-      color: var(--color-text-header);
-      text-align: center;
-      font-size: 2.2rem;
-      margin-top: 0;
-      margin-bottom: 1.5rem;
-      text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
-    }
-
-    /* --- ESTILOS DE COMPONENTES MEJORADOS --- */
-    input[type="text"], button {
-      font-family: var(--font-body);
-      border-radius: 8px;
-      border: 1px solid var(--color-accent-wood);
-      padding: 0.8em 1em;
-      background: rgba(0,0,0,0.2);
-      color: var(--color-foreground);
+      --color-bg: #0a141d;
+      --color-surface: rgba(10, 20, 30, 0.65);
+      --color-border: rgba(107, 79, 53, 0.4);
+      --color-text-main: #c5b8a3;
+      --color-text-header: #e6d9c1;
+      --color-accent-primary: #d4af37; /* Oro viejo */
+      --color-accent-secondary: #6b4f35; /* Madera oscura */
+      --color-modal-bg: #f2e8d5;
+      --color-modal-text: #6b4f35;
+      --transition-speed: 0.4s;
     }
     
-    button {
-      background: var(--color-accent-wood);
-      color: var(--color-text-header);
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    /* --- TEMA DÍA (NATURALEZA Y PIEDRA) --- */
+    body.theme-day {
+      --color-bg: #d7c7ad; /* Lino crudo */
+      --color-surface: rgba(242, 232, 213, 0.65); /* Pergamino translúcido */
+      --color-border: rgba(105, 116, 88, 0.4); /* Piedra musgosa */
+      --color-text-main: #5d5345; /* Texto oscuro sobre lino */
+      --color-text-header: #3e3529;
+      --color-accent-primary: #8c6d4e; /* Bronce antiguo */
+      --color-accent-secondary: #a8987f; /* Madera clara */
+      --color-modal-bg: #3e3529;
+      --color-modal-text: #f2e8d5;
     }
 
-    button:hover:not(:disabled) {
-      background: #8a6a4f;
-      transform: translateY(-2px);
-    }
-    
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
-
-    .tipo-btn {
-      background: transparent;
-      border: 1px solid var(--color-accent-wood);
-    }
-    
-    .tipo-btn.active {
-      background: var(--color-accent-gold);
-      color: var(--color-background);
-      border-color: var(--color-accent-gold);
-      font-weight: bold;
-    }
-
-    /* --- CÓDICE RÚNICO (GALERÍA) --- */
-    #galeria-runas {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-    }
-    #galeria-runas > div {
-      flex: 0 0 90px;
-      text-align: center;
-      background: rgba(0,0,0,0.2);
-      border: 1px solid var(--color-accent-wood);
-      border-radius: 8px;
-      padding: 10px 0 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    #galeria-runas > div:hover {
-      box-shadow: 0 4px 16px rgba(212,175,55,0.2);
-      transform: translateY(-3px) scale(1.05);
-      background: var(--color-accent-wood);
-    }
-
-    /* --- MODAL --- */
-    .runa-modal-overlay {
-      display: none;
-      position: fixed; z-index: 1000; inset: 0;
-      background: rgba(13, 26, 38, 0.85);
-      backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-      justify-content: center; align-items: center;
-      animation: fadeIn 0.3s;
-    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { background-color: var(--color-bg); color: var(--color-text-main); font-family: var(--font-body); margin: 0; overflow-x: hidden; transition: background-color var(--transition-speed), color var(--transition-speed); }
+    .world-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, var(--color-bg), #142331); z-index: -1; transition: background var(--transition-speed); }
+    body.theme-day .world-background { background: linear-gradient(to bottom, var(--color-bg), #bfae91); }
+    .world-background::before { content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 200%; background: transparent url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="1" cy="1" r="0.4" fill="%23f2e8d5"/></svg>'); background-size: 70px 70px; animation: pan-background 150s linear infinite; opacity: 0.08; }
+    .world-background::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, var(--color-bg), transparent); animation: mist-flow 45s ease-in-out infinite alternate; transition: background var(--transition-speed); }
+    #particles-js { position:fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 0; }
+    @keyframes pan-background { from { transform: translate(0,0); } to { transform: translate(-50%, -50%); } }
+    @keyframes mist-flow { from { opacity: 0.5; transform: translateY(10%); } to { opacity: 0.8; transform: translateY(0); } }
+    .app-container { max-width: 1200px; margin: 0 auto; padding: 1rem; position: relative; z-index: 2; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0.5rem; border-bottom: 1px solid rgba(212, 175, 55, 0.2); margin-bottom: 2rem; transition: border-color var(--transition-speed); }
+    body.theme-day header { border-bottom-color: rgba(105, 116, 88, 0.4); }
+    .logo-container { display: flex; align-items: center; gap: 1rem; }
+    .logo-rune { font-size: 2.5rem; color: var(--color-accent-primary); text-shadow: 0 0 15px var(--color-accent-primary); animation: pulse-glow 5s ease-in-out infinite; transition: color var(--transition-speed), text-shadow var(--transition-speed); }
+    header h1 { font-family: var(--font-display); font-size: 1.5rem; color: var(--color-text-header); margin: 0; letter-spacing: 2px; transition: color var(--transition-speed); }
+    #main-nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    #main-nav a { color: var(--color-text-main); text-decoration: none; padding: 0.5rem 0.8rem; position: relative; transition: color var(--transition-speed), text-shadow var(--transition-speed); }
+    #main-nav a::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background-color: var(--color-accent-primary); transition: width var(--transition-speed), background-color var(--transition-speed); }
+    #main-nav a:hover, #main-nav a.active { color: var(--color-text-header); text-shadow: 0 0 5px var(--color-accent-primary); }
+    #main-nav a:hover::after, #main-nav a.active::after { width: 60%; }
+    .main-section { display: none; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 16px; padding: 1.5rem; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); transition: background-color var(--transition-speed), border-color var(--transition-speed); }
+    .main-section.active { display: block; animation: section-fade-in 0.8s ease forwards; }
+    @keyframes section-fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    h2 { font-family: var(--font-display); color: var(--color-text-header); text-align: center; font-size: 2.2rem; margin-top: 0; margin-bottom: 1.5rem; text-shadow: 0 0 10px var(--color-accent-primary); transition: color var(--transition-speed), text-shadow var(--transition-speed); }
+    input[type="text"], button { font-family: var(--font-body); border-radius: 8px; border: 1px solid var(--color-accent-secondary); padding: 0.8em 1em; background: rgba(0,0,0,0.2); color: var(--color-text-header); transition: all var(--transition-speed); }
+    body.theme-day input[type="text"] { background: rgba(255,255,255,0.2); border-color: var(--color-accent-secondary); color: var(--color-text-header); }
+    button { background: var(--color-accent-secondary); color: var(--color-text-header); font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    button:hover:not(:disabled) { background-color: var(--color-accent-primary); color: var(--color-bg); transform: translateY(-2px); box-shadow: 0 4px 15px var(--color-accent-primary); }
+    button:disabled { cursor: not-allowed; opacity: 0.5; }
+    .tipo-btn { background: transparent; border: 1px solid var(--color-accent-secondary); }
+    .tipo-btn.active { background: var(--color-accent-primary); color: var(--color-bg); border-color: var(--color-accent-primary); font-weight: bold; }
+    #galeria-runas { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+    .runa-glyph-container { text-align:center; flex: 0 0 90px; height: 110px; display: flex; flex-direction:column; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border: 1px solid var(--color-accent-secondary); border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); cursor: pointer; transition: all var(--transition-speed); padding-top:5px; }
+    body.theme-day .runa-glyph-container { background: rgba(255,255,255,0.2); }
+    .runa-glyph-container:hover { box-shadow: 0 4px 20px var(--color-accent-primary); transform: translateY(-3px) scale(1.05); background: var(--color-accent-secondary); }
+    .runa-svg { width: 50px; height: 50px; color: var(--color-text-main); filter: drop-shadow(0 0 3px var(--color-accent-primary)); transition: all var(--transition-speed); animation: pulse-glow 6s ease-in-out infinite alternate; }
+    .runa-glyph-container .runa-nombre-tag { font-size: 0.85em; margin-top: 8px; color: var(--color-text-main); transition: color var(--transition-speed); }
+    .runa-glyph-container:hover .runa-svg { color: var(--color-accent-primary); filter: drop-shadow(0 0 8px var(--color-accent-primary)); transform: scale(1.1); animation-play-state: paused; }
+    .runa-glyph-container:hover .runa-nombre-tag { color: var(--color-text-header); }
+    @keyframes pulse-glow { from { filter: drop-shadow(0 0 3px var(--color-accent-primary)); } to { filter: drop-shadow(0 0 8px var(--color-accent-primary)); } }
+    .runa-modal-overlay { display: none; position: fixed; z-index: 1000; inset: 0; background: rgba(10, 20, 29, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); justify-content: center; align-items: center; animation: fadeIn 0.3s; }
     .runa-modal-overlay.active { display: flex; }
-    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
-    
-    .runa-modal {
-      background: var(--color-foreground);
-      color: var(--color-accent-wood);
-      border-radius: 16px;
-      box-shadow: 0 8px 44px rgba(0,0,0,0.5);
-      display: flex; gap: 32px;
-      max-width: 650px; width: 98%;
-      padding: 32px 28px;
-      position: relative;
-      font-family: var(--font-body);
-      animation: modalSlideUp 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
-    }
-    @keyframes modalSlideUp {
-      from { transform: translateY(40px); opacity: 0; }
-      to   { transform: translateY(0); opacity: 1; }
-    }
-    
-    .runa-modal-img {
-      background: #e6d9c1;
-      padding: 10px;
-      border-radius: 12px;
-      font-size: 4em;
-      min-height: 150px;
-      max-width: 150px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .runa-modal-nombre {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 1.7em;
-      color: var(--color-accent-wood);
-    }
-    .runa-modal-simbolo {
-      font-size: 2.4em;
-      color: var(--color-accent-wood);
-    }
-    .runa-modal-significado {
-      font-size: 1.1em;
-      color: #8c6d4e;
-      font-weight: 500;
-    }
-    .runa-modal-interpretacion {
-      background: #e9e2d3;
-      border-radius: 7px;
-      padding: 0.8em 1em;
-      color: #3b2d1c;
-    }
-    .runa-modal-extra {
-      font-size: 0.99em;
-      color: #5a4a31;
-    }
-    .runa-modal-close {
-      cursor: pointer;
-      position: absolute;
-      top: 12px; right: 12px;
-      font-size: 1.8em; color: #bca170;
-      background: none; border: none;
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      transition: background 0.2s, color 0.2s;
-    }
-    .runa-modal-close:hover {
-      background: #e6d9c1;
-      color: var(--color-accent-wood);
-    }
-
-    /* --- TIRADA --- */
-    .tirada-runas-flex { display: flex; gap: 20px; justify-content: center; align-items: flex-start; flex-wrap: wrap; margin-top: 12px; }
-    .tirada-runa-box {
-      text-align: center;
-      background: rgba(242, 232, 213, 0.1);
-      border: 1px solid var(--color-accent-wood);
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      padding: 12px 8px 10px;
-      min-width: 140px;
-      transition: all 0.2s;
-    }
-    .tirada-runa-box:hover, .tirada-runa-box:focus {
-      box-shadow: 0 4px 16px rgba(212,175,55,0.4);
-      transform: translateY(-3px) scale(1.03);
-      background: rgba(107, 79, 53, 0.5);
-      border-color: var(--color-accent-gold);
-    }
+    .runa-modal { background: var(--color-modal-bg); color: var(--color-modal-text); border-radius: 16px; box-shadow: 0 8px 44px rgba(0,0,0,0.5); display: flex; gap: 32px; max-width: 650px; width: 98%; padding: 32px 28px; position: relative; animation: modalSlideUp 0.35s cubic-bezier(0.165, 0.84, 0.44, 1); transition: background-color var(--transition-speed), color var(--transition-speed); }
+    .runa-modal-img { background: #e6d9c1; border-radius: 12px; min-height: 150px; width: 150px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background-color var(--transition-speed); }
+    body.theme-day .runa-modal-img { background: #5d5345; }
+    .runa-modal-img .runa-svg { width: 90px; height: 90px; color: var(--color-modal-text); animation: none; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+    .runa-modal-info > div { opacity: 0; animation: reveal-secret 0.5s ease forwards; }
+    .runa-modal-info .runa-modal-nombre { animation-delay: 0.1s; } .runa-modal-info .runa-modal-significado { animation-delay: 0.2s; } .runa-modal-info .runa-modal-interpretacion { animation-delay: 0.4s; } .runa-modal-info .runa-modal-extra { animation-delay: 0.6s; }
+    @keyframes reveal-secret { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .runa-modal-nombre { font-family: var(--font-display); font-size: 1.7em; }
+    .runa-modal-significado { font-size: 1.1em; color: #8c6d4e; font-weight: 500; margin: 0.5em 0; transition: color var(--transition-speed); }
+    body.theme-day .runa-modal-significado { color: #bfae91; }
+    .runa-modal-interpretacion { background: #e9e2d3; border-radius: 7px; padding: 0.8em 1em; color: #3b2d1c; margin: 0.5em 0; transition: background-color var(--transition-speed), color var(--transition-speed); }
+    body.theme-day .runa-modal-interpretacion { background: #4a4134; color: #d7c7ad; }
+    .runa-modal-extra { font-size: 0.9em; color: #5a4a31; margin-top: 1em; font-style: italic; transition: color var(--transition-speed); }
+    body.theme-day .runa-modal-extra { color: #a8987f; }
+    .runa-modal-close { cursor: pointer; position: absolute; top: 12px; right: 12px; font-size: 1.8em; color: #bca170; background: none; border: none; width: 40px; height: 40px; border-radius: 50%; transition: background 0.2s, color 0.2s, transform 0.2s; }
+    body.theme-day .runa-modal-close { color: #a8987f; }
+    .runa-modal-close:hover { background: #e6d9c1; color: var(--color-modal-text); transform: rotate(90deg); }
+    body.theme-day .runa-modal-close:hover { background: #5d5345; }
+    .tirada-runa-box { text-align: center; background: rgba(242, 232, 213, 0.1); border: 1px solid var(--color-accent-secondary); border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); padding: 12px 8px 10px; min-width: 140px; transition: all var(--transition-speed); }
+    .tirada-runa-box:hover, .tirada-runa-box:focus { box-shadow: 0 4px 16px var(--color-accent-primary); transform: translateY(-3px) scale(1.03); background: rgba(107, 79, 53, 0.5); border-color: var(--color-accent-primary); }
+    body.theme-day .tirada-runa-box { background: rgba(255,255,255,0.1); }
+    body.theme-day .tirada-runa-box:hover { background: rgba(168, 152, 127, 0.5); }
+    .tirada-runa-box .runa-svg { width: 60px; height: 60px; margin: 0.5em auto; }
     .tirada-pos { color: var(--color-text-header); font-weight: bold; }
-    .tirada-simbolo { font-size: 2.1em; color: var(--color-accent-gold); }
     .tirada-nombre { font-weight: bold; font-size: 1.13em; color: var(--color-text-header); }
-    .tirada-significado { color: var(--color-text-main); }
-    .tirada-adivinacion { background: rgba(0,0,0,0.2); color: var(--color-text-main); padding: 0.8em 0.7em; border-radius: 7px; }
-
-    /* Estilos de layout de Tirada y Modal no se modifican, solo se les aplica la nueva piel */
-    .tirada-cruz-layout { display: grid; grid-template-areas: ". arriba ." "izquierda centro derecha" ". abajo ."; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto auto auto; gap: 8px; justify-items: center; align-items: center; margin-top: 10px; }
+    .tirada-cruz-layout { display: grid; grid-template-areas: ". arriba ." "izquierda centro derecha" ". abajo ."; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
     .tirada-cruz-arriba { grid-area: arriba; } .tirada-cruz-centro { grid-area: centro; } .tirada-cruz-abajo { grid-area: abajo; } .tirada-cruz-izquierda { grid-area: izquierda; } .tirada-cruz-derecha { grid-area: derecha; }
-
-    /* --- RESPONSIVE DESIGN --- */
+    .fixed-controls { position: fixed; bottom: 20px; right: 20px; z-index: 100; display: flex; gap: 10px; }
+    .fixed-controls button { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 50%; width: 50px; height: 50px; font-size: 1.5em; backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; padding: 0; color: var(--color-text-header); }
+    .theme-switcher svg { width: 24px; height: 24px; transition: all 0.5s ease; }
+    .theme-switcher #icon-sun { display: none; }
+    footer { text-align: center; padding: 2rem 1rem; margin-top: 2rem; color: rgba(197, 184, 163, 0.5); border-top: 1px solid rgba(212, 175, 55, 0.1); transition: all var(--transition-speed); }
+    body.theme-day footer { color: rgba(62, 53, 41, 0.5); border-top-color: rgba(105, 116, 88, 0.2); }
     @media (max-width: 768px) {
-      header { flex-direction: column; gap: 1rem; }
-      header h1 { font-size: 1.4rem; }
-      #main-nav { justify-content: center; flex-wrap: wrap; }
-      #main-nav a { padding: 0.5rem; font-size: 0.85rem; }
-      .runa-modal { flex-direction: column; gap: 12px; padding: 20px 10px 16px 10px; align-items: center; max-width: 95vw; }
-      .runa-modal-img { margin: 0 auto 10px auto; font-size: 2.7em; min-width: 120px; min-height: 120px; max-width: 120px; }
-      .runa-modal-info { min-width: 0; width: 97%; }
-      .runa-modal-close { top: 7px; right: 7px; font-size: 1.4em; }
-      .tirada-cruz-layout { grid-template-areas: "arriba" "centro" "izquierda" "derecha" "abajo"; grid-template-columns: 1fr; grid-template-rows: repeat(5, auto); }
-      .tirada-cruz-arriba, .tirada-cruz-centro, .tirada-cruz-abajo, .tirada-cruz-izquierda, .tirada-cruz-derecha { width: 90%; }
-      .tirada-runas-flex { flex-direction: column; align-items: center; }
-      .tirada-runa-box { min-width: 250px; margin-bottom: 15px; }
-    }
-
-    footer {
-        text-align: center;
-        padding: 2rem 1rem;
-        margin-top: 2rem;
-        color: rgba(197, 184, 163, 0.5);
-        border-top: 1px solid rgba(212, 175, 55, 0.1);
+      header { flex-direction: column; gap: 1rem; } header h1 { font-size: 1.4rem; text-align: center; } #main-nav { justify-content: center; }
+      .runa-modal { flex-direction: column; align-items: center; }
+      .tirada-cruz-layout { grid-template-areas: "arriba" "centro" "izquierda" "derecha" "abajo"; grid-template-columns: 1fr; }
+      .tirada-runa-box { min-width: 80vw; }
+      .tirada-runas-flex.tres-runas { flex-direction: column; align-items: center; gap: 1rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- CAPA DE FONDO ATMOSFÉRICO -->
+  <!-- Sprite SVG v5: Forjado con la Máxima Fidelidad a la Imagen Original -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="rune-fehu" viewBox="0 0 100 100"><path d="M30 10V90 M30 10L70 35 M30 40L70 65" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-uruz" viewBox="0 0 100 100"><path d="M30 90V10L70 40V90" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-thurisaz" viewBox="0 0 100 100"><path d="M30 10V90 M30 55L60 40L30 25" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-ansuz" viewBox="0 0 100 100"><path d="M30 10V90 M30 10L70 35 M30 35L70 60" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-raidho" viewBox="0 0 100 100"><path d="M30 10V90 M30 10L70 30L30 50" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-kenaz" viewBox="0 0 100 100"><path d="M30 10L70 50L30 90" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-gebo" viewBox="0 0 100 100"><path d="M20 20L80 80 M80 20L20 80" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-wunjo" viewBox="0 0 100 100"><path d="M30 10V90 M30 10L70 35L30 60" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-hagalaz" viewBox="0 0 100 100"><path d="M20 10V90 M80 10V90 M20 50L80 50" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-nauthiz" viewBox="0 0 100 100"><path d="M30 10V90 M70 10L30 80" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-isa" viewBox="0 0 100 100"><path d="M50 10V90" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-jera" viewBox="0 0 100 100"><path d="M30 20L70 50L30 80 M70 20L30 50L70 80" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-eihwaz" viewBox="0 0 100 100"><path d="M30 90V10L70 50L30 90" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-perthro" viewBox="0 0 100 100"><path d="M30 10V90H70V50H30" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-algiz" viewBox="0 0 100 100"><path d="M50 10V90 M20 40L50 10L80 40" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-sowilo" viewBox="0 0 100 100"><path d="M40 10L60 30L40 50L60 70L40 90" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-tiwaz" viewBox="0 0 100 100"><path d="M50 10V90 M20 20L80 20L50 10" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-berkano" viewBox="0 0 100 100"><path d="M30 10V90 M30 10L70 30L30 50L70 70L30 90" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-ehwaz" viewBox="0 0 100 100"><path d="M30 10V90 M70 10V90 M30 50L70 50" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-mannaz" viewBox="0 0 100 100"><path d="M20 10V90 M80 10V90 M20 10L80 50 M20 50L80 10" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-laguz" viewBox="0 0 100 100"><path d="M40 10V90L70 60" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-ingwaz" viewBox="0 0 100 100"><path d="M50 10L20 50L50 90L80 50Z" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-dagaz" viewBox="0 0 100 100"><path d="M20 10L80 50L20 90L80 50Z M20 10L20 90 M80 10L80 90" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+    <symbol id="rune-othala" viewBox="0 0 100 100"><path d="M30 30L50 10L70 30L50 50Z M30 30L30 90 M70 30L70 90" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor" stroke-width="10" fill="none"/></symbol>
+  </svg>
+  
   <div class="world-background"></div>
+  <div id="particles-js"></div>
 
-  <!-- CONTENEDOR PRINCIPAL DE LA APLICACIÓN -->
   <div class="app-container">
     <header>
       <div class="logo-container">
-        <span class="logo-rune">ᛟ</span> <!-- Othala: Herencia, nuestro hogar digital -->
+        <span class="logo-rune">ᛟ</span>
         <h1>El Hilo de las Nornas</h1>
       </div>
       <nav id="main-nav">
@@ -380,54 +168,52 @@
     </header>
 
     <main>
-      <div class="main-content-wrapper">
-        <section id="inicio" class="main-section">
-          <h2>Un Portal a la Sabiduría Antigua</h2>
-          <p style="text-align: center; font-size: 1.2em; max-width: 700px; margin: 0 auto 2em auto;">
-            Has llegado al fiordo de Bjørndal, un lugar donde el velo entre los mundos es delgado. Aquí, las runas no son solo símbolos, son la voz del destino. Explora su sabiduría, consulta el oráculo o adéntrate en la saga de "El Hilo de las Nornas".
-          </p>
-           <div style="text-align: center;">
-            <button onclick="document.querySelector('[data-section=tirada]').click()">Consultar el Oráculo</button>
-          </div>
-        </section>
+      <section id="inicio" class="main-section active">
+        <h2>Un Portal a la Sabiduría Antigua</h2>
+        <p style="text-align: center; font-size: 1.2em; max-width: 700px; margin: 0 auto 2em auto;">
+          Has llegado al fiordo de Bjørndal, un lugar donde el velo entre los mundos es delgado. Aquí, las runas no son solo símbolos, son la voz del destino. Explora su sabiduría, consulta el oráculo o adéntrate en la saga de "El Hilo de las Nornas".
+        </p>
+        <div style="text-align: center;">
+          <button id="cta-oraculo">Consultar el Oráculo</button>
+        </div>
+      </section>
 
-        <section id="tirada" class="main-section" style="display:none">
-          <h2>Ritual del Oráculo</h2>
-          <div style="text-align:center; margin-bottom: 2em;">
-            <label for="pregunta" style="font-weight:bold; display:block; margin-bottom: 0.5em;">Graba tu pregunta en el éter:</label>
-            <input type="text" id="pregunta" placeholder="Escribe tu consulta a las Nornas..." style="width:90%;max-width:370px;">
+      <section id="tirada" class="main-section">
+        <h2>Ritual del Oráculo</h2>
+        <div style="text-align:center; margin-bottom: 2em;">
+          <label for="pregunta" style="font-weight:bold; display:block; margin-bottom: 0.5em;">Graba tu pregunta en el éter:</label>
+          <input type="text" id="pregunta" placeholder="Escribe tu consulta a las Nornas..." style="width:90%;max-width:370px;">
+        </div>
+        <div style="text-align:center;">
+          <p>Elige el ritual que más resuene con tu espíritu.</p>
+          <div class="tipos-tirada" style="display:flex; justify-content:center; gap:10px; margin-bottom:1em;">
+            <button class="tipo-btn active" data-tirada="simple" title="Una respuesta directa y concisa.">Una Runa</button>
+            <button class="tipo-btn" data-tirada="tres" title="Pasado, Presente y Futuro.">Tres Runas</button>
+            <button class="tipo-btn" data-tirada="cruz" title="Análisis profundo de una situación.">Cruz Rúnica</button>
           </div>
-          <div style="text-align:center;">
-            <p>Elige el ritual que más resuene con tu espíritu.</p>
-            <div class="tipos-tirada" style="display:flex; justify-content:center; gap:10px; margin-bottom:1em;">
-              <button class="tipo-btn active" data-tirada="simple" title="Una respuesta directa y concisa.">Una Runa</button>
-              <button class="tipo-btn" data-tirada="tres" title="Pasado, Presente y Futuro.">Tres Runas</button>
-              <button class="tipo-btn" data-tirada="cruz" title="Análisis profundo de una situación.">Cruz Rúnica</button>
-            </div>
-            <div id="explicacion-tirada" style="margin: 1em auto; max-width:500px; background: rgba(0,0,0,0.1); padding: 1em; border-radius:8px;"></div>
-          </div>
-          <div style="text-align:center; margin-top: 2em;">
-            <button id="iniciar-ritual" disabled>Lanzar las Runas</button>
-            <div id="tirada-resultado" style="margin-top:2em;"></div>
-          </div>
-          <template id="ejemplo-simple"><b>Una Runa:</b> Ideal para una pregunta concreta, te ofrece una guía directa.</template>
-          <template id="ejemplo-tres"><b>Tres Runas:</b> Explora el flujo del tiempo: Pasado, Presente y Futuro de tu consulta.</template>
-          <template id="ejemplo-cruz"><b>Cruz Rúnica:</b> Un análisis profundo: Tú, tu Guía, la Raíz del asunto, el Obstáculo y la Solución.</template>
-        </section>
+          <div id="explicacion-tirada" style="margin: 1em auto; max-width:500px; background: rgba(0,0,0,0.1); padding: 1em; border-radius:8px;"></div>
+        </div>
+        <div style="text-align:center; margin-top: 2em;">
+          <button id="iniciar-ritual" disabled>Lanzar las Runas</button>
+          <div id="tirada-resultado" style="margin-top:2em;"></div>
+        </div>
+        <template id="ejemplo-simple"><b>Una Runa:</b> Ideal para una pregunta concreta, te ofrece una guía directa.</template>
+        <template id="ejemplo-tres"><b>Tres Runas:</b> Explora el flujo del tiempo: Pasado, Presente y Futuro de tu consulta.</template>
+        <template id="ejemplo-cruz"><b>Cruz Rúnica:</b> Un análisis profundo: Tú, tu Guía, la Raíz del asunto, el Obstáculo y la Solución.</template>
+      </section>
 
-        <section id="galeria" class="main-section" style="display:none">
-          <h2>Códice de Runas</h2>
-          <div id="galeria-runas"></div>
-        </section>
+      <section id="galeria" class="main-section">
+        <h2>Códice de Runas</h2>
+        <div id="galeria-runas"></div>
+      </section>
 
-        <section id="saga" class="main-section" style="display:none">
-          <h2>La Saga: El Hilo de las Nornas</h2>
-          <div style="max-width: 800px; margin: 0 auto; line-height: 1.7;">
-            <p>En el fiordo de Bjørndal, la muerte de un Jarl sin heredero amenaza con desgarrar al clan. Una joven völva, Ingrid, debe interpretar una misteriosa tirada de runas para guiar a su gente a través de una tormenta de ambición, traición y guerra inminente. La fuerza del guerrero Björn y la astucia del comerciante Hakon se enfrentan, pero las runas susurran un secreto que ninguno de los dos puede ver...</p>
-            <p><em>(Aquí se podrá leer la saga completa, capítulo por capítulo, con sus ilustraciones)</em></p>
-          </div>
-        </section>
-      </div>
+      <section id="saga" class="main-section">
+        <h2>La Saga: El Hilo de las Nornas</h2>
+        <div style="max-width: 800px; margin: 0 auto; line-height: 1.7;">
+          <p>En el fiordo de Bjørndal, la muerte de un Jarl sin heredero amenaza con desgarrar al clan. Una joven völva, Ingrid, debe interpretar una misteriosa tirada de runas para guiar a su gente a través de una tormenta de ambición, traición y guerra inminente. La fuerza del guerrero Björn y la astucia del comerciante Hakon se enfrentan, pero las runas susurran un secreto que ninguno de los dos puede ver...</p>
+          <p><em>(Aquí se podrá leer la saga completa, capítulo por capítulo, con sus ilustraciones)</em></p>
+        </div>
+      </section>
     </main>
     
     <footer>
@@ -448,32 +234,48 @@
     </div>
   </div>
 
+  <div class="fixed-controls">
+      <div class="theme-switcher">
+          <button id="theme-toggle-btn" title="Cambiar tema">
+              <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path id="icon-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                  <path id="icon-sun" d="M12 1v2m0 18v2m8.66-10.66l-1.42 1.42M4.76 4.76L3.34 6.18M23 12h-2M3 12H1m18.66-7.24l-1.42-1.42M4.76 19.24l-1.42-1.42M12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12z" style="display:none;"></path>
+              </svg>
+          </button>
+      </div>
+      <div class="audio-controls">
+        <button id="mute-btn">🔇</button>
+      </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  
   <script>
     const runas = [
-      { nombre: 'Fehu', simbolo: 'ᚠ', img: 'fehu.png', significado: 'Riqueza, abundancia, inicio de proyectos y recursos.', extra: 'Representa el ganado, la prosperidad material, la energía de inicio y la importancia de valorar lo que ya se posee. Suele indicar oportunidades de ganancia, pero también la necesidad de cuidar y compartir.', interpretacion: "La energía de Fehu te invita a valorar los recursos presentes y a usarlos con sabiduría. Es momento de reconocer la abundancia en tu vida y actuar con generosidad." },
-      { nombre: 'Uruz', simbolo: 'ᚢ', img: 'uruz.png', significado: 'Fuerza vital, poder, salud y energía para superar desafíos.', extra: 'Conectada al buey salvaje, Uruz señala la fuerza bruta, la vitalidad y la capacidad de transformación. Invita a aprovechar el potencial interior y a aceptar los cambios que nos fortifican.', interpretacion: "Uruz representa la fuerza y el coraje que habitan en tu interior. Confía en tu poder para superar cualquier desafío y transforma la adversidad en crecimiento." },
-      { nombre: 'Thurisaz', simbolo: 'ᚦ', img: 'thurisaz.png', significado: 'Desafío, protección, pruebas, oportunidad de aprendizaje.', extra: "Simboliza el martillo de Thor y la puerta entre mundos. Puede presagiar pruebas o confrontaciones, pero también la posibilidad de superarlas con conciencia y protección.", interpretacion: "Thurisaz señala pruebas necesarias para tu evolución. Enfrenta los obstáculos con conciencia; cada desafío es una oportunidad de aprender y fortalecerte." },
-      { nombre: 'Ansuz', simbolo: 'ᚨ', img: 'ansuz.png', significado: 'Palabra, comunicación, inspiración divina, mensajes.', extra: "Ligada a Odín y la sabiduría, Ansuz indica momentos de comunicación importante, mensajes inspiradores o la necesidad de escuchar la intuición.", interpretacion: "Ansuz es la voz de la inspiración. Escucha los mensajes que llegan, comunícate desde el corazón y permite que la verdad se exprese." },
-      { nombre: 'Raidho', simbolo: 'ᚱ', img: 'raidho.png', significado: 'Viaje, movimiento, evolución, camino correcto.', extra: 'Viaje físico o espiritual, la importancia de avanzar y adaptarse. Habla de ciclos, evolución y la necesidad de poner en marcha los proyectos.', interpretacion: "Raidho habla de un viaje, externo o interno. Confía en el proceso, cada paso es parte del aprendizaje. El movimiento te llevará hacia el equilibrio." },
-      { nombre: 'Kenaz', simbolo: 'ᚲ', img: 'kenaz.png', significado: 'Luz, creatividad, revelaciones, apertura de caminos.', extra: 'Simboliza la antorcha, el fuego del conocimiento, la creatividad y la claridad. Revela lo oculto y ayuda a superar la oscuridad.', interpretacion: "Kenaz ilumina lo oculto. Es tiempo de crear, de encender tu fuego interior y de dejar que tu luz guíe tu camino." },
-      { nombre: 'Gebo', simbolo: 'ᚷ', img: 'gebo.png', significado: 'Regalo, intercambio, generosidad, equilibrio en relaciones.', extra: 'Simboliza el dar y recibir, la reciprocidad, los pactos y las alianzas. Puede señalar la llegada de una bendición o la importancia de la cooperación.', interpretacion: "Gebo es el símbolo del regalo y el intercambio sano. Da y recibe con amor, busca el equilibrio en tus relaciones y acepta la ayuda que el universo te ofrece." },
-      { nombre: 'Wunjo', simbolo: 'ᚹ', img: 'wunjo.png', significado: 'Alegría, bienestar, éxito, armonía interior.', extra: 'Representa la alegría compartida, el triunfo después de la dificultad y la llegada de la paz. Habla de plenitud y satisfacción.', interpretacion: "Wunjo anuncia alegría y armonía. Permite que la gratitud y la confianza abran la puerta a la felicidad y el éxito." },
-      { nombre: 'Hagalaz', simbolo: 'ᚺ', img: 'hagalaz.png', significado: 'Cambios bruscos, pruebas, transformación necesaria.', extra: 'La runa del granizo, transformación a través de crisis. Pide aceptar lo inesperado y comprender que todo cambio trae renovación.', interpretacion: "Hagalaz aconseja aceptar los cambios repentinos y ver en ellos una oportunidad de transformación. Después de la tormenta, llega la calma." },
-      { nombre: 'Nauthiz', simbolo: 'ᚾ', img: 'nauthiz.png', significado: 'Necesidad, carencia, resistencia, superación de obstáculos.', extra: 'Simboliza la necesidad, la escasez y la capacidad de resistir. Llama a la paciencia, al aprendizaje a través de las limitaciones y a la superación personal.', interpretacion: "Nauthiz señala momentos de necesidad. Acepta tus limitaciones y aprende de ellas. La paciencia y la resiliencia son tus aliadas." },
-      { nombre: 'Isa', simbolo: 'ᛁ', img: 'isa.png', significado: 'Estancamiento, pausa, paciencia, introspección.', extra: 'Representa el hielo, el tiempo de quietud y reflexión. Puede señalar bloqueos, pero también la oportunidad de meditar y reorientar el rumbo.', interpretacion: "Isa te invita a la quietud y la reflexión. No fuerces el avance, aprovecha este tiempo para meditar y reencontrarte." },
-      { nombre: 'Jera', simbolo: 'ᛃ', img: 'jera.png', significado: 'Ciclo, cosecha, resultados a largo plazo, recompensa.', extra: 'La runa de la cosecha y de los ciclos naturales. Indica que todo llega en su momento, recompensa al esfuerzo sostenido.', interpretacion: "Jera recompensa el esfuerzo sostenido. Todo ciclo llega a su fin y la cosecha será justa. Confía en los tiempos de la vida." },
-      { nombre: 'Eihwaz', simbolo: 'ᛇ', img: 'eihwaz.png', significado: 'Resistencia, transformación, conexión con lo profundo.', extra: 'Simboliza el tejo, la conexión entre mundos y la capacidad de superar pruebas profundas. Ayuda en procesos de transformación interior.', interpretacion: "Eihwaz es transformación profunda. No temas a los cambios radicales; el renacimiento espiritual está cerca." },
-      { nombre: 'Perthro', simbolo: 'ᛈ', img: 'perthro.png', significado: 'Misterio, destino, intuición, secretos revelados.', extra: 'Runa de la suerte, el azar y el destino. Nos habla de lo oculto, de lo que aún no puede conocerse. Invita a confiar en la intuición.', interpretacion: "Perthro revela misterios y secretos. Confía en tu intuición, hay verdades ocultas que pronto saldrán a la luz." },
-      { nombre: 'Algiz', simbolo: 'ᛉ', img: 'algiz.png', significado: 'Protección, guía espiritual, conexión sagrada.', extra: 'Simboliza el ciervo y la protección divina. Es la runa de la defensa ante los peligros y de la conexión con lo espiritual.', interpretacion: "Algiz te protege y conecta con lo sagrado. Deja que la guía espiritual te oriente y protege tu energía." },
-      { nombre: 'Sowilo', simbolo: 'ᛋ', img: 'sowilo.png', significado: 'Éxito, poder solar, claridad, victoria.', extra: 'La runa del sol, victoria sobre la oscuridad, claridad mental y energía renovada. Anuncia éxito y logros.', interpretacion: "Sowilo es el sol que ilumina tu camino. Éxito, claridad y vitalidad llegan a tu vida. Es momento de avanzar con seguridad." },
-      { nombre: 'Tiwaz', simbolo: 'ᛏ', img: 'tiwaz.png', significado: 'Justicia, valentía, sacrificio, integridad.', extra: 'Simboliza la lanza del dios Tyr, la justicia y el sacrificio por el bien común. Llama a actuar con valentía y rectitud.', interpretacion: "Tiwaz exige justicia y sacrificio. Actúa con integridad, sé valiente y defiende lo que es correcto." },
-      { nombre: 'Berkano', simbolo: 'ᛒ', img: 'berkano.png', significado: 'Nacimiento, crecimiento, fertilidad, nuevos comienzos.', extra: 'Runa de la madre, la fertilidad y la protección. Anuncia nacimientos, proyectos nuevos y crecimiento.', interpretacion: "Berkano anuncia nuevos comienzos. Cuida de tus proyectos como una madre y permite que crezcan con amor." },
-      { nombre: 'Ehwaz', simbolo: 'ᛖ', img: 'ehwaz.png', significado: 'Movimiento, progreso, confianza mutua, apoyo.', extra: 'Simboliza el caballo, los viajes y el trabajo en equipo. Habla de confianza, avances y colaboración.', interpretacion: "Ehwaz habla de movimiento y colaboración. Confía en quienes te rodean y avanza hacia tus metas en compañía." },
-      { nombre: 'Mannaz', simbolo: 'ᛗ', img: 'mannaz.png', significado: 'Humanidad, cooperación, autoconocimiento, ayuda.', extra: 'Runa del ser humano, la comunidad y la autorrealización. Llama a la introspección y a la colaboración social.', interpretacion: "Mannaz es la humanidad y el autoconocimiento. Reconoce tu valor y busca el apoyo de la comunidad." },
-      { nombre: 'Laguz', simbolo: 'ᛚ', img: 'laguz.png', significado: 'Intuición, emociones, flujo, adaptabilidad.', extra: 'Runa del agua, la intuición, la adaptabilidad y las emociones profundas. Invita a fluir y a confiar en el proceso emocional.', interpretacion: "Laguz fluye como el agua. Déjate llevar por la intuición y adapta tus emociones con sabiduría." },
-      { nombre: 'Ingwaz', simbolo: 'ᛜ', img: 'ingwaz.png', significado: 'Potencial, paz interna, culminación, descanso.', extra: 'Simboliza la semilla, el potencial oculto y la culminación de procesos. Habla de la importancia del reposo y la integración.', interpretacion: "Ingwaz simboliza paz y culminación. Es tiempo de finalizar procesos y disfrutar del merecido descanso." },
-      { nombre: 'Dagaz', simbolo: 'ᛞ', img: 'dagaz.png', significado: 'Despertar, transformación, nuevos paradigmas.', extra: 'La runa del día, del despertar y de los cambios positivos. Indica un punto de inflexión y la llegada de la claridad.', interpretacion: "Dagaz es despertar y transformación. Estás a punto de vivir un cambio positivo y revelador." },
-      { nombre: 'Othala', simbolo: 'ᛟ', img: 'othala.png', significado: 'Herencia, raíces, legado, pertenencia.', extra: 'Runa de la herencia, las tradiciones y el sentido de pertenencia. Habla de los ancestros y de la transmisión de valores.', interpretacion: "Othala conecta con tus raíces. Honra tu herencia y construye tu propio legado." }
+      { nombre: 'Fehu', significado: 'Riqueza, abundancia, inicio de proyectos y recursos.', extra: 'Representa el ganado, la prosperidad material, la energía de inicio y la importancia de valorar lo que ya se posee.', interpretacion: "La energía de Fehu te invita a valorar los recursos presentes y a usarlos con sabiduría. Es momento de reconocer la abundancia en tu vida y actuar con generosidad." },
+      { nombre: 'Uruz', significado: 'Fuerza vital, poder, salud y energía para superar desafíos.', extra: 'Conectada al buey salvaje, Uruz señala la fuerza bruta, la vitalidad y la capacidad de transformación.', interpretacion: "Uruz representa la fuerza y el coraje que habitan en tu interior. Confía en tu poder para superar cualquier desafío." },
+      { nombre: 'Thurisaz', significado: 'Desafío, protección, pruebas, oportunidad de aprendizaje.', extra: "Simboliza el martillo de Thor y la puerta entre mundos. Puede presagiar pruebas, pero también la posibilidad de superarlas con conciencia.", interpretacion: "Thurisaz señala pruebas necesarias para tu evolución. Enfrenta los obstáculos con conciencia; cada desafío es una oportunidad." },
+      { nombre: 'Ansuz', significado: 'Palabra, comunicación, inspiración divina, mensajes.', extra: "Ligada a Odín y la sabiduría, Ansuz indica momentos de comunicación importante, mensajes inspiradores o la necesidad de escuchar la intuición.", interpretacion: "Ansuz es la voz de la inspiración. Escucha los mensajes que llegan, comunícate desde el corazón y permite que la verdad se exprese." },
+      { nombre: 'Raidho', significado: 'Viaje, movimiento, evolución, camino correcto.', extra: 'Viaje físico o espiritual, la importancia de avanzar y adaptarse. Habla de ciclos, evolución y la necesidad de poner en marcha los proyectos.', interpretacion: "Raidho habla de un viaje, externo o interno. Confía en el proceso, cada paso es parte del aprendizaje." },
+      { nombre: 'Kenaz', significado: 'Luz, creatividad, revelaciones, apertura de caminos.', extra: 'Simboliza la antorcha, el fuego del conocimiento, la creatividad y la claridad. Revela lo oculto y ayuda a superar la oscuridad.', interpretacion: "Kenaz ilumina lo oculto. Es tiempo de crear, de encender tu fuego interior y de dejar que tu luz guíe tu camino." },
+      { nombre: 'Gebo', significado: 'Regalo, intercambio, generosidad, equilibrio en relaciones.', extra: 'Simboliza el dar y recibir, la reciprocidad, los pactos y las alianzas. Puede señalar la llegada de una bendición o la importancia de la cooperación.', interpretacion: "Gebo es el símbolo del regalo y el intercambio sano. Da y recibe con amor, busca el equilibrio en tus relaciones." },
+      { nombre: 'Wunjo', significado: 'Alegría, bienestar, éxito, armonía interior.', extra: 'Representa la alegría compartida, el triunfo después de la dificultad y la llegada de la paz. Habla de plenitud y satisfacción.', interpretacion: "Wunjo anuncia alegría y armonía. Permite que la gratitud y la confianza abran la puerta a la felicidad." },
+      { nombre: 'Hagalaz', significado: 'Cambios bruscos, pruebas, transformación necesaria.', extra: 'La runa del granizo, transformación a través de crisis. Pide aceptar lo inesperado y comprender que todo cambio trae renovación.', interpretacion: "Hagalaz aconseja aceptar los cambios repentinos y ver en ellos una oportunidad de transformación. Después de la tormenta, llega la calma." },
+      { nombre: 'Nauthiz', significado: 'Necesidad, carencia, resistencia, superación de obstáculos.', extra: 'Simboliza la necesidad, la escasez y la capacidad de resistir. Llama a la paciencia, al aprendizaje a través de las limitaciones.', interpretacion: "Nauthiz señala momentos de necesidad. Acepta tus limitaciones y aprende de ellas. La paciencia y la resiliencia son tus aliadas." },
+      { nombre: 'Isa', significado: 'Estancamiento, pausa, paciencia, introspección.', extra: 'Representa el hielo, el tiempo de quietud y reflexión. Puede señalar bloqueos, pero también la oportunidad de meditar.', interpretacion: "Isa te invita a la quietud y la reflexión. No fuerces el avance, aprovecha este tiempo para meditar y reencontrarte." },
+      { nombre: 'Jera', significado: 'Ciclo, cosecha, resultados a largo plazo, recompensa.', extra: 'La runa de la cosecha y de los ciclos naturales. Indica que todo llega en su momento, recompensa al esfuerzo sostenido.', interpretacion: "Jera recompensa el esfuerzo sostenido. Todo ciclo llega a su fin y la cosecha será justa. Confía en los tiempos de la vida." },
+      { nombre: 'Eihwaz', significado: 'Resistencia, transformación, conexión con lo profundo.', extra: 'Simboliza el tejo, la conexión entre mundos y la capacidad de superar pruebas profundas. Ayuda en procesos de transformación interior.', interpretacion: "Eihwaz es transformación profunda. No temas a los cambios radicales; el renacimiento espiritual está cerca." },
+      { nombre: 'Perthro', significado: 'Misterio, destino, intuición, secretos revelados.', extra: 'Runa de la suerte, el azar y el destino. Nos habla de lo oculto. Invita a confiar en la intuición.', interpretacion: "Perthro revela misterios y secretos. Confía en tu intuición, hay verdades ocultas que pronto saldrán a la luz." },
+      { nombre: 'Algiz', significado: 'Protección, guía espiritual, conexión sagrada.', extra: 'Simboliza el ciervo y la protección divina. Es la runa de la defensa ante los peligros y de la conexión con lo espiritual.', interpretacion: "Algiz te protege y conecta con lo sagrado. Deja que la guía espiritual te oriente y protege tu energía." },
+      { nombre: 'Sowilo', significado: 'Éxito, poder solar, claridad, victoria.', extra: 'La runa del sol, victoria sobre la oscuridad, claridad mental y energía renovada. Anuncia éxito y logros.', interpretacion: "Sowilo es el sol que ilumina tu camino. Éxito, claridad y vitalidad llegan a tu vida. Avanza con seguridad." },
+      { nombre: 'Tiwaz', significado: 'Justicia, valentía, sacrificio, integridad.', extra: 'Simboliza la lanza del dios Tyr, la justicia y el sacrificio por el bien común. Llama a actuar con valentía y rectitud.', interpretacion: "Tiwaz exige justicia y sacrificio. Actúa con integridad, sé valiente y defiende lo que es correcto." },
+      { nombre: 'Berkano', significado: 'Nacimiento, crecimiento, fertilidad, nuevos comienzos.', extra: 'Runa de la madre, la fertilidad y la protección. Anuncia nacimientos, proyectos nuevos y crecimiento.', interpretacion: "Berkano anuncia nuevos comienzos. Cuida de tus proyectos como una madre y permite que crezcan con amor." },
+      { nombre: 'Ehwaz', significado: 'Movimiento, progreso, confianza mutua, apoyo.', extra: 'Simboliza el caballo, los viajes y el trabajo en equipo. Habla de confianza, avances y colaboración.', interpretacion: "Ehwaz habla de movimiento y colaboración. Confía en quienes te rodean y avanza hacia tus metas en compañía." },
+      { nombre: 'Mannaz', significado: 'Humanidad, cooperación, autoconocimiento, ayuda.', extra: 'Runa del ser humano, la comunidad y la autorrealización. Llama a la introspección y a la colaboración social.', interpretacion: "Mannaz es la humanidad y el autoconocimiento. Reconoce tu valor y busca el apoyo de la comunidad." },
+      { nombre: 'Laguz', significado: 'Intuición, emociones, flujo, adaptabilidad.', extra: 'Runa del agua, la intuición, la adaptabilidad y las emociones profundas. Invita a fluir y a confiar en el proceso emocional.', interpretacion: "Laguz fluye como el agua. Déjate llevar por la intuición y adapta tus emociones con sabiduría." },
+      { nombre: 'Ingwaz', significado: 'Potencial, paz interna, culminación, descanso.', extra: 'Simboliza la semilla, el potencial oculto y la culminación de procesos. Habla de la importancia del reposo y la integración.', interpretacion: "Ingwaz simboliza paz y culminación. Es tiempo de finalizar procesos y disfrutar del merecido descanso." },
+      { nombre: 'Dagaz', significado: 'Despertar, transformación, nuevos paradigmas.', extra: 'La runa del día, del despertar y de los cambios positivos. Indica un punto de inflexión y la llegada de la claridad.', interpretacion: "Dagaz es despertar y transformación. Estás a punto de vivir un cambio positivo y revelador." },
+      { nombre: 'Othala', significado: 'Herencia, raíces, legado, pertenencia.', extra: 'Runa de la herencia, las tradiciones y el sentido de pertenencia. Habla de los ancestros y de la transmisión de valores.', interpretacion: "Othala conecta con tus raíces. Honra tu herencia y construye tu propio legado." }
     ];
 
     function openRunaModalByName(nombreRuna) {
@@ -486,7 +288,7 @@
         const modalInterpretacion = document.getElementById('runa-modal-interpretacion');
         const modalExtra = document.getElementById('runa-modal-extra');
         
-        modalImg.innerHTML = `<img src="img/runas/${r.img}" alt="${r.nombre}" style="max-width:80px; display:block; margin-bottom: 6px;"><span style="font-size:2em;">${r.simbolo}</span>`;
+        modalImg.innerHTML = `<svg class="runa-svg" viewBox="0 0 100 100"><use xlink:href="#rune-${r.nombre.toLowerCase()}"></use></svg>`;
         modalNombre.textContent = r.nombre;
         modalSignificado.textContent = r.significado || '';
         modalInterpretacion.textContent = r.interpretacion || '';
@@ -507,10 +309,7 @@
                 box.tabIndex = 0;
                 box.addEventListener('click', () => openRunaModalByName(nombre));
                 box.addEventListener('keydown', (e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                        openRunaModalByName(nombre);
-                        e.preventDefault();
-                    }
+                    if (e.key === "Enter" || e.key === " ") { openRunaModalByName(nombre); e.preventDefault(); }
                 });
             }
         });
@@ -520,43 +319,34 @@
       // SPA Navigation
       const navLinks = document.querySelectorAll('#main-nav a[data-section]');
       const sections = document.querySelectorAll('.main-section');
+      const ctaOraculo = document.getElementById('cta-oraculo');
+
+      function navigateTo(sectionId) {
+          navLinks.forEach(l => l.classList.toggle('active', l.dataset.section === sectionId));
+          sections.forEach(sec => sec.classList.toggle('active', sec.id === sectionId));
+      }
       navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const sectionId = link.getAttribute('data-section');
-          navLinks.forEach(l => l.classList.remove('active'));
-          link.classList.add('active');
-          sections.forEach(sec => {
-            sec.style.display = sec.id === sectionId ? '' : 'none';
-          });
-        });
+        link.addEventListener('click', (e) => { e.preventDefault(); navigateTo(link.dataset.section); });
       });
+      ctaOraculo.addEventListener('click', () => navigateTo('tirada'));
 
       // Galería
       const galeria = document.getElementById('galeria-runas');
-      if(galeria) {
-          galeria.innerHTML = runas.map(r => `
-            <div data-nombre="${r.nombre}" tabindex="0" role="button" aria-label="Ver detalles de ${r.nombre}">
-              <span style="font-size:2.4em;display:block;">${r.simbolo}</span>
-              <img src="img/runas/${r.img}" alt="${r.nombre}" style="max-width:40px;display:block;margin:4px auto 8px;">
-              <span style="font-weight:bold; font-size:0.9em;">${r.nombre}</span>
-            </div>
-          `).join('');
-          galeria.querySelectorAll('div[data-nombre]').forEach(div => {
-            div.addEventListener('click', () => openRunaModalByName(div.dataset.nombre));
-            div.addEventListener('keydown', e => {
-              if (e.key === "Enter" || e.key === " ") { openRunaModalByName(div.dataset.nombre); e.preventDefault(); }
-            });
-          });
-      }
+      galeria.innerHTML = runas.map(r => `
+        <div class="runa-glyph-container" data-nombre="${r.nombre}" tabindex="0" role="button" aria-label="Ver detalles de ${r.nombre}">
+          <svg class="runa-svg" viewBox="0 0 100 100"><use xlink:href="#rune-${r.nombre.toLowerCase()}"></use></svg>
+          <span class="runa-nombre-tag">${r.nombre}</span>
+        </div>
+      `).join('');
+      galeria.querySelectorAll('div[data-nombre]').forEach(div => {
+        div.addEventListener('click', () => openRunaModalByName(div.dataset.nombre));
+        div.addEventListener('keydown', e => { if (e.key === "Enter" || e.key === " ") { openRunaModalByName(div.dataset.nombre); e.preventDefault(); } });
+      });
 
       // Modal Logic
       const modalOverlay = document.getElementById('runa-modal-overlay');
       const closeModalBtn = document.getElementById('runa-modal-close');
-      const closeModal = () => {
-        modalOverlay.classList.remove('active');
-        document.body.style.overflow = "";
-      };
+      const closeModal = () => { modalOverlay.classList.remove('active'); document.body.style.overflow = ""; };
       closeModalBtn.addEventListener('click', closeModal);
       modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
       document.addEventListener('keydown', e => { if (e.key === "Escape" && modalOverlay.classList.contains('active')) closeModal(); });
@@ -567,58 +357,86 @@
       const preguntaInput = document.getElementById('pregunta');
       const tirarBtn = document.getElementById('iniciar-ritual');
       const tiradaResultado = document.getElementById('tirada-resultado');
-      const templates = {
-        simple: document.getElementById('ejemplo-simple').innerHTML,
-        tres: document.getElementById('ejemplo-tres').innerHTML,
-        cruz: document.getElementById('ejemplo-cruz').innerHTML
-      };
+      const templates = { simple: document.getElementById('ejemplo-simple').innerHTML, tres: document.getElementById('ejemplo-tres').innerHTML, cruz: document.getElementById('ejemplo-cruz').innerHTML };
       let tipoSeleccionado = 'simple';
       explicacion.innerHTML = templates[tipoSeleccionado];
 
       tiradaBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          tipoSeleccionado = btn.dataset.tirada;
-          explicacion.innerHTML = templates[tipoSeleccionado];
-          tiradaBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-        });
+        btn.addEventListener('click', () => { tipoSeleccionado = btn.dataset.tirada; explicacion.innerHTML = templates[tipoSeleccionado]; tiradaBtns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); });
       });
 
-      preguntaInput.addEventListener('input', () => {
-        tirarBtn.disabled = preguntaInput.value.trim().length === 0;
-      });
+      preguntaInput.addEventListener('input', () => { tirarBtn.disabled = preguntaInput.value.trim().length === 0; });
 
       function sacarRunas(n) {
-        const baraja = [...runas];
-        const extraidas = [];
-        for (let i = 0; i < n && baraja.length > 0; i++) {
-          const idx = Math.floor(Math.random() * baraja.length);
-          extraidas.push(baraja.splice(idx, 1)[0]);
-        }
+        const baraja = [...runas]; let extraidas = [];
+        for (let i = 0; i < n && baraja.length > 0; i++) { extraidas.push(baraja.splice(Math.floor(Math.random() * baraja.length), 1)[0]); }
         return extraidas;
       }
 
       tirarBtn.addEventListener('click', () => {
-        tiradaResultado.innerHTML = '';
-        tiradaResultado.style.opacity = 0;
-
+        tiradaResultado.innerHTML = ''; tiradaResultado.style.opacity = 0;
         setTimeout(() => {
           if (tipoSeleccionado === 'simple') {
             const [runa] = sacarRunas(1);
-            tiradaResultado.innerHTML = `<div class="tirada-runas-flex"><div class="tirada-runa-box"><span class="tirada-simbolo">${runa.simbolo}</span><span class="tirada-nombre">${runa.nombre}</span><img src="img/runas/${runa.img}" alt="${runa.nombre}" style="max-width:90px;display:block;margin:10px auto;"><div class="tirada-significado">${runa.significado}</div><div class="tirada-adivinacion"><b>Interpretación:</b><br>${runa.interpretacion}</div></div></div>`;
+            tiradaResultado.innerHTML = `<div class="tirada-runas-flex"><div class="tirada-runa-box"><div class="tirada-pos">Tu Guía</div><svg class="runa-svg" viewBox="0 0 100 100"><use xlink:href="#rune-${runa.nombre.toLowerCase()}"></use></svg><span class="tirada-nombre">${runa.nombre}</span></div></div>`;
           } else if (tipoSeleccionado === 'tres') {
-            const [r1, r2, r3] = sacarRunas(3);
-            const pos = ['Pasado', 'Presente', 'Futuro'];
-            tiradaResultado.innerHTML = `<div class="tirada-runas-flex">${[r1,r2,r3].map((r,i) => `<div class="tirada-runa-box"><div class="tirada-pos">${pos[i]}</div><span class="tirada-simbolo">${r.simbolo}</span><span class="tirada-nombre">${r.nombre}</span><img src="img/runas/${r.img}" alt="${r.nombre}" style="max-width:70px;display:block;margin:10px auto;"><div class="tirada-adivinacion">${r.interpretacion}</div></div>`).join('')}</div>`;
+            const [r1, r2, r3] = sacarRunas(3); const pos = ['Pasado', 'Presente', 'Futuro'];
+            tiradaResultado.innerHTML = `<div class="tirada-runas-flex tres-runas">${[r1,r2,r3].map((r,i) => `<div class="tirada-runa-box"><div class="tirada-pos">${pos[i]}</div><svg class="runa-svg" viewBox="0 0 100 100"><use xlink:href="#rune-${r.nombre.toLowerCase()}"></use></svg><span class="tirada-nombre">${r.nombre}</span></div>`).join('')}</div>`;
           } else if (tipoSeleccionado === 'cruz') {
-            const extraidas = sacarRunas(5);
-            const pos = [ { label: 'Tú / Ahora', class: 'tirada-cruz-centro' }, { label: 'Guía', class: 'tirada-cruz-arriba' }, { label: 'Raíz', class: 'tirada-cruz-abajo' }, { label: 'Obstáculo', class: 'tirada-cruz-izquierda' }, { label: 'Futuro', class: 'tirada-cruz-derecha' }];
-            tiradaResultado.innerHTML = `<div class="tirada-cruz-layout">${extraidas.map((r, i) => `<div class="${pos[i].class} tirada-runa-box"><div class="tirada-pos">${pos[i].label}</div><span class="tirada-simbolo">${r.simbolo}</span><span class="tirada-nombre">${r.nombre}</span><img src="img/runas/${r.img}" alt="${r.nombre}" style="max-width:70px;display:block;margin:10px auto;"><div class="tirada-adivinacion" style="font-size:0.9em">${r.interpretacion}</div></div>`).join('')}</div>`;
+            const extraidas = sacarRunas(5); const pos = [ { label: 'Tú / Ahora', class: 'tirada-cruz-centro' }, { label: 'Guía', class: 'tirada-cruz-arriba' }, { label: 'Raíz', class: 'tirada-cruz-abajo' }, { label: 'Obstáculo', class: 'tirada-cruz-izquierda' }, { label: 'Futuro', class: 'tirada-cruz-derecha' }];
+            tiradaResultado.innerHTML = `<div class="tirada-cruz-layout">${extraidas.map((r, i) => `<div class="${pos[i].class} tirada-runa-box"><div class="tirada-pos">${pos[i].label}</div><svg class="runa-svg" viewBox="0 0 100 100"><use xlink:href="#rune-${r.nombre.toLowerCase()}"></use></svg><span class="tirada-nombre">${r.nombre}</span></div>`).join('')}</div>`;
           }
           activarModalEnTiradas();
-          tiradaResultado.style.transition = 'opacity 0.5s';
-          tiradaResultado.style.opacity = 1;
-        }, 300); // Pequeño delay para la animación
+          tiradaResultado.style.transition = 'opacity 0.5s'; tiradaResultado.style.opacity = 1;
+        }, 300);
+      });
+
+      // Partículas
+      particlesJS('particles-js', { particles: { number: { value: 50, density: { enable: true, value_area: 800 } }, color: { value: "#d4af37" }, shape: { type: "circle" }, opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } }, size: { value: 2, random: true }, line_linked: { enable: false }, move: { enable: true, speed: 0.5, direction: "none", random: true, straight: false, out_mode: "out" } }, interactivity: { events: { onhover: { enable: false } } }, retina_detect: true });
+      
+      // Sonido y Tema
+      const sounds = {
+        hover: new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-share-sound/share_sound_button_rollover_001.mp3?_=1'), // Placeholder
+        click: new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-share-sound/share_sound_button_press_001.mp3?_=2'), // Placeholder
+        cast: new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-the-sound-pack-tree/tspt_dice_roll_single_01.mp3?_=4'), // Placeholder
+        ambient: new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-sound-ideas/sound_ideas_wind_howling_through_trees_01.mp3') // Placeholder
+      };
+      let isMuted = true;
+      sounds.ambient.loop = true; sounds.ambient.volume = 0.3;
+      function playSound(soundName) { if (!isMuted && sounds[soundName]) { sounds[soundName].currentTime = 0; sounds[soundName].play().catch(e => {}); } }
+      const muteBtn = document.getElementById('mute-btn');
+      muteBtn.addEventListener('click', () => {
+        isMuted = !isMuted; muteBtn.textContent = isMuted ? '🔇' : '🔊';
+        isMuted ? sounds.ambient.pause() : sounds.ambient.play().catch(e => {});
+      });
+      document.querySelectorAll('button, #main-nav a, .runa-glyph-container').forEach(el => {
+        el.addEventListener('mousedown', () => playSound('click'));
+        el.addEventListener('mouseenter', () => playSound('hover'));
+      });
+      document.getElementById('iniciar-ritual').addEventListener('mousedown', () => playSound('cast'));
+
+      // Lógica del Theme Switcher
+      const themeToggleBtn = document.getElementById('theme-toggle-btn');
+      const iconSun = document.getElementById('icon-sun');
+      const iconMoon = document.getElementById('icon-moon');
+      const currentTheme = localStorage.getItem('theme');
+
+      function setTheme(theme) {
+          document.body.classList.toggle('theme-day', theme === 'day');
+          iconSun.style.display = theme === 'day' ? 'block' : 'none';
+          iconMoon.style.display = theme === 'day' ? 'none' : 'block';
+          localStorage.setItem('theme', theme);
+      }
+
+      if (currentTheme) {
+          setTheme(currentTheme);
+      } else {
+          setTheme('night'); // Default to night theme
+      }
+
+      themeToggleBtn.addEventListener('click', () => {
+          const newTheme = document.body.classList.contains('theme-day') ? 'night' : 'day';
+          setTheme(newTheme);
       });
     });
   </script>
