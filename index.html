@@ -84,10 +84,16 @@
     .tirada-nombre { font-weight: bold; font-size: 1.13em; color: var(--color-text-header); }
     .tirada-cruz-layout { display: grid; grid-template-areas: ". arriba ." "izquierda centro derecha" ". abajo ."; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
     .tirada-cruz-arriba { grid-area: arriba; } .tirada-cruz-centro { grid-area: centro; } .tirada-cruz-abajo { grid-area: abajo; } .tirada-cruz-izquierda { grid-area: izquierda; } .tirada-cruz-derecha { grid-area: derecha; }
-    .fixed-controls { position: fixed; bottom: 20px; right: 20px; z-index: 100; display: flex; gap: 10px; }
+    .fixed-controls { position: fixed; bottom: 20px; right: 20px; z-index: 100; display: flex; flex-direction: column; gap: 10px; align-items: center; }
     .fixed-controls button { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 50%; width: 50px; height: 50px; font-size: 1.5em; backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; padding: 0; color: var(--color-text-header); }
     .theme-switcher svg { width: 24px; height: 24px; transition: all 0.5s ease; }
     .theme-switcher #icon-sun { display: none; }
+    .audio-controls { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .audio-controls input[type="range"] { -webkit-appearance: none; appearance: none; width: 50px; height: 50px; background: transparent; cursor: pointer; transform: rotate(-90deg); }
+    .audio-controls input[type="range"]::-webkit-slider-runnable-track { background: rgba(0,0,0,0.2); height: 4px; border-radius: 2px; border: 1px solid var(--color-border); }
+    .audio-controls input[type="range"]::-moz-range-track { background: rgba(0,0,0,0.2); height: 4px; border-radius: 2px; border: 1px solid var(--color-border); }
+    .audio-controls input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; margin-top: -6px; background-color: var(--color-accent-primary); height: 16px; width: 16px; border-radius: 50%; border: 2px solid var(--color-surface); }
+    .audio-controls input[type="range"]::-moz-range-thumb { background-color: var(--color-accent-primary); height: 12px; width: 12px; border-radius: 50%; border: 2px solid var(--color-surface); }
     #chatbot-toggle-btn { position: fixed; bottom: 20px; left: 20px; z-index: 100; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 50%; width: 50px; height: 50px; backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; padding: 0; color: var(--color-text-header); animation: pulse-glow 4s ease-in-out infinite alternate; }
     #chatbot-toggle-btn svg { width: 28px; height: 28px; color: var(--color-accent-primary); transition: all 0.5s ease; }
     #chatbot-overlay { display: none; position: fixed; z-index: 1010; inset: 0; background: rgba(10, 20, 29, 0.85); backdrop-filter: blur(8px); justify-content: center; align-items: center; animation: fadeIn 0.5s; }
@@ -110,6 +116,10 @@
   
   <div class="world-background"></div>
   <div id="particles-js"></div>
+
+  <!-- PISTAS DE AUDIO -->
+  <audio id="audio-theme-day" loop src="URL_A_TU_CANCION_TEMA_CLARO.mp3" preload="auto"></audio>
+  <audio id="audio-theme-night" loop src="URL_A_TU_CANCION_TEMA_OSCURO.mp3" preload="auto"></audio>
 
   <div class="app-container">
     <header>
@@ -202,7 +212,8 @@
           </button>
       </div>
       <div class="audio-controls">
-        <button id="mute-btn">🔇</button>
+        <button id="mute-btn" title="Silenciar / Activar Sonido">🔇</button>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.3" title="Control de volumen">
       </div>
   </div>
 
@@ -366,45 +377,64 @@
       // Partículas
       particlesJS('particles-js', { particles: { number: { value: 50, density: { enable: true, value_area: 800 } }, color: { value: "#d4af37" }, shape: { type: "circle" }, opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } }, size: { value: 2, random: true }, line_linked: { enable: false }, move: { enable: true, speed: 0.5, direction: "none", random: true, straight: false, out_mode: "out" } }, interactivity: { events: { onhover: { enable: false } } }, retina_detect: true });
       
-      // Sonido y Tema
-      const sounds = {
-        hover: new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-share-sound/share_sound_button_rollover_001.mp3?_=1'), // Placeholder
-        click: new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-share-sound/share_sound_button_press_001.mp3?_=2'), // Placeholder
-        cast: new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-the-sound-pack-tree/tspt_dice_roll_single_01.mp3?_=4'), // Placeholder
-        ambient: new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-sound-ideas/sound_ideas_wind_howling_through_trees_01.mp3') // Placeholder
-      };
-      let isMuted = true;
-      sounds.ambient.loop = true; sounds.ambient.volume = 0.3;
-      function playSound(soundName) { if (!isMuted && sounds[soundName]) { sounds[soundName].currentTime = 0; sounds[soundName].play().catch(e => {}); } }
+      // --- NUEVA LÓGICA DE SONIDO Y TEMA ---
+      const audioDay = document.getElementById('audio-theme-day');
+      const audioNight = document.getElementById('audio-theme-night');
       const muteBtn = document.getElementById('mute-btn');
+      const volumeSlider = document.getElementById('volume-slider');
+      
+      let isMuted = true;
+      let currentVolume = 0.3;
+
+      function syncVolume() {
+        audioDay.volume = currentVolume;
+        audioNight.volume = currentVolume;
+      }
+
+      function playCurrentTrack() {
+        if (isMuted) return;
+        const isDayTheme = document.body.classList.contains('theme-day');
+        const toPlay = isDayTheme ? audioDay : audioNight;
+        const toPause = isDayTheme ? audioNight : audioDay;
+
+        toPause.pause();
+        toPlay.play().catch(e => console.error("La reproducción automática fue bloqueada. Se requiere interacción del usuario.", e));
+      }
+
       muteBtn.addEventListener('click', () => {
-        isMuted = !isMuted; muteBtn.textContent = isMuted ? '🔇' : '🔊';
-        isMuted ? sounds.ambient.pause() : sounds.ambient.play().catch(e => {});
+        isMuted = !isMuted;
+        muteBtn.textContent = isMuted ? '🔇' : '🔊';
+        if (isMuted) {
+          audioDay.pause();
+          audioNight.pause();
+        } else {
+          playCurrentTrack();
+        }
       });
-      document.querySelectorAll('button, #main-nav a, .runa-glyph-container').forEach(el => {
-        el.addEventListener('mousedown', () => playSound('click'));
-        el.addEventListener('mouseenter', () => playSound('hover'));
+      
+      volumeSlider.addEventListener('input', (e) => {
+        currentVolume = e.target.value;
+        syncVolume();
       });
-      document.getElementById('iniciar-ritual').addEventListener('mousedown', () => playSound('cast'));
 
       // Lógica del Theme Switcher
       const themeToggleBtn = document.getElementById('theme-toggle-btn');
       const iconSun = document.getElementById('icon-sun');
       const iconMoon = document.getElementById('icon-moon');
-      const currentTheme = localStorage.getItem('theme');
+      const currentTheme = localStorage.getItem('theme') || 'night';
 
       function setTheme(theme) {
           document.body.classList.toggle('theme-day', theme === 'day');
           iconSun.style.display = theme === 'day' ? 'block' : 'none';
           iconMoon.style.display = theme === 'day' ? 'none' : 'block';
           localStorage.setItem('theme', theme);
+          // ¡Aquí está la magia!
+          playCurrentTrack();
       }
 
-      if (currentTheme) {
-          setTheme(currentTheme);
-      } else {
-          setTheme('night');
-      }
+      // Inicialización
+      syncVolume();
+      setTheme(currentTheme);
 
       themeToggleBtn.addEventListener('click', () => {
           const newTheme = document.body.classList.contains('theme-day') ? 'night' : 'day';
