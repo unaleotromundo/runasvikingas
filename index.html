@@ -233,7 +233,7 @@
 
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   
-  <script>
+    <script>
     const runas = [
       { nombre: 'Fehu', simbolo: 'ᚠ', significado: 'Riqueza, abundancia, prosperidad.', extra: 'Representa el ganado, la prosperidad material y la energía de inicio.', interpretacion: "Valora tus recursos con sabiduría. Es momento de reconocer la abundancia y actuar con generosidad." },
       { nombre: 'Uruz', simbolo: 'ᚢ', significado: 'Fuerza vital, poder, salud.', extra: 'Conectada al buey salvaje, Uruz señala la fuerza bruta, la vitalidad y la transformación.', interpretacion: "Confía en tu poder para superar cualquier desafío y transforma la adversidad en crecimiento." },
@@ -374,10 +374,20 @@
         }, 300);
       });
 
-      // Partículas
-      particlesJS('particles-js', { particles: { number: { value: 50, density: { enable: true, value_area: 800 } }, color: { value: "#d4af37" }, shape: { type: "circle" }, opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } }, size: { value: 2, random: true }, line_linked: { enable: false }, move: { enable: true, speed: 0.5, direction: "none", random: true, straight: false, out_mode: "out" } }, interactivity: { events: { onhover: { enable: false } } }, retina_detect: true });
+      // --- CONFIGURACIÓN DE PARTÍCULAS ---
+      const particlesNightConfig = { particles: { number: { value: 50, density: { enable: true, value_area: 800 } }, color: { value: "#d4af37" }, shape: { type: "circle" }, opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } }, size: { value: 2, random: true }, line_linked: { enable: false }, move: { enable: true, speed: 0.5, direction: "none", random: true, straight: false, out_mode: "out" } }, interactivity: { events: { onhover: { enable: false } } }, retina_detect: true };
+      const particlesDayConfig = { particles: { number: { value: 150, density: { enable: true, value_area: 800 } }, color: { value: ["#8f2c24", "#3a7d44"] }, shape: { type: "circle" }, opacity: { value: 0.6, random: true, anim: { enable: true, speed: 1, opacity_min: 0.2, sync: false } }, size: { value: 2.5, random: true }, line_linked: { enable: false }, move: { enable: true, speed: 0.6, direction: "none", random: true, straight: false, out_mode: "out" } }, interactivity: { events: { onhover: { enable: false } } }, retina_detect: true };
+
+      function setParticles(theme) {
+        if (window.pJSDom && window.pJSDom.length > 0) {
+            window.pJSDom[0].pJS.fn.vendors.destroypJS();
+            window.pJSDom = [];
+        }
+        const config = theme === 'day' ? particlesDayConfig : particlesNightConfig;
+        particlesJS('particles-js', config);
+      }
       
-      // --- NUEVA LÓGICA DE SONIDO Y TEMA ---
+      // --- LÓGICA DE SONIDO Y TEMA ---
       const audioDay = document.getElementById('audio-theme-day');
       const audioNight = document.getElementById('audio-theme-night');
       const muteBtn = document.getElementById('mute-btn');
@@ -428,8 +438,10 @@
           iconSun.style.display = theme === 'day' ? 'block' : 'none';
           iconMoon.style.display = theme === 'day' ? 'none' : 'block';
           localStorage.setItem('theme', theme);
-          // ¡Aquí está la magia!
+          
+          // ¡Aquí está la magia doble!
           playCurrentTrack();
+          setParticles(theme);
       }
 
       // Inicialización
