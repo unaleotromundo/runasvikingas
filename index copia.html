@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>El Hilo de las Nornas | Un Portal Rúnico</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- TEMA NOCHE (FUEGO Y SOMBRA) - POR DEFECTO --- */
+    :root {
+      --color-bg: #0a141d; --color-surface: rgba(10, 20, 30, 0.65); --color-border: rgba(107, 79, 53, 0.4); --color-text-main: #c5b8a3; --color-text-header: #e6d9c1; --color-accent-primary: #d4af37; --color-accent-secondary: #6b4f35; --color-modal-bg: #f2e8d5; --color-modal-text: #6b4f35; --transition-speed: 0.4s;
+    }
+    
+    /* --- TEMA DÍA (NATURALEZA Y PIEDRA) --- */
+    body.theme-day {
+      --color-bg: #d7c7ad; --color-surface: rgba(242, 232, 213, 0.65); --color-border: rgba(105, 116, 88, 0.4); --color-text-main: #5d5345; --color-text-header: #3e3529; --color-accent-primary: #8c6d4e; --color-accent-secondary: #a8987f; --color-modal-bg: #3e3529; --color-modal-text: #f2e8d5;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body { background-color: var(--color-bg); color: var(--color-text-main); font-family: var(--font-body); margin: 0; overflow-x: hidden; transition: background-color var(--transition-speed), color var(--transition-speed); }
+    .world-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, var(--color-bg), #142331); z-index: -1; transition: background var(--transition-speed); }
+    body.theme-day .world-background { background: linear-gradient(to bottom, var(--color-bg), #bfae91); }
+    #particles-js { position:fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 0; }
+    .app-container { max-width: 1200px; margin: 0 auto; padding: 1rem; position: relative; z-index: 2; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0.5rem; border-bottom: 1px solid rgba(212, 175, 55, 0.2); margin-bottom: 2rem; transition: border-color var(--transition-speed); }
+    body.theme-day header { border-bottom-color: rgba(105, 116, 88, 0.4); }
+    .logo-container { display: flex; align-items: center; gap: 1rem; }
+    .logo-rune { font-size: 2.5rem; color: var(--color-accent-primary); text-shadow: 0 0 15px var(--color-accent-primary); animation: pulse-glow 5s ease-in-out infinite; transition: color var(--transition-speed), text-shadow var(--transition-speed); }
+    header h1 { font-family: 'Cinzel Decorative', serif; font-size: 1.5rem; color: var(--color-text-header); margin: 0; letter-spacing: 2px; transition: color var(--transition-speed); }
+    #main-nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    #main-nav a { color: var(--color-text-main); text-decoration: none; padding: 0.5rem 0.8rem; position: relative; transition: color var(--transition-speed), text-shadow var(--transition-speed); }
+    #main-nav a::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background-color: var(--color-accent-primary); transition: width var(--transition-speed), background-color var(--transition-speed); }
+    #main-nav a:hover, #main-nav a.active { color: var(--color-text-header); text-shadow: 0 0 5px var(--color-accent-primary); }
+    #main-nav a:hover::after, #main-nav a.active::after { width: 60%; }
+    .main-section { display: none; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 16px; padding: 1.5rem; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); transition: background-color var(--transition-speed), border-color var(--transition-speed); }
+    .main-section.active { display: block; animation: section-fade-in 0.8s ease forwards; }
+    @keyframes section-fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    h2 { font-family: 'Cinzel Decorative', serif; color: var(--color-text-header); text-align: center; font-size: 2.2rem; margin-top: 0; margin-bottom: 1.5rem; text-shadow: 0 0 10px var(--color-accent-primary); transition: color var(--transition-speed), text-shadow var(--transition-speed); }
+    input[type="text"], button { font-family: var(--font-body); border-radius: 8px; border: 1px solid var(--color-accent-secondary); padding: 0.8em 1em; background: rgba(0,0,0,0.2); color: var(--color-text-header); transition: all var(--transition-speed); }
+    body.theme-day input[type="text"] { background: rgba(255,255,255,0.2); border-color: var(--color-accent-secondary); color: var(--color-text-header); }
+    button { background: var(--color-accent-secondary); color: var(--color-text-header); font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    button:hover:not(:disabled) { background-color: var(--color-accent-primary); color: var(--color-bg); transform: translateY(-2px); box-shadow: 0 4px 15px var(--color-accent-primary); }
+    button:disabled { cursor: not-allowed; opacity: 0.5; }
+    .tipo-btn { background: transparent; border: 1px solid var(--color-accent-secondary); }
+    .tipo-btn.active { background: var(--color-accent-primary); color: var(--color-bg); border-color: var(--color-accent-primary); font-weight: bold; }
+    #galeria-runas { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+    .runa-glyph-container { text-align:center; flex: 0 0 90px; height: 110px; display: flex; flex-direction:column; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border: 1px solid var(--color-accent-secondary); border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); cursor: pointer; transition: all var(--transition-speed); padding-top:5px; }
+    body.theme-day .runa-glyph-container { background: rgba(255,255,255,0.2); }
+    .runa-glyph-container:hover { box-shadow: 0 4px 20px var(--color-accent-primary); transform: translateY(-3px) scale(1.05); background: var(--color-accent-secondary); }
+    .runa-glyph { font-size: 50px; line-height: 1; color: var(--color-text-main); text-shadow: 0 0 3px var(--color-accent-primary); transition: all var(--transition-speed); animation: pulse-glow 6s ease-in-out infinite alternate; }
+    .runa-glyph-container .runa-nombre-tag { font-size: 0.85em; margin-top: 8px; color: var(--color-text-main); transition: color var(--transition-speed); }
+    .runa-glyph-container:hover .runa-glyph { color: var(--color-accent-primary); text-shadow: 0 0 8px var(--color-accent-primary); transform: scale(1.1); animation-play-state: paused; }
+    .runa-glyph-container:hover .runa-nombre-tag { color: var(--color-text-header); }
+    @keyframes pulse-glow { from { text-shadow: 0 0 3px var(--color-accent-primary); } to { text-shadow: 0 0 8px var(--color-accent-primary); } }
+    .runa-modal-overlay { display: none; position: fixed; z-index: 1000; inset: 0; background: rgba(10, 20, 29, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); justify-content: center; align-items: center; animation: fadeIn 0.3s; }
+    .runa-modal-overlay.active { display: flex; }
+    .runa-modal { background: var(--color-modal-bg); color: var(--color-modal-text); border-radius: 16px; box-shadow: 0 8px 44px rgba(0,0,0,0.5); display: flex; gap: 32px; max-width: 650px; width: 98%; padding: 32px 28px; position: relative; animation: modalSlideUp 0.35s cubic-bezier(0.165, 0.84, 0.44, 1); transition: background-color var(--transition-speed), color var(--transition-speed); }
+    .runa-modal-img { background: #e6d9c1; border-radius: 12px; min-height: 150px; width: 150px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background-color var(--transition-speed); }
+    body.theme-day .runa-modal-img { background: #5d5345; }
+    .runa-modal-img .runa-glyph { font-size: 90px; color: var(--color-modal-text); animation: none; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .runa-modal-info > div { opacity: 0; animation: reveal-secret 0.5s ease forwards; }
+    .runa-modal-info .runa-modal-nombre { animation-delay: 0.1s; } .runa-modal-info .runa-modal-significado { animation-delay: 0.2s; } .runa-modal-info .runa-modal-interpretacion { animation-delay: 0.4s; } .runa-modal-info .runa-modal-extra { animation-delay: 0.6s; }
+    @keyframes reveal-secret { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .runa-modal-nombre { font-family: 'Cinzel Decorative', serif; font-size: 1.7em; }
+    .runa-modal-significado { font-size: 1.1em; color: #8c6d4e; font-weight: 500; margin: 0.5em 0; transition: color var(--transition-speed); }
+    body.theme-day .runa-modal-significado { color: #bfae91; }
+    .runa-modal-interpretacion { background: #e9e2d3; border-radius: 7px; padding: 0.8em 1em; color: #3b2d1c; margin: 0.5em 0; transition: background-color var(--transition-speed), color var(--transition-speed); }
+    body.theme-day .runa-modal-interpretacion { background: #4a4134; color: #d7c7ad; }
+    .runa-modal-extra { font-size: 0.9em; color: #5a4a31; margin-top: 1em; font-style: italic; transition: color var(--transition-speed); }
+    body.theme-day .runa-modal-extra { color: #a8987f; }
+    .runa-modal-close { cursor: pointer; position: absolute; top: 12px; right: 12px; font-size: 1.8em; color: #bca170; background: none; border: none; width: 40px; height: 40px; border-radius: 50%; transition: background 0.2s, color 0.2s, transform 0.2s; }
+    body.theme-day .runa-modal-close { color: #a8987f; }
+    .runa-modal-close:hover { background: #e6d9c1; color: var(--color-modal-text); transform: rotate(90deg); }
+    body.theme-day .runa-modal-close:hover { background: #5d5345; }
+    .tirada-runa-box { text-align: center; background: rgba(242, 232, 213, 0.1); border: 1px solid var(--color-accent-secondary); border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); padding: 12px 8px 10px; min-width: 140px; transition: all var(--transition-speed); }
+    .tirada-runa-box:hover, .tirada-runa-box:focus { box-shadow: 0 4px 16px var(--color-accent-primary); transform: translateY(-3px) scale(1.03); background: rgba(107, 79, 53, 0.5); border-color: var(--color-accent-primary); }
+    body.theme-day .tirada-runa-box { background: rgba(255,255,255,0.1); }
+    body.theme-day .tirada-runa-box:hover { background: rgba(168, 152, 127, 0.5); }
+    .tirada-runa-box .runa-glyph { font-size: 60px; margin: 0.2em auto; }
+    .tirada-pos { color: var(--color-text-header); font-weight: bold; }
+    .tirada-nombre { font-weight: bold; font-size: 1.13em; color: var(--color-text-header); }
+    .tirada-cruz-layout { display: grid; grid-template-areas: ". arriba ." "izquierda centro derecha" ". abajo ."; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
+    .tirada-cruz-arriba { grid-area: arriba; } .tirada-cruz-centro { grid-area: centro; } .tirada-cruz-abajo { grid-area: abajo; } .tirada-cruz-izquierda { grid-area: izquierda; } .tirada-cruz-derecha { grid-area: derecha; }
+    .fixed-controls { position: fixed; bottom: 20px; right: 20px; z-index: 100; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+    .fixed-controls button { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 50%; width: 50px; height: 50px; font-size: 1.5em; backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; padding: 0; color: var(--color-text-header); }
+    .theme-switcher svg { width: 24px; height: 24px; transition: all 0.5s ease; }
+    .theme-switcher #icon-sun { display: none; }
+    .audio-controls { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .audio-controls input[type="range"] { -webkit-appearance: none; appearance: none; width: 50px; height: 50px; background: transparent; cursor: pointer; transform: rotate(-90deg); }
+    .audio-controls input[type="range"]::-webkit-slider-runnable-track { background: rgba(0,0,0,0.2); height: 4px; border-radius: 2px; border: 1px solid var(--color-border); }
+    .audio-controls input[type="range"]::-moz-range-track { background: rgba(0,0,0,0.2); height: 4px; border-radius: 2px; border: 1px solid var(--color-border); }
+    .audio-controls input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; margin-top: -6px; background-color: var(--color-accent-primary); height: 16px; width: 16px; border-radius: 50%; border: 2px solid var(--color-surface); }
+    .audio-controls input[type="range"]::-moz-range-thumb { background-color: var(--color-accent-primary); height: 12px; width: 12px; border-radius: 50%; border: 2px solid var(--color-surface); }
+    #chatbot-toggle-btn { position: fixed; bottom: 20px; left: 20px; z-index: 100; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 50%; width: 50px; height: 50px; backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; padding: 0; color: var(--color-text-header); animation: pulse-glow 4s ease-in-out infinite alternate; }
+    #chatbot-toggle-btn svg { width: 28px; height: 28px; color: var(--color-accent-primary); transition: all 0.5s ease; }
+    #chatbot-overlay { display: none; position: fixed; z-index: 1010; inset: 0; background: rgba(10, 20, 29, 0.85); backdrop-filter: blur(8px); justify-content: center; align-items: center; animation: fadeIn 0.5s; }
+    #chatbot-overlay.active { display: flex; }
+    #chatbot-container { position: relative; width: 90%; max-width: 420px; height: 80%; max-height: 700px; }
+    #chatbot-container iframe { width: 100%; height: 100%; border: 1px solid var(--color-border); border-radius: 16px; box-shadow: 0 8px 44px rgba(0,0,0,0.5); }
+    #chatbot-close-btn { position: absolute; top: -15px; right: -15px; background: var(--color-modal-bg); color: var(--color-modal-text); border-radius: 50%; width: 40px; height: 40px; font-size: 1.5em; border: 1px solid var(--color-border); z-index: 10; }
+    footer { text-align: center; padding: 2rem 1rem; margin-top: 2rem; color: rgba(197, 184, 163, 0.5); border-top: 1px solid rgba(212, 175, 55, 0.1); transition: all var(--transition-speed); }
+    body.theme-day footer { color: rgba(62, 53, 41, 0.5); border-top-color: rgba(105, 116, 88, 0.2); }
+    @media (max-width: 768px) {
+      header { flex-direction: column; gap: 1rem; } header h1 { font-size: 1.4rem; text-align: center; } #main-nav { justify-content: center; }
+      .runa-modal { flex-direction: column; align-items: center; }
+      .tirada-cruz-layout { grid-template-areas: "arriba" "centro" "izquierda" "derecha" "abajo"; grid-template-columns: 1fr; }
+      .tirada-runa-box { min-width: 80vw; }
+      .tirada-runas-flex.tres-runas { flex-direction: column; align-items: center; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="world-background"></div>
+  <div id="particles-js"></div>
+
+  <!-- PISTAS DE AUDIO -->
+  <audio id="audio-theme-day" loop src="audio/musica-tema-claro.mp3" preload="auto"></audio>
+  <audio id="audio-theme-night" loop src="audio/musica-tema-oscuro.mp3" preload="auto"></audio>
+
+  <div class="app-container">
+    <header>
+      <div class="logo-container">
+        <span class="logo-rune">ᛟ</span>
+        <h1>El Hilo de las Nornas</h1>
+      </div>
+      <nav id="main-nav">
+        <a href="#" data-section="inicio" class="active">Inicio</a>
+        <a href="#" data-section="tirada">Oráculo</a>
+        <a href="#" data-section="galeria">Códice Rúnico</a>
+        <a href="#" data-section="saga">La Saga</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="inicio" class="main-section active">
+        <h2>Un Portal a la Sabiduría Antigua</h2>
+        <p style="text-align: center; font-size: 1.2em; max-width: 700px; margin: 0 auto 2em auto;">
+          Has llegado al fiordo de Bjørndal, un lugar donde el velo entre los mundos es delgado. Aquí, las runas no son solo símbolos, son la voz del destino. Explora su sabiduría, consulta el oráculo o adéntrate en la saga de "El Hilo de las Nornas".
+        </p>
+        <div style="text-align: center;">
+          <button id="cta-oraculo">Consultar el Oráculo</button>
+        </div>
+      </section>
+
+      <section id="tirada" class="main-section">
+        <h2>Ritual del Oráculo</h2>
+        <div style="text-align:center; margin-bottom: 2em;">
+          <label for="pregunta" style="font-weight:bold; display:block; margin-bottom: 0.5em;">Graba tu pregunta en el éter:</label>
+          <input type="text" id="pregunta" placeholder="Escribe tu consulta a las Nornas..." style="width:90%;max-width:370px;">
+        </div>
+        <div style="text-align:center;">
+          <p>Elige el ritual que más resuene con tu espíritu.</p>
+          <div class="tipos-tirada" style="display:flex; justify-content:center; gap:10px; margin-bottom:1em;">
+            <button class="tipo-btn active" data-tirada="simple" title="Una respuesta directa y concisa.">Una Runa</button>
+            <button class="tipo-btn" data-tirada="tres" title="Pasado, Presente y Futuro.">Tres Runas</button>
+            <button class="tipo-btn" data-tirada="cruz" title="Análisis profundo de una situación.">Cruz Rúnica</button>
+          </div>
+          <div id="explicacion-tirada" style="margin: 1em auto; max-width:500px; background: rgba(0,0,0,0.1); padding: 1em; border-radius:8px;"></div>
+        </div>
+        <div style="text-align:center; margin-top: 2em;">
+          <button id="iniciar-ritual" disabled>Lanzar las Runas</button>
+          <div id="tirada-resultado" style="margin-top:2em;"></div>
+        </div>
+        <template id="ejemplo-simple"><b>Una Runa:</b> Ideal para una pregunta concreta, te ofrece una guía directa.</template>
+        <template id="ejemplo-tres"><b>Tres Runas:</b> Explora el flujo del tiempo: Pasado, Presente y Futuro de tu consulta.</template>
+        <template id="ejemplo-cruz"><b>Cruz Rúnica:</b> Un análisis profundo: Tú, tu Guía, la Raíz del asunto, el Obstáculo y la Solución.</template>
+      </section>
+
+      <section id="galeria" class="main-section">
+        <h2>Códice de Runas</h2>
+        <div id="galeria-runas"></div>
+      </section>
+
+      <section id="saga" class="main-section">
+        <h2>La Saga: El Hilo de las Nornas</h2>
+        <div style="max-width: 800px; margin: 0 auto; line-height: 1.7;">
+          <p>En el fiordo de Bjørndal, la muerte de un Jarl sin heredero amenaza con desgarrar al clan. Una joven völva, Ingrid, debe interpretar una misteriosa tirada de runas para guiar a su gente a través de una tormenta de ambición, traición y guerra inminente. La fuerza del guerrero Björn y la astucia del comerciante Hakon se enfrentan, pero las runas susurran un secreto que ninguno de los dos puede ver...</p>
+          <p><em>(Aquí se podrá leer la saga completa, capítulo por capítulo, con sus ilustraciones)</em></p>
+        </div>
+      </section>
+    </main>
+    
+    <footer>
+      <p>&copy; 2025 Forjado en colaboración. Un portal al mundo de las runas.</p>
+    </footer>
+  </div>
+  
+  <div class="runa-modal-overlay" id="runa-modal-overlay" tabindex="-1">
+    <div class="runa-modal" role="dialog" aria-modal="true" aria-labelledby="runa-modal-nombre">
+      <button class="runa-modal-close" id="runa-modal-close" aria-label="Cerrar modal">&times;</button>
+      <div class="runa-modal-img" id="runa-modal-img"></div>
+      <div class="runa-modal-info">
+        <h3 class="runa-modal-nombre" id="runa-modal-nombre"></h3>
+        <div class="runa-modal-significado" id="runa-modal-significado"></div>
+        <div class="runa-modal-interpretacion" id="runa-modal-interpretacion"></div>
+        <div class="runa-modal-extra" id="runa-modal-extra"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fixed-controls">
+      <div class="theme-switcher">
+          <button id="theme-toggle-btn" title="Cambiar tema">
+              <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path id="icon-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                  <path id="icon-sun" d="M12 1v2m0 18v2m8.66-10.66l-1.42 1.42M4.76 4.76L3.34 6.18M23 12h-2M3 12H1m18.66-7.24l-1.42-1.42M4.76 19.24l-1.42-1.42M12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12z" style="display:none;"></path>
+              </svg>
+          </button>
+      </div>
+      <div class="audio-controls">
+        <button id="mute-btn" title="Silenciar / Activar Sonido">🔇</button>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.3" title="Control de volumen">
+      </div>
+  </div>
+
+  <button id="chatbot-toggle-btn" title="Consultar al Oráculo IA">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+    </svg>
+  </button>
+
+  <div id="chatbot-overlay">
+    <div id="chatbot-container">
+        <iframe src="https://cdn.botpress.cloud/webchat/v3.2/shareable.html?configUrl=https://files.bpcontent.cloud/2025/08/21/02/20250821024347-N68COQR2.json&theme=dark" frameborder="0"></iframe>
+        <button id="chatbot-close-btn" title="Cerrar Oráculo">&times;</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  
+    <script>
+    const runas = [
+      { nombre: 'Fehu', simbolo: 'ᚠ', significado: 'Riqueza, abundancia, prosperidad.', extra: 'Representa el ganado, la prosperidad material y la energía de inicio.', interpretacion: "Valora tus recursos con sabiduría. Es momento de reconocer la abundancia y actuar con generosidad." },
+      { nombre: 'Uruz', simbolo: 'ᚢ', significado: 'Fuerza vital, poder, salud.', extra: 'Conectada al buey salvaje, Uruz señala la fuerza bruta, la vitalidad y la transformación.', interpretacion: "Confía en tu poder para superar cualquier desafío y transforma la adversidad en crecimiento." },
+      { nombre: 'Thurisaz', simbolo: 'ᚦ', significado: 'Desafío, protección, pruebas.', extra: 'Simboliza el martillo de Thor y la puerta entre mundos. Anuncia pruebas, pero también la fuerza para superarlas.', interpretacion: "Enfrenta los obstáculos con conciencia; cada desafío es una oportunidad para fortalecerte." },
+      { nombre: 'Ansuz', simbolo: 'ᚨ', significado: 'Palabra, comunicación, inspiración.', extra: 'Ligada a Odín y la sabiduría, Ansuz indica la necesidad de escuchar la intuición y los mensajes que llegan.', interpretacion: "Escucha los mensajes, comunícate desde el corazón y permite que la verdad se exprese." },
+      { nombre: 'Raidho', simbolo: 'ᚱ', significado: 'Viaje, movimiento, evolución.', extra: 'Representa un viaje físico o espiritual, la importancia de avanzar y adaptarse a los ciclos.', interpretacion: "Confía en el proceso del viaje, cada paso es parte del aprendizaje. El movimiento te llevará al equilibrio." },
+      { nombre: 'Kenaz', simbolo: 'ᚲ', significado: 'Luz, creatividad, revelaciones.', extra: 'Simboliza la antorcha, el fuego del conocimiento que revela lo oculto y abre caminos.', interpretacion: "Es tiempo de crear, de encender tu fuego interior y de dejar que tu luz guíe el camino." },
+      { nombre: 'Gebo', simbolo: 'ᚷ', significado: 'Regalo, intercambio, generosidad.', extra: 'Simboliza el dar y recibir, la reciprocidad, los pactos y las alianzas.', interpretacion: "Da y recibe con amor, busca el equilibrio en tus relaciones y acepta la ayuda que se te ofrece." },
+      { nombre: 'Wunjo', simbolo: 'ᚹ', significado: 'Alegría, bienestar, éxito.', extra: 'Representa la alegría compartida y el triunfo después de la dificultad. Habla de plenitud y satisfacción.', interpretacion: "Permite que la gratitud y la confianza abran la puerta a la felicidad y al éxito en tu vida." },
+      { nombre: 'Hagalaz', simbolo: 'ᚺ', significado: 'Cambios bruscos, transformación.', extra: 'La runa del granizo, la crisis que destruye lo viejo para dar paso a lo nuevo. Una transformación necesaria.', interpretacion: "Acepta los cambios repentinos y ve en ellos una oportunidad. Después de la tormenta, llega la calma." },
+      { nombre: 'Nauthiz', simbolo: 'ᚾ', significado: 'Necesidad, carencia, resistencia.', extra: 'Simboliza la escasez y la capacidad de resistir. Llama a la paciencia y al aprendizaje a través de las limitaciones.', interpretacion: "Acepta tus limitaciones y aprende de ellas. La paciencia y la resiliencia son tus mayores aliadas ahora." },
+      { nombre: 'Isa', simbolo: 'ᛁ', significado: 'Estancamiento, pausa, introspección.', extra: 'Representa el hielo, un tiempo de quietud y reflexión. Puede señalar bloqueos, pero también la oportunidad de meditar.', interpretacion: "Te invita a la quietud. No fuerces el avance, aprovecha este tiempo para meditar y reencontrarte." },
+      { nombre: 'Jera', simbolo: 'ᛃ', significado: 'Ciclo, cosecha, recompensa.', extra: 'La runa de la cosecha y los ciclos naturales. Indica que todo llega en su momento, recompensando el esfuerzo.', interpretacion: "Recompensa el esfuerzo sostenido. Todo ciclo llega a su fin y la cosecha será justa. Confía en los tiempos." },
+      { nombre: 'Eihwaz', simbolo: 'ᛇ', significado: 'Resistencia, transformación profunda.', extra: 'Simboliza el tejo, la conexión entre mundos y la capacidad de superar pruebas profundas.', interpretacion: "Es una runa de transformación profunda. No temas a los cambios radicales; el renacimiento está cerca." },
+      { nombre: 'Perthro', simbolo: 'ᛈ', significado: 'Misterio, destino, intuición.', extra: 'Runa de la suerte, el azar y lo oculto que está por revelarse. Invita a confiar en la intuición.', interpretacion: "Revela misterios y secretos. Confía en tu intuición, hay verdades ocultas que pronto saldrán a la luz." },
+      { nombre: 'Algiz', simbolo: 'ᛉ', significado: 'Protección, guía espiritual.', extra: 'Simboliza el ciervo y la protección divina. Es la defensa ante peligros y la conexión con lo sagrado.', interpretacion: "Te protege y conecta con lo sagrado. Deja que la guía espiritual te oriente y resguarda tu energía." },
+      { nombre: 'Sowilo', simbolo: 'ᛋ', significado: 'Éxito, poder solar, victoria.', extra: 'La runa del sol, la victoria sobre la oscuridad, la claridad mental y la energía renovada.', interpretacion: "Es el sol que ilumina tu camino. El éxito, la claridad y la vitalidad llegan a tu vida. Avanza con seguridad." },
+      { nombre: 'Tiwaz', simbolo: 'ᛏ', significado: 'Justicia, valentía, sacrificio.', extra: 'Simboliza la lanza del dios Tyr, la justicia y el sacrificio por un bien mayor. Llama a actuar con rectitud.', interpretacion: "Exige justicia y sacrificio. Actúa con integridad, sé valiente y defiende lo que es correcto." },
+      { nombre: 'Berkano', simbolo: 'ᛒ', significado: 'Nacimiento, crecimiento, fertilidad.', extra: 'Runa de la madre, la fertilidad y la protección. Anuncia nacimientos, proyectos nuevos y crecimiento.', interpretacion: "Anuncia nuevos comienzos. Cuida de tus proyectos como una madre y permite que crezcan con amor." },
+      { nombre: 'Ehwaz', simbolo: 'ᛖ', significado: 'Movimiento, progreso, confianza.', extra: 'Simboliza el caballo, los viajes y el trabajo en equipo. Habla de confianza, avances y colaboración.', interpretacion: "Habla de movimiento y colaboración. Confía en quienes te rodean y avanza hacia tus metas en compañía." },
+      { nombre: 'Mannaz', simbolo: 'ᛗ', significado: 'Humanidad, cooperación, autoconocimiento.', extra: 'Runa del ser humano, la comunidad y la autorrealización. Llama a la introspección y la colaboración.', interpretacion: "Es la humanidad y el autoconocimiento. Reconoce tu valor y busca el apoyo de la comunidad." },
+      { nombre: 'Laguz', simbolo: 'ᛚ', significado: 'Intuición, emociones, flujo.', extra: 'Runa del agua, la intuición, la adaptabilidad y las emociones profundas. Invita a fluir.', interpretacion: "Fluye como el agua. Déjate llevar por la intuición y adapta tus emociones con sabiduría." },
+      { nombre: 'Ingwaz', simbolo: 'ᛝ', significado: 'Potencial, paz interna, culminación.', extra: 'Simboliza la semilla, el potencial oculto y la culminación de procesos. Habla de reposo e integración.', interpretacion: "Simboliza paz y culminación. Es tiempo de finalizar procesos y disfrutar del merecido descanso." },
+      { nombre: 'Othala', simbolo: 'ᛟ', significado: 'Herencia, raíces, legado.', extra: 'Runa de la herencia, las tradiciones y el sentido de pertenencia. Habla de los ancestros y los valores.', interpretacion: "Conecta con tus raíces. Honra tu herencia y construye tu propio legado a partir de ella." },
+      { nombre: 'Dagaz', simbolo: 'ᛞ', significado: 'Despertar, transformación, nuevos paradigmas.', extra: 'La runa del día, del despertar y de los cambios positivos. Indica un punto de inflexión y la llegada de la claridad.', interpretacion: "Es el despertar y la transformación. Estás a punto de vivir un cambio positivo y revelador." }
+    ];
+
+    function openRunaModalByName(nombreRuna) {
+        const r = runas.find(r => r.nombre === nombreRuna);
+        if (!r) return;
+        const modalOverlay = document.getElementById('runa-modal-overlay');
+        const modalImg = document.getElementById('runa-modal-img');
+        const modalNombre = document.getElementById('runa-modal-nombre');
+        const modalSignificado = document.getElementById('runa-modal-significado');
+        const modalInterpretacion = document.getElementById('runa-modal-interpretacion');
+        const modalExtra = document.getElementById('runa-modal-extra');
+        
+        modalImg.innerHTML = `<span class="runa-glyph">${r.simbolo}</span>`;
+        modalNombre.textContent = r.nombre;
+        modalSignificado.textContent = r.significado || '';
+        modalInterpretacion.textContent = r.interpretacion || '';
+        modalExtra.textContent = r.extra || '';
+        
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = "hidden";
+        document.getElementById('runa-modal-close').focus();
+    }
+
+    function activarModalEnTiradas() {
+        document.querySelectorAll('.tirada-runa-box').forEach(box => {
+            const nombre = box.querySelector('.tirada-nombre')?.textContent;
+            if (nombre) {
+                box.style.cursor = "pointer";
+                box.setAttribute('role', 'button');
+                box.setAttribute('aria-label', `Ver detalles de la runa ${nombre}`);
+                box.tabIndex = 0;
+                box.addEventListener('click', () => openRunaModalByName(nombre));
+                box.addEventListener('keydown', (e) => {
+                    if (e.key === "Enter" || e.key === " ") { openRunaModalByName(nombre); e.preventDefault(); }
+                });
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // SPA Navigation
+      const navLinks = document.querySelectorAll('#main-nav a[data-section]');
+      const sections = document.querySelectorAll('.main-section');
+      const ctaOraculo = document.getElementById('cta-oraculo');
+
+      function navigateTo(sectionId) {
+          navLinks.forEach(l => l.classList.toggle('active', l.dataset.section === sectionId));
+          sections.forEach(sec => sec.classList.toggle('active', sec.id === sectionId));
+      }
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => { e.preventDefault(); navigateTo(link.dataset.section); });
+      });
+      ctaOraculo.addEventListener('click', () => navigateTo('tirada'));
+
+      // Galería
+      const galeria = document.getElementById('galeria-runas');
+      galeria.innerHTML = runas.map(r => `
+        <div class="runa-glyph-container" data-nombre="${r.nombre}" tabindex="0" role="button" aria-label="Ver detalles de ${r.nombre}">
+          <span class="runa-glyph">${r.simbolo}</span>
+          <span class="runa-nombre-tag">${r.nombre}</span>
+        </div>
+      `).join('');
+      galeria.querySelectorAll('div[data-nombre]').forEach(div => {
+        div.addEventListener('click', () => openRunaModalByName(div.dataset.nombre));
+        div.addEventListener('keydown', e => { if (e.key === "Enter" || e.key === " ") { openRunaModalByName(div.dataset.nombre); e.preventDefault(); } });
+      });
+
+      // Modal Logic
+      const modalOverlay = document.getElementById('runa-modal-overlay');
+      const closeModalBtn = document.getElementById('runa-modal-close');
+      const closeModal = () => { modalOverlay.classList.remove('active'); document.body.style.overflow = ""; };
+      closeModalBtn.addEventListener('click', closeModal);
+      modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+      document.addEventListener('keydown', e => { if (e.key === "Escape" && modalOverlay.classList.contains('active')) closeModal(); });
+
+      // Tirada Logic
+      const tiradaBtns = document.querySelectorAll('.tipo-btn');
+      const explicacion = document.getElementById('explicacion-tirada');
+      const preguntaInput = document.getElementById('pregunta');
+      const tirarBtn = document.getElementById('iniciar-ritual');
+      const tiradaResultado = document.getElementById('tirada-resultado');
+      const templates = { simple: document.getElementById('ejemplo-simple').innerHTML, tres: document.getElementById('ejemplo-tres').innerHTML, cruz: document.getElementById('ejemplo-cruz').innerHTML };
+      let tipoSeleccionado = 'simple';
+      explicacion.innerHTML = templates[tipoSeleccionado];
+
+      tiradaBtns.forEach(btn => {
+        btn.addEventListener('click', () => { tipoSeleccionado = btn.dataset.tirada; explicacion.innerHTML = templates[tipoSeleccionado]; tiradaBtns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); });
+      });
+
+      preguntaInput.addEventListener('input', () => { tirarBtn.disabled = preguntaInput.value.trim().length === 0; });
+
+      function sacarRunas(n) {
+        const baraja = [...runas]; let extraidas = [];
+        for (let i = 0; i < n && baraja.length > 0; i++) { extraidas.push(baraja.splice(Math.floor(Math.random() * baraja.length), 1)[0]); }
+        return extraidas;
+      }
+
+      tirarBtn.addEventListener('click', () => {
+        tiradaResultado.innerHTML = ''; tiradaResultado.style.opacity = 0;
+        setTimeout(() => {
+          if (tipoSeleccionado === 'simple') {
+            const [runa] = sacarRunas(1);
+            tiradaResultado.innerHTML = `<div class="tirada-runas-flex"><div class="tirada-runa-box"><div class="tirada-pos">Tu Guía</div><span class="runa-glyph">${runa.simbolo}</span><span class="tirada-nombre">${runa.nombre}</span></div></div>`;
+          } else if (tipoSeleccionado === 'tres') {
+            const [r1, r2, r3] = sacarRunas(3); const pos = ['Pasado', 'Presente', 'Futuro'];
+            tiradaResultado.innerHTML = `<div class="tirada-runas-flex tres-runas">${[r1,r2,r3].map((r,i) => `<div class="tirada-runa-box"><div class="tirada-pos">${pos[i]}</div><span class="runa-glyph">${r.simbolo}</span><span class="tirada-nombre">${r.nombre}</span></div>`).join('')}</div>`;
+          } else if (tipoSeleccionado === 'cruz') {
+            const extraidas = sacarRunas(5); const pos = [ { label: 'Tú / Ahora', class: 'tirada-cruz-centro' }, { label: 'Guía', class: 'tirada-cruz-arriba' }, { label: 'Raíz', class: 'tirada-cruz-abajo' }, { label: 'Obstáculo', class: 'tirada-cruz-izquierda' }, { label: 'Futuro', class: 'tirada-cruz-derecha' }];
+            tiradaResultado.innerHTML = `<div class="tirada-cruz-layout">${extraidas.map((r, i) => `<div class="${pos[i].class} tirada-runa-box"><div class="tirada-pos">${pos[i].label}</div><span class="runa-glyph">${r.simbolo}</span><span class="tirada-nombre">${r.nombre}</span></div>`).join('')}</div>`;
+          }
+          activarModalEnTiradas();
+          tiradaResultado.style.transition = 'opacity 0.5s'; tiradaResultado.style.opacity = 1;
+        }, 300);
+      });
+
+      // --- CONFIGURACIÓN DE PARTÍCULAS ---
+      const particlesNightConfig = { particles: { number: { value: 100, density: { enable: true, value_area: 800 } }, color: { value: "#d4af37" }, shape: { type: "circle" }, opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } }, size: { value: 2, random: true }, line_linked: { enable: false }, move: { enable: true, speed: 0.5, direction: "none", random: true, straight: false, out_mode: "out" } }, interactivity: { events: { onhover: { enable: false } } }, retina_detect: true };
+      const particlesDayConfig = { particles: { number: { value: 150, density: { enable: true, value_area: 800 } }, color: { value: ["#8f2c24", "#3a7d44"] }, shape: { type: "circle" }, opacity: { value: 0.6, random: true, anim: { enable: true, speed: 1, opacity_min: 0.2, sync: false } }, size: { value: 2.5, random: true }, line_linked: { enable: false }, move: { enable: true, speed: 0.6, direction: "none", random: true, straight: false, out_mode: "out" } }, interactivity: { events: { onhover: { enable: false } } }, retina_detect: true };
+
+      function setParticles(theme) {
+        if (window.pJSDom && window.pJSDom.length > 0) {
+            window.pJSDom[0].pJS.fn.vendors.destroypJS();
+            window.pJSDom = [];
+        }
+        const config = theme === 'day' ? particlesDayConfig : particlesNightConfig;
+        particlesJS('particles-js', config);
+      }
+      
+      // --- LÓGICA DE SONIDO Y TEMA ---
+      const audioDay = document.getElementById('audio-theme-day');
+      const audioNight = document.getElementById('audio-theme-night');
+      const muteBtn = document.getElementById('mute-btn');
+      const volumeSlider = document.getElementById('volume-slider');
+      
+      let isMuted = true;
+      let currentVolume = 0.3;
+
+      function syncVolume() {
+        audioDay.volume = currentVolume;
+        audioNight.volume = currentVolume;
+      }
+
+      function playCurrentTrack() {
+        if (isMuted) return;
+        const isDayTheme = document.body.classList.contains('theme-day');
+        const toPlay = isDayTheme ? audioDay : audioNight;
+        const toPause = isDayTheme ? audioNight : audioDay;
+
+        toPause.pause();
+        toPlay.play().catch(e => console.error("La reproducción automática fue bloqueada. Se requiere interacción del usuario.", e));
+      }
+
+      muteBtn.addEventListener('click', () => {
+        isMuted = !isMuted;
+        muteBtn.textContent = isMuted ? '🔇' : '🔊';
+        if (isMuted) {
+          audioDay.pause();
+          audioNight.pause();
+        } else {
+          playCurrentTrack();
+        }
+      });
+      
+      volumeSlider.addEventListener('input', (e) => {
+        currentVolume = e.target.value;
+        syncVolume();
+      });
+
+      // Lógica del Theme Switcher
+      const themeToggleBtn = document.getElementById('theme-toggle-btn');
+      const iconSun = document.getElementById('icon-sun');
+      const iconMoon = document.getElementById('icon-moon');
+      const currentTheme = localStorage.getItem('theme') || 'night';
+
+      function setTheme(theme) {
+          document.body.classList.toggle('theme-day', theme === 'day');
+          iconSun.style.display = theme === 'day' ? 'block' : 'none';
+          iconMoon.style.display = theme === 'day' ? 'none' : 'block';
+          localStorage.setItem('theme', theme);
+          
+          // ¡Aquí está la magia doble!
+          playCurrentTrack();
+          setParticles(theme);
+      }
+
+      // Inicialización
+      syncVolume();
+      setTheme(currentTheme);
+
+      themeToggleBtn.addEventListener('click', () => {
+          const newTheme = document.body.classList.contains('theme-day') ? 'night' : 'day';
+          setTheme(newTheme);
+      });
+
+      // Lógica del Chatbot
+      const chatbotToggle = document.getElementById('chatbot-toggle-btn');
+      const chatbotOverlay = document.getElementById('chatbot-overlay');
+      const chatbotClose = document.getElementById('chatbot-close-btn');
+
+      const openChatbot = () => {
+          chatbotOverlay.classList.add('active');
+          document.body.style.overflow = 'hidden';
+      };
+      const closeChatbot = () => {
+          chatbotOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+      };
+
+      chatbotToggle.addEventListener('click', openChatbot);
+      chatbotClose.addEventListener('click', closeChatbot);
+      chatbotOverlay.addEventListener('click', (e) => {
+          if (e.target === chatbotOverlay) {
+              closeChatbot();
+          }
+      });
+      document.addEventListener('keydown', e => {
+        if(e.key === "Escape" && chatbotOverlay.classList.contains('active')) {
+            closeChatbot();
+        }
+      });
+
+    });
+  </script>
+</body>
+</html>

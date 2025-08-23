@@ -20,7 +20,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; }
-    body { background-color: var(--color-bg); color: var(--color-text-main); font-family: var(--font-body); margin: 0; overflow-x: hidden; transition: background-color var(--transition-speed), color var(--transition-speed); }
+    body { background-color: var(--color-bg); color: var(--color-text-main); font-family: 'Roboto', sans-serif; margin: 0; overflow-x: hidden; transition: background-color var(--transition-speed), color var(--transition-speed); }
     .world-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, var(--color-bg), #142331); z-index: -1; transition: background var(--transition-speed); }
     body.theme-day .world-background { background: linear-gradient(to bottom, var(--color-bg), #bfae91); }
     #particles-js { position:fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 0; }
@@ -39,7 +39,7 @@
     .main-section.active { display: block; animation: section-fade-in 0.8s ease forwards; }
     @keyframes section-fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     h2 { font-family: 'Cinzel Decorative', serif; color: var(--color-text-header); text-align: center; font-size: 2.2rem; margin-top: 0; margin-bottom: 1.5rem; text-shadow: 0 0 10px var(--color-accent-primary); transition: color var(--transition-speed), text-shadow var(--transition-speed); }
-    input[type="text"], button { font-family: var(--font-body); border-radius: 8px; border: 1px solid var(--color-accent-secondary); padding: 0.8em 1em; background: rgba(0,0,0,0.2); color: var(--color-text-header); transition: all var(--transition-speed); }
+    input[type="text"], button { font-family: 'Roboto', sans-serif; border-radius: 8px; border: 1px solid var(--color-accent-secondary); padding: 0.8em 1em; background: rgba(0,0,0,0.2); color: var(--color-text-header); transition: all var(--transition-speed); }
     body.theme-day input[type="text"] { background: rgba(255,255,255,0.2); border-color: var(--color-accent-secondary); color: var(--color-text-header); }
     button { background: var(--color-accent-secondary); color: var(--color-text-header); font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
     button:hover:not(:disabled) { background-color: var(--color-accent-primary); color: var(--color-bg); transform: translateY(-2px); box-shadow: 0 4px 15px var(--color-accent-primary); }
@@ -57,24 +57,29 @@
     @keyframes pulse-glow { from { text-shadow: 0 0 3px var(--color-accent-primary); } to { text-shadow: 0 0 8px var(--color-accent-primary); } }
     .runa-modal-overlay { display: none; position: fixed; z-index: 1000; inset: 0; background: rgba(10, 20, 29, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); justify-content: center; align-items: center; animation: fadeIn 0.3s; }
     .runa-modal-overlay.active { display: flex; }
-    .runa-modal { background: var(--color-modal-bg); color: var(--color-modal-text); border-radius: 16px; box-shadow: 0 8px 44px rgba(0,0,0,0.5); display: flex; gap: 32px; max-width: 650px; width: 98%; padding: 32px 28px; position: relative; animation: modalSlideUp 0.35s cubic-bezier(0.165, 0.84, 0.44, 1); transition: background-color var(--transition-speed), color var(--transition-speed); }
+    /* --- CSS CORREGIDO PARA EL MODAL --- */
+    .runa-modal { background: var(--color-modal-bg); color: var(--color-modal-text); border-radius: 16px; box-shadow: 0 8px 44px rgba(0,0,0,0.5); display: flex; gap: 32px; max-width: 650px; width: 98%; padding: 32px 28px; position: relative; animation: modalSlideUp 0.35s cubic-bezier(0.165, 0.84, 0.44, 1); transition: background-color var(--transition-speed), color var(--transition-speed); max-height: 90vh; overflow-y: auto; }
     .runa-modal-img { background: #e6d9c1; border-radius: 12px; min-height: 150px; width: 150px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background-color var(--transition-speed); }
     body.theme-day .runa-modal-img { background: #5d5345; }
     .runa-modal-img .runa-glyph { font-size: 90px; color: var(--color-modal-text); animation: none; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
     .runa-modal-info > div { opacity: 0; animation: reveal-secret 0.5s ease forwards; }
-    .runa-modal-info .runa-modal-nombre { animation-delay: 0.1s; } .runa-modal-info .runa-modal-significado { animation-delay: 0.2s; } .runa-modal-info .runa-modal-interpretacion { animation-delay: 0.4s; } .runa-modal-info .runa-modal-extra { animation-delay: 0.6s; }
+    .runa-modal-info .runa-modal-nombre { animation-delay: 0.1s; } .runa-modal-info .runa-modal-significado { animation-delay: 0.2s; } .runa-modal-info .runa-modal-interpretacion { animation-delay: 0.4s; } .runa-modal-info .btn-saber-mas { animation-delay: 0.6s; }
     @keyframes reveal-secret { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     .runa-modal-nombre { font-family: 'Cinzel Decorative', serif; font-size: 1.7em; }
     .runa-modal-significado { font-size: 1.1em; color: #8c6d4e; font-weight: 500; margin: 0.5em 0; transition: color var(--transition-speed); }
     body.theme-day .runa-modal-significado { color: #bfae91; }
     .runa-modal-interpretacion { background: #e9e2d3; border-radius: 7px; padding: 0.8em 1em; color: #3b2d1c; margin: 0.5em 0; transition: background-color var(--transition-speed), color var(--transition-speed); }
     body.theme-day .runa-modal-interpretacion { background: #4a4134; color: #d7c7ad; }
-    .runa-modal-extra { font-size: 0.9em; color: #5a4a31; margin-top: 1em; font-style: italic; transition: color var(--transition-speed); }
-    body.theme-day .runa-modal-extra { color: #a8987f; }
     .runa-modal-close { cursor: pointer; position: absolute; top: 12px; right: 12px; font-size: 1.8em; color: #bca170; background: none; border: none; width: 40px; height: 40px; border-radius: 50%; transition: background 0.2s, color 0.2s, transform 0.2s; }
     body.theme-day .runa-modal-close { color: #a8987f; }
     .runa-modal-close:hover { background: #e6d9c1; color: var(--color-modal-text); transform: rotate(90deg); }
     body.theme-day .runa-modal-close:hover { background: #5d5345; }
+    .btn-saber-mas { background: transparent; border: 1px solid var(--color-accent-secondary); color: var(--color-accent-secondary); margin-top: 1em; padding: 0.5em 1em; font-weight: normal; }
+    body.theme-day .btn-saber-mas { color: var(--color-modal-text); }
+    .btn-saber-mas:hover { background: var(--color-accent-secondary); color: var(--color-modal-bg); transform: none; box-shadow: none;}
+    .runa-modal-expandido h4 { font-family: 'Cinzel Decorative', serif; margin-top: 1.5em; margin-bottom: 0.5em; color: var(--color-accent-primary); border-bottom: 1px solid var(--color-border); padding-bottom: 0.3em; }
+    body.theme-day .runa-modal-expandido h4 { color: var(--color-accent-secondary); border-color: var(--color-border); }
+    .runa-modal-expandido p { font-size: 0.95em; line-height: 1.6; margin-top: 0; }
     .tirada-runa-box { text-align: center; background: rgba(242, 232, 213, 0.1); border: 1px solid var(--color-accent-secondary); border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); padding: 12px 8px 10px; min-width: 140px; transition: all var(--transition-speed); }
     .tirada-runa-box:hover, .tirada-runa-box:focus { box-shadow: 0 4px 16px var(--color-accent-primary); transform: translateY(-3px) scale(1.03); background: rgba(107, 79, 53, 0.5); border-color: var(--color-accent-primary); }
     body.theme-day .tirada-runa-box { background: rgba(255,255,255,0.1); }
@@ -105,7 +110,7 @@
     body.theme-day footer { color: rgba(62, 53, 41, 0.5); border-top-color: rgba(105, 116, 88, 0.2); }
     @media (max-width: 768px) {
       header { flex-direction: column; gap: 1rem; } header h1 { font-size: 1.4rem; text-align: center; } #main-nav { justify-content: center; }
-      .runa-modal { flex-direction: column; align-items: center; }
+      .runa-modal { flex-direction: column; align-items: center; /* La altura y scroll ya están en la regla principal */ }
       .tirada-cruz-layout { grid-template-areas: "arriba" "centro" "izquierda" "derecha" "abajo"; grid-template-columns: 1fr; }
       .tirada-runa-box { min-width: 80vw; }
       .tirada-runas-flex.tres-runas { flex-direction: column; align-items: center; gap: 1rem; }
@@ -194,10 +199,35 @@
       <button class="runa-modal-close" id="runa-modal-close" aria-label="Cerrar modal">&times;</button>
       <div class="runa-modal-img" id="runa-modal-img"></div>
       <div class="runa-modal-info">
-        <h3 class="runa-modal-nombre" id="runa-modal-nombre"></h3>
-        <div class="runa-modal-significado" id="runa-modal-significado"></div>
-        <div class="runa-modal-interpretacion" id="runa-modal-interpretacion"></div>
-        <div class="runa-modal-extra" id="runa-modal-extra"></div>
+        
+        <!-- Contenido Inicial -->
+        <div><h3 class="runa-modal-nombre" id="runa-modal-nombre"></h3></div>
+        <div><p class="runa-modal-significado" id="runa-modal-significado"></p></div>
+        <div><p class="runa-modal-interpretacion" id="runa-modal-interpretacion"></p></div>
+        <div><button class="btn-saber-mas" id="btn-saber-mas">Saber más...</button></div>
+
+        <!-- Contenido Expandido (inicialmente oculto) -->
+        <div class="runa-modal-expandido" id="runa-modal-expandido" style="display: none;">
+          <div id="runa-modal-titulo-wrapper">
+              <h4 id="runa-modal-titulo"></h4>
+          </div>
+          <div id="runa-modal-significado-profundo-wrapper">
+              <h4>Significado Profundo</h4>
+              <p id="runa-modal-significado-profundo"></p>
+          </div>
+          <div id="runa-modal-invertida-wrapper">
+              <h4>Valor Invertido</h4>
+              <p id="runa-modal-invertida"></p>
+          </div>
+          <div id="runa-modal-postura-wrapper">
+              <h4>Postura Corporal</h4>
+              <p id="runa-modal-postura"></p>
+          </div>
+          <div id="runa-modal-ritual-wrapper">
+              <h4>Ritual Asociado</h4>
+              <p id="runa-modal-ritual"></p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -233,50 +263,333 @@
 
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   
-    <script>
+  <script>
+    /* --- BASE DE DATOS COMPLETA DE RUNAS (COMBINADA Y ENRIQUECIDA) --- */
     const runas = [
-      { nombre: 'Fehu', simbolo: 'ᚠ', significado: 'Riqueza, abundancia, prosperidad.', extra: 'Representa el ganado, la prosperidad material y la energía de inicio.', interpretacion: "Valora tus recursos con sabiduría. Es momento de reconocer la abundancia y actuar con generosidad." },
-      { nombre: 'Uruz', simbolo: 'ᚢ', significado: 'Fuerza vital, poder, salud.', extra: 'Conectada al buey salvaje, Uruz señala la fuerza bruta, la vitalidad y la transformación.', interpretacion: "Confía en tu poder para superar cualquier desafío y transforma la adversidad en crecimiento." },
-      { nombre: 'Thurisaz', simbolo: 'ᚦ', significado: 'Desafío, protección, pruebas.', extra: 'Simboliza el martillo de Thor y la puerta entre mundos. Anuncia pruebas, pero también la fuerza para superarlas.', interpretacion: "Enfrenta los obstáculos con conciencia; cada desafío es una oportunidad para fortalecerte." },
-      { nombre: 'Ansuz', simbolo: 'ᚨ', significado: 'Palabra, comunicación, inspiración.', extra: 'Ligada a Odín y la sabiduría, Ansuz indica la necesidad de escuchar la intuición y los mensajes que llegan.', interpretacion: "Escucha los mensajes, comunícate desde el corazón y permite que la verdad se exprese." },
-      { nombre: 'Raidho', simbolo: 'ᚱ', significado: 'Viaje, movimiento, evolución.', extra: 'Representa un viaje físico o espiritual, la importancia de avanzar y adaptarse a los ciclos.', interpretacion: "Confía en el proceso del viaje, cada paso es parte del aprendizaje. El movimiento te llevará al equilibrio." },
-      { nombre: 'Kenaz', simbolo: 'ᚲ', significado: 'Luz, creatividad, revelaciones.', extra: 'Simboliza la antorcha, el fuego del conocimiento que revela lo oculto y abre caminos.', interpretacion: "Es tiempo de crear, de encender tu fuego interior y de dejar que tu luz guíe el camino." },
-      { nombre: 'Gebo', simbolo: 'ᚷ', significado: 'Regalo, intercambio, generosidad.', extra: 'Simboliza el dar y recibir, la reciprocidad, los pactos y las alianzas.', interpretacion: "Da y recibe con amor, busca el equilibrio en tus relaciones y acepta la ayuda que se te ofrece." },
-      { nombre: 'Wunjo', simbolo: 'ᚹ', significado: 'Alegría, bienestar, éxito.', extra: 'Representa la alegría compartida y el triunfo después de la dificultad. Habla de plenitud y satisfacción.', interpretacion: "Permite que la gratitud y la confianza abran la puerta a la felicidad y al éxito en tu vida." },
-      { nombre: 'Hagalaz', simbolo: 'ᚺ', significado: 'Cambios bruscos, transformación.', extra: 'La runa del granizo, la crisis que destruye lo viejo para dar paso a lo nuevo. Una transformación necesaria.', interpretacion: "Acepta los cambios repentinos y ve en ellos una oportunidad. Después de la tormenta, llega la calma." },
-      { nombre: 'Nauthiz', simbolo: 'ᚾ', significado: 'Necesidad, carencia, resistencia.', extra: 'Simboliza la escasez y la capacidad de resistir. Llama a la paciencia y al aprendizaje a través de las limitaciones.', interpretacion: "Acepta tus limitaciones y aprende de ellas. La paciencia y la resiliencia son tus mayores aliadas ahora." },
-      { nombre: 'Isa', simbolo: 'ᛁ', significado: 'Estancamiento, pausa, introspección.', extra: 'Representa el hielo, un tiempo de quietud y reflexión. Puede señalar bloqueos, pero también la oportunidad de meditar.', interpretacion: "Te invita a la quietud. No fuerces el avance, aprovecha este tiempo para meditar y reencontrarte." },
-      { nombre: 'Jera', simbolo: 'ᛃ', significado: 'Ciclo, cosecha, recompensa.', extra: 'La runa de la cosecha y los ciclos naturales. Indica que todo llega en su momento, recompensando el esfuerzo.', interpretacion: "Recompensa el esfuerzo sostenido. Todo ciclo llega a su fin y la cosecha será justa. Confía en los tiempos." },
-      { nombre: 'Eihwaz', simbolo: 'ᛇ', significado: 'Resistencia, transformación profunda.', extra: 'Simboliza el tejo, la conexión entre mundos y la capacidad de superar pruebas profundas.', interpretacion: "Es una runa de transformación profunda. No temas a los cambios radicales; el renacimiento está cerca." },
-      { nombre: 'Perthro', simbolo: 'ᛈ', significado: 'Misterio, destino, intuición.', extra: 'Runa de la suerte, el azar y lo oculto que está por revelarse. Invita a confiar en la intuición.', interpretacion: "Revela misterios y secretos. Confía en tu intuición, hay verdades ocultas que pronto saldrán a la luz." },
-      { nombre: 'Algiz', simbolo: 'ᛉ', significado: 'Protección, guía espiritual.', extra: 'Simboliza el ciervo y la protección divina. Es la defensa ante peligros y la conexión con lo sagrado.', interpretacion: "Te protege y conecta con lo sagrado. Deja que la guía espiritual te oriente y resguarda tu energía." },
-      { nombre: 'Sowilo', simbolo: 'ᛋ', significado: 'Éxito, poder solar, victoria.', extra: 'La runa del sol, la victoria sobre la oscuridad, la claridad mental y la energía renovada.', interpretacion: "Es el sol que ilumina tu camino. El éxito, la claridad y la vitalidad llegan a tu vida. Avanza con seguridad." },
-      { nombre: 'Tiwaz', simbolo: 'ᛏ', significado: 'Justicia, valentía, sacrificio.', extra: 'Simboliza la lanza del dios Tyr, la justicia y el sacrificio por un bien mayor. Llama a actuar con rectitud.', interpretacion: "Exige justicia y sacrificio. Actúa con integridad, sé valiente y defiende lo que es correcto." },
-      { nombre: 'Berkano', simbolo: 'ᛒ', significado: 'Nacimiento, crecimiento, fertilidad.', extra: 'Runa de la madre, la fertilidad y la protección. Anuncia nacimientos, proyectos nuevos y crecimiento.', interpretacion: "Anuncia nuevos comienzos. Cuida de tus proyectos como una madre y permite que crezcan con amor." },
-      { nombre: 'Ehwaz', simbolo: 'ᛖ', significado: 'Movimiento, progreso, confianza.', extra: 'Simboliza el caballo, los viajes y el trabajo en equipo. Habla de confianza, avances y colaboración.', interpretacion: "Habla de movimiento y colaboración. Confía en quienes te rodean y avanza hacia tus metas en compañía." },
-      { nombre: 'Mannaz', simbolo: 'ᛗ', significado: 'Humanidad, cooperación, autoconocimiento.', extra: 'Runa del ser humano, la comunidad y la autorrealización. Llama a la introspección y la colaboración.', interpretacion: "Es la humanidad y el autoconocimiento. Reconoce tu valor y busca el apoyo de la comunidad." },
-      { nombre: 'Laguz', simbolo: 'ᛚ', significado: 'Intuición, emociones, flujo.', extra: 'Runa del agua, la intuición, la adaptabilidad y las emociones profundas. Invita a fluir.', interpretacion: "Fluye como el agua. Déjate llevar por la intuición y adapta tus emociones con sabiduría." },
-      { nombre: 'Ingwaz', simbolo: 'ᛝ', significado: 'Potencial, paz interna, culminación.', extra: 'Simboliza la semilla, el potencial oculto y la culminación de procesos. Habla de reposo e integración.', interpretacion: "Simboliza paz y culminación. Es tiempo de finalizar procesos y disfrutar del merecido descanso." },
-      { nombre: 'Othala', simbolo: 'ᛟ', significado: 'Herencia, raíces, legado.', extra: 'Runa de la herencia, las tradiciones y el sentido de pertenencia. Habla de los ancestros y los valores.', interpretacion: "Conecta con tus raíces. Honra tu herencia y construye tu propio legado a partir de ella." },
-      { nombre: 'Dagaz', simbolo: 'ᛞ', significado: 'Despertar, transformación, nuevos paradigmas.', extra: 'La runa del día, del despertar y de los cambios positivos. Indica un punto de inflexión y la llegada de la claridad.', interpretacion: "Es el despertar y la transformación. Estás a punto de vivir un cambio positivo y revelador." }
+        { 
+            nombre: 'Fehu', simbolo: 'ᚠ', 
+            significado_corto: 'Riqueza, abundancia, prosperidad.', 
+            interpretacion: "Valora tus recursos con sabiduría. Es momento de reconocer la abundancia y actuar con generosidad.",
+            contenido_expandido: {
+                titulo: "Abundancia de dar y recibir",
+                significado_profundo: "Fehu es una antena que atrae y distribuye energía. Como primera letra del Futhark, representa el fuego comunitario, la alegría que se comparte y la abundancia que se prodiga. Simboliza los bienes móviles, como el ganado o el dinero, obtenidos con esfuerzo. Es una energía que fluye por las venas de la tierra y deviene en materia, representando lo que se recibe y lo que se da, un bien colectivo que nadie puede atrapar por completo.",
+                valor_invertido: "Indica una tarea inútil, como querer aferrar el agua entre los dedos. Señala energía desperdiciada, despilfarro, malgasto de dinero o fuerza vital. Puede advertir sobre despojos o pérdidas cuantiosas de bienes.",
+                postura: "De pie con los pies juntos. Los brazos se elevan por el frente hacia el cielo y adelante, con las palmas enfrentadas y la cabeza ligeramente levantada.",
+                ritual: "El ritual de 'la atadura de los años' de los pueblos originarios ilustra el mensaje de Fehu. Al final de un ciclo, todos los fuegos se apagan. Un sacerdote enciende un fuego nuevo y sagrado, distribuyendo un tizón a cada jefe de clan para que reenciendan el hogar de cada casa, simbolizando la renovación, la abundancia y el carácter colectivo de la vida."
+            }
+        },
+        { 
+            nombre: 'Uruz', simbolo: 'ᚢ', 
+            significado_corto: 'Fuerza vital, poder, salud.',
+            interpretacion: "Confía en tu poder para superar cualquier desafío y transforma la adversidad en crecimiento.",
+            contenido_expandido: {
+                titulo: "Fuerza de la iniciación",
+                significado_profundo: "Uruz representa al uro o buey salvaje, un animal de fuerza indomable. Apela a la reserva de poder individual que nos habita. En las antiguas tribus, cazar al uro era un rito iniciático para los jóvenes, cuya adultez quedaba sellada al regresar con la presa. Su aparición sugiere recurrir a las potencias del instinto como motor de vida, autoabastecerse y retroalimentarse.",
+                valor_invertido: "Es una runa de sacrificio. No como sometimiento, sino como el acto de 'hacer sagrado', de ofrendar una materia densa para recibir una energía sutil. Sugiere aceptar lo inútil del esfuerzo frente a los dictados del destino.",
+                postura: "De pie, con los pies abiertos al ancho de las caderas. Bajar el tronco y los brazos, dejando que la cabeza cuelgue en dirección al piso, avanzando y golpeando rítmicamente con los pies en la tierra.",
+                ritual: null
+            }
+        },
+        { 
+            nombre: 'Thurisaz', simbolo: 'ᚦ', 
+            significado_corto: 'Desafío, protección, pruebas.',
+            interpretacion: "Enfrenta los obstáculos con conciencia; cada desafío es una oportunidad para fortalecerte.",
+            contenido_expandido: {
+                titulo: "Fuerza de un gigante",
+                significado_profundo: "Representada por el gigante Thor, identifica una acción potente, directa e irreflexiva. Es una runa de curación que desestructura. En las leyendas, Thor rompe con estructuras anteriores para dar lugar a lo nuevo. Cuando aparece, el pasaje de una situación a otra es violento o sorpresivo, requiriendo más hechos que palabras.",
+                valor_invertido: "Toda la potencia de la runa se vuelve en contra, produciendo enojo por no haber actuado en el momento propicio. El significado puede ser la necesidad de una mirada interior o que toda acción externa conducirá al debilitamiento. La sugerencia es observar el paisaje interior en quietud.",
+                postura: "De pie con los pies juntos. Los brazos suben por adelante hasta quedar paralelos al suelo a la altura de la boca del estómago, con las palmas hacia abajo y los dedos mayores unidos.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Ansuz', simbolo: 'ᚨ',
+            significado_corto: 'Palabra, comunicación, inspiración.',
+            interpretacion: "Escucha los mensajes, comunícate desde el corazón y permite que la verdad se exprese.",
+            contenido_expandido: {
+                titulo: "En un principio fue el verbo",
+                significado_profundo: "Simboliza la voz, la palabra, la poesía. Abre el pórtico del futhark e introduce en los caminos del conocimiento de sí. Comunica con los dioses arquetípicos que habitan dentro de uno y plasma el pensamiento en sonidos y letras. Representa la autoridad y la comunicación con lo divino.",
+                valor_invertido: "Significa llamarse a silencio. Puede indicar que la energía del dios Loki, el engañador, circunda la situación y existe la posibilidad de engaño o autoengaño.",
+                postura: "De pie con los pies juntos. Los brazos se elevan por adelante hasta quedar a 45 grados del cuerpo, en actitud de ofrecer. Palmas hacia arriba y la garganta abierta, conectada con las manos en la intención de dar la voz.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Raidho', simbolo: 'ᚱ',
+            significado_corto: 'Viaje, movimiento, evolución.',
+            interpretacion: "Confía en el proceso del viaje, cada paso es parte del aprendizaje. El movimiento te llevará al equilibrio.",
+            contenido_expandido: {
+                titulo: "El viaje hacia mi destino",
+                significado_profundo: "Significa un largo viaje en carro, un encuentro y comunicación a través de la acción. Su diseño muestra una pierna dando un paso. Representa la decisión de buscar activamente la meta propuesta, trascendiendo la situación actual para ir al encuentro de otros.",
+                valor_invertido: "Significa estancamiento, viajes bloqueados, obstáculos en la comunicación y en la acción. Atascarse en la puerta, ruptura por desencuentro o estancamiento.",
+                postura: "De pie, una pierna adelante, como dando un paso. Los brazos acompañan el movimiento natural de caminar.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Kenaz', simbolo: 'ᚲ',
+            significado_corto: 'Luz, creatividad, revelaciones.',
+            interpretacion: "Es tiempo de crear, de encender tu fuego interior y de dejar que tu luz guíe el camino.",
+            contenido_expandido: {
+                titulo: "El ojo de Dios",
+                significado_profundo: "Kenaz (o Kaunaz) es el fuego del conocimiento, la chispa divina y la visión interna. Es la luz que nos permite ver en la oscuridad, la inspiración y la revelación. Es la apertura a la sabiduría, el entendimiento y la creatividad.",
+                valor_invertido: "Puede indicar confusión, pérdida de claridad, dificultad para ver una solución. Dolor que se amplía hacia adentro, la corrosión de la autocrítica y el dolor de mirar la propia sombra.",
+                postura: "Sentados con piernas abiertas y estiradas a ras del piso. Los brazos se abren hasta quedar paralelos al suelo y abiertos con las palmas de las manos hacia arriba.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Gebo', simbolo: 'ᚷ',
+            significado_corto: 'Regalo, intercambio, generosidad.',
+            interpretacion: "Da y recibe con amor, busca el equilibrio en tus relaciones y acepta la ayuda que se te ofrece.",
+            contenido_expandido: {
+                titulo: "El regalo de una pareja equilibrada",
+                significado_profundo: "Representa el regalo, la unión y el equilibrio entre dar y recibir. Simboliza el encuentro de dos partes que se reconocen y logran fundirse, ofrendado a los dioses. Es la runa de la pareja y el intercambio justo. Siempre es positiva.",
+                valor_invertido: "Gebo no tiene posición invertida. Su mensaje es siempre de unión, regalo o equilibrio.",
+                postura: "De pie, abrimos las piernas en el ancho de caderas. Los brazos se elevan por los costados reproduciendo una letra X. El cuerpo forma dos líneas que se cruzan a nivel de la boca del estómago.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Wunjo', simbolo: 'ᚹ',
+            significado_corto: 'Alegría, bienestar, éxito.',
+            interpretacion: "Permite que la gratitud y la confianza abran la puerta a la felicidad y al éxito en tu vida.",
+            contenido_expandido: {
+                titulo: "Un lugar de llegada para mi alegría",
+                significado_profundo: "Representa la alegría, la meta alcanzada, la armonía y la felicidad compartida. Simboliza el momento de celebración por los logros y la unión con los demás. Es la cima conquistada y el disfrute del fruto del trabajo.",
+                valor_invertido: "Indica tristeza, demoras en obtener resultados, rupturas, pérdida de alegría o disonancia en los vínculos.",
+                postura: "De pie, sentimos el suelo bajo los pies y el cielo sobre la cabeza. Los brazos se elevan por adelante, paralelos al piso, con los dedos tocándose y las palmas enfrentadas.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Hagalaz', simbolo: 'ᚺ',
+            significado_corto: 'Cambios bruscos, transformación.',
+            interpretacion: "Acepta los cambios repentinos y ve en ellos una oportunidad. Después de la tormenta, llega la calma.",
+            contenido_expandido: {
+                titulo: "El arma de los gigantes de la escarcha",
+                significado_profundo: "Simboliza el granizo, las fuerzas destructivas de la naturaleza que traen un cambio y una transformación inesperada. Es la runa de la crisis, el quiebre necesario para que surja un nuevo orden. Su efecto es ineludible.",
+                valor_invertido: "Hagalaz no tiene posición invertida, su mensaje es siempre disruptivo y transformador.",
+                postura: "De pie con los pies juntos. Los brazos se abren en cruz, exponiendo la parte anterior del tórax. Se busca sentir la sensación de estar expuesto.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Nauthiz', simbolo: 'ᚾ',
+            significado_corto: 'Necesidad, carencia, resistencia.',
+            interpretacion: "Acepta tus limitaciones y aprende de ellas. La paciencia y la resiliencia son tus mayores aliadas ahora.",
+            contenido_expandido: {
+                titulo: "La maestría que da el dolor",
+                significado_profundo: "Es la necesidad, la carencia y el dolor que enseña y forja el carácter. Simboliza la maestría que se adquiere a través del sufrimiento y la superación de retos inevitables. Es la runa del aprendizaje a través de la dificultad.",
+                valor_invertido: "Habla del maestro interno. Indica la capacidad de enseñar, asistir o comprender a otros a partir de la experiencia de los propios padecimientos. El dolor se transforma en maestría.",
+                postura: "De pie, con los pies juntos. Los brazos se colocan a la altura de la boca del estómago, con los codos flexionados y los antebrazos cruzados, tirando hacia afuera como para aflojar un tornillo.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Isa', simbolo: 'ᛁ',
+            significado_corto: 'Estancamiento, pausa, introspección.',
+            interpretacion: "Te invita a la quietud. No fuerces el avance, aprovecha este tiempo para meditar y reencontrarte.",
+            contenido_expandido: {
+                titulo: "El hielo. El silencio del movimiento",
+                significado_profundo: "Representa el hielo, la quietud y el estancamiento necesario para la reflexión. Es la pausa antes de la acción, una introspección irremediable. La energía se concentra en el eje interior, preparando un cambio futuro.",
+                valor_invertido: "Isa no tiene posición invertida. Su mensaje es siempre de quietud, detención y mirada interior.",
+                postura: "De pie, sentimos el eje de nuestra columna vertebral. Apoyamos los pies en la tierra y abrimos la cabeza al cielo. Observamos la verticalidad.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Jera', simbolo: 'ᛃ',
+            significado_corto: 'Ciclo, cosecha, recompensa.',
+            interpretacion: "Recompensa el esfuerzo sostenido. Todo ciclo llega a su fin y la cosecha será justa. Confía en los tiempos.",
+            contenido_expandido: {
+                titulo: "La paciencia de sostener un ciclo",
+                significado_profundo: "Es la cosecha, el ciclo anual, la recompensa que llega tras el esfuerzo y la espera paciente. Simboliza los frutos del trabajo y el respeto por los procesos naturales de la vida. Todo llega a su debido tiempo.",
+                valor_invertido: "Jera no tiene posición invertida. Cuando aparece, señala que un nuevo ciclo comienza, o si sale en el pasado, que ya comenzó y el presente es su fruto.",
+                postura: "Es la postura más móvil. De pie, el brazo izquierdo se eleva y toca la cabeza, mientras la pierna izquierda está estirada. La pierna derecha se dobla, tocando con el pie la rodilla izquierda. El movimiento es constante y alternado.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Eihwaz', simbolo: 'ᛇ',
+            significado_corto: 'Resistencia, transformación profunda.',
+            interpretacion: "Es una runa de transformación profunda. No temas a los cambios radicales; el renacimiento está cerca.",
+            contenido_expandido: {
+                titulo: "Muerte y transformación en el corazón del futharc",
+                significado_profundo: "Representa el tejo, árbol sagrado asociado a la muerte y el renacimiento. Simboliza la transformación profunda, la superación de pruebas y la conexión entre los mundos. Su lugar está en el centro del futhark, es el corazón y el puente que relaciona lo esencial con lo material.",
+                valor_invertido: "Eihwaz no tiene posición invertida. Su mensaje es siempre de transformación, defensa y resistencia.",
+                postura: "Nos paramos sobre nuestras rodillas. El mentón baja hasta juntarse con el pecho. Luego, apoyamos los glúteos sobre los talones, en sensación de recogimiento.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Perthro', simbolo: 'ᛈ',
+            significado_corto: 'Misterio, destino, intuición.',
+            interpretacion: "Revela misterios y secretos. Confía en tu intuición, hay verdades ocultas que pronto saldrán a la luz.",
+            contenido_expandido: {
+                titulo: "El secreto se oculta en nuestro corazón",
+                significado_profundo: "Es la runa de lo misterioso y lo oculto, un asunto secreto que aún no está preparado para ser revelado. Se asocia al azar, la suerte y el destino (las Nornas). Representa aquello que permanece en secreto hasta que estemos listos para comprenderlo.",
+                valor_invertido: "Significa 'secreto descubierto'. Máscaras obsoletas que se caen. Lo que fue útil para un camino, ya no lo es. La energía insta a dejar caer todo gesto estereotipado y a procurar la cara del adentro.",
+                postura: "Sentados. Apoyamos las plantas de los pies en el piso, con las piernas flexionadas y un poco abiertas. Los codos se apoyan en las rodillas y las manos sostienen la cabeza, en actitud pensativa.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Algiz', simbolo: 'ᛉ',
+            significado_corto: 'Protección, guía espiritual.',
+            interpretacion: "Te protege y conecta con lo sagrado. Deja que la guía espiritual te oriente y resguarda tu energía.",
+            contenido_expandido: {
+                titulo: "La oportunidad de decir no",
+                significado_profundo: "Simboliza los cuernos de un alce, que delimitan un espacio libre y protegido. Es la runa de la defensa espiritual, de poner límites al mal. Representa la conexión con lo divino y la confianza que emana del corazón para decir 'no' cuando es necesario.",
+                valor_invertido: "Indica una falta de defensas. La persona intenta protegerse aferrándose a las situaciones, lo que muestra una falta de confianza en el proceso de la vida y la deja a merced de posibles manipulaciones.",
+                postura: "De pie, con los pies juntos. Elevamos los brazos por el costado hacia arriba. Las palmas quedan hacia fuera y la cabeza se dirige un poco hacia atrás, como mirando al cielo. Se busca la sensación de delimitar el espacio.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Sowilo', simbolo: 'ᛋ',
+            significado_corto: 'Éxito, poder solar, victoria.',
+            interpretacion: "Es el sol que ilumina tu camino. El éxito, la claridad y la vitalidad llegan a tu vida. Avanza con seguridad.",
+            contenido_expandido: {
+                titulo: "Un camino hacia el Sol",
+                significado_profundo: "Es el sol, la victoria sobre la oscuridad, la claridad mental y la energía vital. Representa la realización, la iluminación y la fuerza para lograr las metas. Es una gran luz divina, un esplendor que consuela y trae un gran alivio.",
+                valor_invertido: "Sowilo no tiene posición invertida. Su energía es siempre de éxito, claridad y fuerza vital.",
+                postura: "De pie, abrimos las piernas en el ancho de caderas y las flexionamos un poco. Los brazos se elevan por adelante, ahuecándose, como si rodeáramos una gran pelota inflable.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Tiwaz', simbolo: 'ᛏ',
+            significado_corto: 'Justicia, valentía, sacrificio.',
+            interpretacion: "Exige justicia y sacrificio. Actúa con integridad, sé valiente y defiende lo que es correcto.",
+            contenido_expandido: {
+                titulo: "Reposando en la fe",
+                significado_profundo: "Es la runa del guerrero Tyr, del autosacrificio por un bien mayor, la fe y la justicia. Simboliza la victoria que se obtiene con honestidad, compromiso y valentía. Encabeza el octeto de las relaciones humanas.",
+                valor_invertido: "Indica que la fuerza y el valor se están empleando en el lugar menos indicado. Puede señalar una traición de un pacto, injusticia, falta de fe, derrota y dificultades con la autoestima.",
+                postura: "De pie, sentimos los pies en el piso y la cúspide de la cabeza en contacto con el cielo. Los brazos se elevan por los costados hasta quedar a 45 grados del cuerpo, imitando una flecha.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Berkano', simbolo: 'ᛒ',
+            significado_corto: 'Nacimiento, crecimiento, fertilidad.',
+            interpretacion: "Anuncia nuevos comienzos. Cuida de tus proyectos como una madre y permite que crezcan con amor.",
+            contenido_expandido: {
+                titulo: "El coraje de lo femenino",
+                significado_profundo: "Es la madre tierra, la maternidad, el nacimiento, la fertilidad y el crecimiento. Si Tiwaz es el coraje masculino, Berkano es el coraje femenino, el de parir. Representa el acto de nutrir y sustentar aquello que necesita crecer, ya sean hijos, ideas o sueños.",
+                valor_invertido: "Significa sobreprotección o prioridades mal establecidas. Se está alimentando algo que no es lo importante para la situación presente. Bajo una apariencia de cuidado, puede ocultarse hostilidad o culpa.",
+                postura: "De pie, flexionamos las rodillas y mantenemos los pies apoyados en el suelo. Los brazos se elevan por adelante, los antebrazos se flexionan y las manos llegan a tocar las sienes.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Ehwaz', simbolo: 'ᛖ',
+            significado_corto: 'Movimiento, progreso, confianza.',
+            interpretacion: "Habla de movimiento y colaboración. Confía en quienes te rodean y avanza hacia tus metas en compañía.",
+            contenido_expandido: {
+                titulo: "Un paseo que enlaza universos",
+                significado_profundo: "Es el caballo, que simboliza la sintonía entre dos mundos (jinete y caballo, racional e intuitivo). Representa la confianza, la cooperación, el trabajo en equipo y el movimiento equilibrado. Alude a un matrimonio, un encuentro o una mudanza para cooperar.",
+                valor_invertido: "Indica que el héroe precisa descanso. Es momento de pausa para reciclar fuerzas, bajar del caballo y reposar. La continuación del movimiento o del viaje está desaconsejada.",
+                postura: "Se realiza entre dos personas. Se ubican frente a frente, con rodillas levemente flexionadas y las manos tendidas hacia el compañero para tomarse. Se busca la vivencia de compartir.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Mannaz', simbolo: 'ᛗ',
+            significado_corto: 'Humanidad, cooperación, autoconocimiento.',
+            interpretacion: "Es la humanidad y el autoconocimiento. Reconoce tu valor y busca el apoyo de la comunidad.",
+            contenido_expandido: {
+                titulo: "La raza humana",
+                significado_profundo: "Es el ser humano, la conciencia social y el yo en relación con los otros. Simboliza la colaboración, la inteligencia colectiva y la autosuperación. Representa la estructura, el límite que proporciona certeza y la ley del origen paterno.",
+                valor_invertido: "Soledad, alienación y dificultades sociales. La persona está repitiendo viejas escenas. El mensaje es 'encuentra tu propia ley'. Llama a no refugiarse en el egoísmo y a apelar a la creatividad para salir de un circuito de sufrimiento.",
+                postura: "Nos arrodillamos, con el mentón contra el pecho. Cada mano se apoya en el hombro contrario, y los brazos permanecen cruzados en el centro del pecho. La mirada se dirige hacia el ombligo.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Laguz', simbolo: 'ᛚ',
+            significado_corto: 'Intuición, emociones, flujo.',
+            interpretacion: "Fluye como el agua. Déjate llevar por la intuición y adapta tus emociones con sabiduría.",
+            contenido_expandido: {
+                titulo: "Un cuerpo de agua",
+                significado_profundo: "Es el agua, la intuición, la fluidez y las emociones. Su fluir no posee forma, sino que toma el molde de lo que la contiene. Está representada por la sacerdotisa, la luna nueva y la energía femenina como gran fuente de vida. Es la gran igualadora de las emociones.",
+                valor_invertido: "Desborde emocional. Puede estar indicando problemas de adicciones o situaciones fuera de control. Puede leerse como 'esto es una locura' y sugiere la necesidad de desahogarse para resolver el estado actual.",
+                postura: "De pie con los pies juntos, elevamos los brazos por adelante hasta tomar la posición de quién está por zambullirse a una pileta de natación. Se busca sentir la entrega al mundo del agua.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Ingwaz', simbolo: 'ᛝ',
+            significado_corto: 'Potencial, paz interna, culminación.',
+            interpretacion: "Simboliza paz y culminación. Es tiempo de finalizar procesos y disfrutar del merecido descanso.",
+            contenido_expandido: {
+                titulo: "La potencia de un comienzo",
+                significado_profundo: "Es la semilla, el potencial concentrado y la gestación de algo nuevo. Representa la culminación de un ciclo y el comienzo de otro. Es la transformación de la crisálida en mariposa, una acción que posibilita el despertar a la libertad después de un periodo latente.",
+                valor_invertido: "Ingwaz no tiene posición invertida.",
+                postura: "Nos sentamos en forma cómoda, con la columna derecha. Los brazos evocan el diseño de la runa: se colocan hacia abajo y por los costados, con las manos apoyadas sobre los genitales, como guardianas de la energía vital.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Othala', simbolo: 'ᛟ',
+            significado_corto: 'Herencia, raíces, legado.',
+            interpretacion: "Conecta con tus raíces. Honra tu herencia y construye tu propio legado a partir de ella.",
+            contenido_expandido: {
+                titulo: "El liderazgo que viene de los ancestros",
+                significado_profundo: "Es la herencia, el patrimonio, los ancestros y el hogar. Simboliza la transmisión de valores, la protección del linaje y el arraigo. Representa la herencia genética (ADN) y el legado espiritual (karma o Filgia) que recibimos de nuestros antepasados.",
+                valor_invertido: "Pérdida de raíces, conflictos familiares, desapego. Habla del peligro de quedar encasillado en estereotipos familiares. Puede señalar que la persona no consigue ejercer el liderazgo de su propia vida y cede su poder a otro.",
+                postura: "Nos sentamos cómodamente, con la espalda derecha. Nuestros brazos se elevan, enmarcando la cabeza y uniendo las puntas de los dedos, como si fuera una casita.",
+                ritual: null
+            }
+        },
+        {
+            nombre: 'Dagaz', simbolo: 'ᛞ',
+            significado_corto: 'Despertar, transformación, nuevos paradigmas.',
+            interpretacion: "Es el despertar y la transformación. Estás a punto de vivir un cambio positivo y revelador.",
+            contenido_expandido: {
+                titulo: "La irrupción de la luz",
+                significado_profundo: "Es el amanecer, el cambio radical, la iluminación y la apertura. Simboliza la transformación total y los nuevos comienzos. Es la oportunidad de saltar al abismo con la certeza de que una gran luz nos sostendrá. Encarna la valentía de caminar en la oscuridad hacia la luz.",
+                valor_invertido: "Dagaz no tiene posición invertida.",
+                postura: "Nos sentamos en forma cómoda. Elevamos los brazos por adelante hasta que queden paralelos al piso. Flexionamos los antebrazos de modo que las palmas queden unidas y formen un ángulo de 90 grados. Lentamente separamos las manos, abriéndolas hacia cada costado.",
+                ritual: null
+            }
+        }
     ];
 
     function openRunaModalByName(nombreRuna) {
         const r = runas.find(r => r.nombre === nombreRuna);
         if (!r) return;
+
         const modalOverlay = document.getElementById('runa-modal-overlay');
         const modalImg = document.getElementById('runa-modal-img');
         const modalNombre = document.getElementById('runa-modal-nombre');
         const modalSignificado = document.getElementById('runa-modal-significado');
         const modalInterpretacion = document.getElementById('runa-modal-interpretacion');
-        const modalExtra = document.getElementById('runa-modal-extra');
         
         modalImg.innerHTML = `<span class="runa-glyph">${r.simbolo}</span>`;
         modalNombre.textContent = r.nombre;
-        modalSignificado.textContent = r.significado || '';
+        modalSignificado.textContent = r.significado_corto || '';
         modalInterpretacion.textContent = r.interpretacion || '';
-        modalExtra.textContent = r.extra || '';
         
+        const expandido = r.contenido_expandido;
+        const tituloH4 = document.getElementById('runa-modal-titulo');
+        const significadoProfundoP = document.getElementById('runa-modal-significado-profundo');
+        const invertidaP = document.getElementById('runa-modal-invertida');
+        const posturaP = document.getElementById('runa-modal-postura');
+        const ritualP = document.getElementById('runa-modal-ritual');
+
+        tituloH4.textContent = expandido.titulo || '';
+        significadoProfundoP.textContent = expandido.significado_profundo || '';
+        
+        document.getElementById('runa-modal-invertida-wrapper').style.display = expandido.valor_invertido ? 'block' : 'none';
+        invertidaP.textContent = expandido.valor_invertido || '';
+
+        document.getElementById('runa-modal-postura-wrapper').style.display = expandido.postura ? 'block' : 'none';
+        posturaP.textContent = expandido.postura || '';
+
+        document.getElementById('runa-modal-ritual-wrapper').style.display = expandido.ritual ? 'block' : 'none';
+        ritualP.textContent = expandido.ritual || '';
+
         modalOverlay.classList.add('active');
         document.body.style.overflow = "hidden";
         document.getElementById('runa-modal-close').focus();
@@ -299,7 +612,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-      // SPA Navigation
       const navLinks = document.querySelectorAll('#main-nav a[data-section]');
       const sections = document.querySelectorAll('.main-section');
       const ctaOraculo = document.getElementById('cta-oraculo');
@@ -313,7 +625,6 @@
       });
       ctaOraculo.addEventListener('click', () => navigateTo('tirada'));
 
-      // Galería
       const galeria = document.getElementById('galeria-runas');
       galeria.innerHTML = runas.map(r => `
         <div class="runa-glyph-container" data-nombre="${r.nombre}" tabindex="0" role="button" aria-label="Ver detalles de ${r.nombre}">
@@ -326,15 +637,32 @@
         div.addEventListener('keydown', e => { if (e.key === "Enter" || e.key === " ") { openRunaModalByName(div.dataset.nombre); e.preventDefault(); } });
       });
 
-      // Modal Logic
       const modalOverlay = document.getElementById('runa-modal-overlay');
       const closeModalBtn = document.getElementById('runa-modal-close');
-      const closeModal = () => { modalOverlay.classList.remove('active'); document.body.style.overflow = ""; };
+      const saberMasBtn = document.getElementById('btn-saber-mas');
+      const contenidoExpandido = document.getElementById('runa-modal-expandido');
+      const modal = document.querySelector('.runa-modal');
+
+      const closeModal = () => { 
+          modalOverlay.classList.remove('active'); 
+          document.body.style.overflow = "";
+          contenidoExpandido.style.display = "none";
+          saberMasBtn.textContent = "Saber más...";
+      };
+
       closeModalBtn.addEventListener('click', closeModal);
       modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
       document.addEventListener('keydown', e => { if (e.key === "Escape" && modalOverlay.classList.contains('active')) closeModal(); });
 
-      // Tirada Logic
+      saberMasBtn.addEventListener('click', () => {
+          const isHidden = contenidoExpandido.style.display === 'none';
+          contenidoExpandido.style.display = isHidden ? 'block' : 'none';
+          saberMasBtn.textContent = isHidden ? 'Mostrar menos' : 'Saber más...';
+          if(isHidden) {
+            setTimeout(() => modal.scrollTop = modal.scrollHeight, 10);
+          }
+      });
+
       const tiradaBtns = document.querySelectorAll('.tipo-btn');
       const explicacion = document.getElementById('explicacion-tirada');
       const preguntaInput = document.getElementById('pregunta');
@@ -374,7 +702,6 @@
         }, 300);
       });
 
-      // --- CONFIGURACIÓN DE PARTÍCULAS ---
       const particlesNightConfig = { particles: { number: { value: 100, density: { enable: true, value_area: 800 } }, color: { value: "#d4af37" }, shape: { type: "circle" }, opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } }, size: { value: 2, random: true }, line_linked: { enable: false }, move: { enable: true, speed: 0.5, direction: "none", random: true, straight: false, out_mode: "out" } }, interactivity: { events: { onhover: { enable: false } } }, retina_detect: true };
       const particlesDayConfig = { particles: { number: { value: 150, density: { enable: true, value_area: 800 } }, color: { value: ["#8f2c24", "#3a7d44"] }, shape: { type: "circle" }, opacity: { value: 0.6, random: true, anim: { enable: true, speed: 1, opacity_min: 0.2, sync: false } }, size: { value: 2.5, random: true }, line_linked: { enable: false }, move: { enable: true, speed: 0.6, direction: "none", random: true, straight: false, out_mode: "out" } }, interactivity: { events: { onhover: { enable: false } } }, retina_detect: true };
 
@@ -387,7 +714,6 @@
         particlesJS('particles-js', config);
       }
       
-      // --- LÓGICA DE SONIDO Y TEMA ---
       const audioDay = document.getElementById('audio-theme-day');
       const audioNight = document.getElementById('audio-theme-night');
       const muteBtn = document.getElementById('mute-btn');
@@ -408,7 +734,7 @@
         const toPause = isDayTheme ? audioNight : audioDay;
 
         toPause.pause();
-        toPlay.play().catch(e => console.error("La reproducción automática fue bloqueada. Se requiere interacción del usuario.", e));
+        toPlay.play().catch(e => console.error("La reproducción automática fue bloqueada.", e));
       }
 
       muteBtn.addEventListener('click', () => {
@@ -427,7 +753,6 @@
         syncVolume();
       });
 
-      // Lógica del Theme Switcher
       const themeToggleBtn = document.getElementById('theme-toggle-btn');
       const iconSun = document.getElementById('icon-sun');
       const iconMoon = document.getElementById('icon-moon');
@@ -439,12 +764,10 @@
           iconMoon.style.display = theme === 'day' ? 'none' : 'block';
           localStorage.setItem('theme', theme);
           
-          // ¡Aquí está la magia doble!
           playCurrentTrack();
           setParticles(theme);
       }
 
-      // Inicialización
       syncVolume();
       setTheme(currentTheme);
 
@@ -453,7 +776,6 @@
           setTheme(newTheme);
       });
 
-      // Lógica del Chatbot
       const chatbotToggle = document.getElementById('chatbot-toggle-btn');
       const chatbotOverlay = document.getElementById('chatbot-overlay');
       const chatbotClose = document.getElementById('chatbot-close-btn');

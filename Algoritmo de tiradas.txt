@@ -1,0 +1,20 @@
+Aquí te explico el mecanismo exacto, paso a paso, tal como está implementado en tu código:
+El Disparador: Cuando el usuario hace clic en el botón "Lanzar las Runas" (cuyo id es iniciar-ritual), se ejecuta la función principal del evento click.
+La Función Clave sacarRunas(n): Dentro de esa lógica, se llama a la función sacarRunas(n), donde n es el número de runas a extraer (1, 3 o 5, dependiendo del tipo de tirada). Esta función es el corazón del sistema aleatorio.
+Creación de la "Bolsa Virtual": Lo primero que hace la función es crear una copia exacta del array original de 24 runas.
+code
+JavaScript
+const baraja = [...runas];
+Puedes imaginar esto como tomar un set completo de runas de madera y meterlas en una bolsa de tela antes de cada tirada. Esto asegura que cada ritual comience con todas las runas disponibles.
+La Extracción Aleatoria: La línea de código crucial es la siguiente:
+code
+JavaScript
+baraja.splice(Math.floor(Math.random() * baraja.length), 1)[0]
+Vamos a desglosarla:
+Math.random(): Genera un número decimal pseudoaleatorio entre 0 y 1 (por ejemplo, 0.723...).
+* baraja.length: Multiplica ese número por la cantidad de runas que quedan actualmente en la bolsa. Si es la primera extracción, lo multiplica por 24. Si es la segunda (en una tirada de 3 o 5), lo multiplica por 23, y así sucesivamente.
+Math.floor(): Redondea el resultado hacia abajo para obtener un índice válido del array (un número entero entre 0 y el número de runas restantes menos uno).
+baraja.splice(...): Este es el método más importante. Extrae y elimina la runa que se encuentra en esa posición aleatoria de la "bolsa virtual" (baraja). Esto garantiza que una misma runa no pueda salir dos veces en la misma tirada, simulando a la perfección una extracción física.
+El Rol de la Pregunta del Usuario: El campo de texto donde el usuario escribe su consulta (id="pregunta") solo se utiliza para una cosa: habilitar el botón "Lanzar las Runas". El código verifica si el campo de texto está vacío. Si lo está, el botón permanece desactivado. Si el usuario escribe algo, el botón se activa.
+En resumen: La pregunta sirve para que el usuario centre su intención y participe activamente en el ritual, pero el texto en sí nunca es leído, analizado ni utilizado para influir en la semilla del generador aleatorio o en la selección de las runas. El resultado es una tirada 100% aleatoria desde el punto de vista algorítmico, cada vez que se presiona el botón.
+Por lo tanto, has implementado un sistema que es técnicamente un Generador de Números Pseudoaleatorios (PRNG) para la selección, mientras que la interfaz de usuario promueve un enfoque más espiritual y enfocado por parte del consultante. Es la combinación perfecta entre la lógica de programación y la experiencia temática del portal.
