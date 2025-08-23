@@ -51,15 +51,13 @@
     body.theme-day .runa-glyph-container { background: rgba(255,255,255,0.2); }
     .runa-glyph-container:hover { box-shadow: 0 4px 20px var(--color-accent-primary); transform: translateY(-3px) scale(1.05); background: var(--color-accent-secondary); }
     .runa-glyph { font-size: 50px; line-height: 1; color: var(--color-text-main); text-shadow: 0 0 3px var(--color-accent-primary); transition: all var(--transition-speed); animation: pulse-glow 6s ease-in-out infinite alternate; }
-    /* --- NUEVO ESTILO PARA RUNAS INVERTIDAS --- */
-    .runa-glyph.invertida { transform: rotate(180deg); transition: transform 0.5s ease; }
     .runa-glyph-container .runa-nombre-tag { font-size: 0.85em; margin-top: 8px; color: var(--color-text-main); transition: color var(--transition-speed); }
     .runa-glyph-container:hover .runa-glyph { color: var(--color-accent-primary); text-shadow: 0 0 8px var(--color-accent-primary); transform: scale(1.1); animation-play-state: paused; }
-    .runa-glyph-container:hover .runa-glyph.invertida { transform: scale(1.1) rotate(180deg); }
     .runa-glyph-container:hover .runa-nombre-tag { color: var(--color-text-header); }
     @keyframes pulse-glow { from { text-shadow: 0 0 3px var(--color-accent-primary); } to { text-shadow: 0 0 8px var(--color-accent-primary); } }
     .runa-modal-overlay { display: none; position: fixed; z-index: 1000; inset: 0; background: rgba(10, 20, 29, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); justify-content: center; align-items: center; animation: fadeIn 0.3s; }
     .runa-modal-overlay.active { display: flex; }
+    /* --- CSS CORREGIDO PARA EL MODAL --- */
     .runa-modal { background: var(--color-modal-bg); color: var(--color-modal-text); border-radius: 16px; box-shadow: 0 8px 44px rgba(0,0,0,0.5); display: flex; gap: 32px; max-width: 650px; width: 98%; padding: 32px 28px; position: relative; animation: modalSlideUp 0.35s cubic-bezier(0.165, 0.84, 0.44, 1); transition: background-color var(--transition-speed), color var(--transition-speed); max-height: 90vh; overflow-y: auto; }
     .runa-modal-img { background: #e6d9c1; border-radius: 12px; min-height: 150px; width: 150px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background-color var(--transition-speed); }
     body.theme-day .runa-modal-img { background: #5d5345; }
@@ -112,7 +110,7 @@
     body.theme-day footer { color: rgba(62, 53, 41, 0.5); border-top-color: rgba(105, 116, 88, 0.2); }
     @media (max-width: 768px) {
       header { flex-direction: column; gap: 1rem; } header h1 { font-size: 1.4rem; text-align: center; } #main-nav { justify-content: center; }
-      .runa-modal { flex-direction: column; align-items: center; }
+      .runa-modal { flex-direction: column; align-items: center; /* La altura y scroll ya están en la regla principal */ }
       .tirada-cruz-layout { grid-template-areas: "arriba" "centro" "izquierda" "derecha" "abajo"; grid-template-columns: 1fr; }
       .tirada-runa-box { min-width: 80vw; }
       .tirada-runas-flex.tres-runas { flex-direction: column; align-items: center; gap: 1rem; }
@@ -124,6 +122,7 @@
   <div class="world-background"></div>
   <div id="particles-js"></div>
 
+  <!-- PISTAS DE AUDIO -->
   <audio id="audio-theme-day" loop src="audio/musica-tema-claro.mp3" preload="auto"></audio>
   <audio id="audio-theme-night" loop src="audio/musica-tema-oscuro.mp3" preload="auto"></audio>
 
@@ -200,10 +199,14 @@
       <button class="runa-modal-close" id="runa-modal-close" aria-label="Cerrar modal">&times;</button>
       <div class="runa-modal-img" id="runa-modal-img"></div>
       <div class="runa-modal-info">
+        
+        <!-- Contenido Inicial -->
         <div><h3 class="runa-modal-nombre" id="runa-modal-nombre"></h3></div>
         <div><p class="runa-modal-significado" id="runa-modal-significado"></p></div>
         <div><p class="runa-modal-interpretacion" id="runa-modal-interpretacion"></p></div>
         <div><button class="btn-saber-mas" id="btn-saber-mas">Saber más...</button></div>
+
+        <!-- Contenido Expandido (inicialmente oculto) -->
         <div class="runa-modal-expandido" id="runa-modal-expandido" style="display: none;">
           <div id="runa-modal-titulo-wrapper">
               <h4 id="runa-modal-titulo"></h4>
@@ -261,10 +264,10 @@
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   
   <script>
-    /* --- BASE DE DATOS COMPLETA DE RUNAS CON LÓGICA DE INVERSIÓN --- */
+    /* --- BASE DE DATOS COMPLETA DE RUNAS (COMBINADA Y ENRIQUECIDA) --- */
     const runas = [
         { 
-            nombre: 'Fehu', simbolo: 'ᚠ', puede_invertirse: true,
+            nombre: 'Fehu', simbolo: 'ᚠ', 
             significado_corto: 'Riqueza, abundancia, prosperidad.', 
             interpretacion: "Valora tus recursos con sabiduría. Es momento de reconocer la abundancia y actuar con generosidad.",
             contenido_expandido: {
@@ -276,7 +279,7 @@
             }
         },
         { 
-            nombre: 'Uruz', simbolo: 'ᚢ', puede_invertirse: true,
+            nombre: 'Uruz', simbolo: 'ᚢ', 
             significado_corto: 'Fuerza vital, poder, salud.',
             interpretacion: "Confía en tu poder para superar cualquier desafío y transforma la adversidad en crecimiento.",
             contenido_expandido: {
@@ -288,7 +291,7 @@
             }
         },
         { 
-            nombre: 'Thurisaz', simbolo: 'ᚦ', puede_invertirse: true,
+            nombre: 'Thurisaz', simbolo: 'ᚦ', 
             significado_corto: 'Desafío, protección, pruebas.',
             interpretacion: "Enfrenta los obstáculos con conciencia; cada desafío es una oportunidad para fortalecerte.",
             contenido_expandido: {
@@ -300,7 +303,7 @@
             }
         },
         {
-            nombre: 'Ansuz', simbolo: 'ᚨ', puede_invertirse: true,
+            nombre: 'Ansuz', simbolo: 'ᚨ',
             significado_corto: 'Palabra, comunicación, inspiración.',
             interpretacion: "Escucha los mensajes, comunícate desde el corazón y permite que la verdad se exprese.",
             contenido_expandido: {
@@ -312,7 +315,7 @@
             }
         },
         {
-            nombre: 'Raidho', simbolo: 'ᚱ', puede_invertirse: true,
+            nombre: 'Raidho', simbolo: 'ᚱ',
             significado_corto: 'Viaje, movimiento, evolución.',
             interpretacion: "Confía en el proceso del viaje, cada paso es parte del aprendizaje. El movimiento te llevará al equilibrio.",
             contenido_expandido: {
@@ -324,7 +327,7 @@
             }
         },
         {
-            nombre: 'Kenaz', simbolo: 'ᚲ', puede_invertirse: true,
+            nombre: 'Kenaz', simbolo: 'ᚲ',
             significado_corto: 'Luz, creatividad, revelaciones.',
             interpretacion: "Es tiempo de crear, de encender tu fuego interior y de dejar que tu luz guíe el camino.",
             contenido_expandido: {
@@ -336,7 +339,7 @@
             }
         },
         {
-            nombre: 'Gebo', simbolo: 'ᚷ', puede_invertirse: false,
+            nombre: 'Gebo', simbolo: 'ᚷ',
             significado_corto: 'Regalo, intercambio, generosidad.',
             interpretacion: "Da y recibe con amor, busca el equilibrio en tus relaciones y acepta la ayuda que se te ofrece.",
             contenido_expandido: {
@@ -348,7 +351,7 @@
             }
         },
         {
-            nombre: 'Wunjo', simbolo: 'ᚹ', puede_invertirse: true,
+            nombre: 'Wunjo', simbolo: 'ᚹ',
             significado_corto: 'Alegría, bienestar, éxito.',
             interpretacion: "Permite que la gratitud y la confianza abran la puerta a la felicidad y al éxito en tu vida.",
             contenido_expandido: {
@@ -360,7 +363,7 @@
             }
         },
         {
-            nombre: 'Hagalaz', simbolo: 'ᚺ', puede_invertirse: false,
+            nombre: 'Hagalaz', simbolo: 'ᚺ',
             significado_corto: 'Cambios bruscos, transformación.',
             interpretacion: "Acepta los cambios repentinos y ve en ellos una oportunidad. Después de la tormenta, llega la calma.",
             contenido_expandido: {
@@ -372,7 +375,7 @@
             }
         },
         {
-            nombre: 'Nauthiz', simbolo: 'ᚾ', puede_invertirse: true,
+            nombre: 'Nauthiz', simbolo: 'ᚾ',
             significado_corto: 'Necesidad, carencia, resistencia.',
             interpretacion: "Acepta tus limitaciones y aprende de ellas. La paciencia y la resiliencia son tus mayores aliadas ahora.",
             contenido_expandido: {
@@ -384,7 +387,7 @@
             }
         },
         {
-            nombre: 'Isa', simbolo: 'ᛁ', puede_invertirse: false,
+            nombre: 'Isa', simbolo: 'ᛁ',
             significado_corto: 'Estancamiento, pausa, introspección.',
             interpretacion: "Te invita a la quietud. No fuerces el avance, aprovecha este tiempo para meditar y reencontrarte.",
             contenido_expandido: {
@@ -396,7 +399,7 @@
             }
         },
         {
-            nombre: 'Jera', simbolo: 'ᛃ', puede_invertirse: false,
+            nombre: 'Jera', simbolo: 'ᛃ',
             significado_corto: 'Ciclo, cosecha, recompensa.',
             interpretacion: "Recompensa el esfuerzo sostenido. Todo ciclo llega a su fin y la cosecha será justa. Confía en los tiempos.",
             contenido_expandido: {
@@ -408,7 +411,7 @@
             }
         },
         {
-            nombre: 'Eihwaz', simbolo: 'ᛇ', puede_invertirse: false,
+            nombre: 'Eihwaz', simbolo: 'ᛇ',
             significado_corto: 'Resistencia, transformación profunda.',
             interpretacion: "Es una runa de transformación profunda. No temas a los cambios radicales; el renacimiento está cerca.",
             contenido_expandido: {
@@ -420,7 +423,7 @@
             }
         },
         {
-            nombre: 'Perthro', simbolo: 'ᛈ', puede_invertirse: true,
+            nombre: 'Perthro', simbolo: 'ᛈ',
             significado_corto: 'Misterio, destino, intuición.',
             interpretacion: "Revela misterios y secretos. Confía en tu intuición, hay verdades ocultas que pronto saldrán a la luz.",
             contenido_expandido: {
@@ -432,7 +435,7 @@
             }
         },
         {
-            nombre: 'Algiz', simbolo: 'ᛉ', puede_invertirse: true,
+            nombre: 'Algiz', simbolo: 'ᛉ',
             significado_corto: 'Protección, guía espiritual.',
             interpretacion: "Te protege y conecta con lo sagrado. Deja que la guía espiritual te oriente y resguarda tu energía.",
             contenido_expandido: {
@@ -444,7 +447,7 @@
             }
         },
         {
-            nombre: 'Sowilo', simbolo: 'ᛋ', puede_invertirse: false,
+            nombre: 'Sowilo', simbolo: 'ᛋ',
             significado_corto: 'Éxito, poder solar, victoria.',
             interpretacion: "Es el sol que ilumina tu camino. El éxito, la claridad y la vitalidad llegan a tu vida. Avanza con seguridad.",
             contenido_expandido: {
@@ -456,7 +459,7 @@
             }
         },
         {
-            nombre: 'Tiwaz', simbolo: 'ᛏ', puede_invertirse: true,
+            nombre: 'Tiwaz', simbolo: 'ᛏ',
             significado_corto: 'Justicia, valentía, sacrificio.',
             interpretacion: "Exige justicia y sacrificio. Actúa con integridad, sé valiente y defiende lo que es correcto.",
             contenido_expandido: {
@@ -468,7 +471,7 @@
             }
         },
         {
-            nombre: 'Berkano', simbolo: 'ᛒ', puede_invertirse: true,
+            nombre: 'Berkano', simbolo: 'ᛒ',
             significado_corto: 'Nacimiento, crecimiento, fertilidad.',
             interpretacion: "Anuncia nuevos comienzos. Cuida de tus proyectos como una madre y permite que crezcan con amor.",
             contenido_expandido: {
@@ -480,7 +483,7 @@
             }
         },
         {
-            nombre: 'Ehwaz', simbolo: 'ᛖ', puede_invertirse: true,
+            nombre: 'Ehwaz', simbolo: 'ᛖ',
             significado_corto: 'Movimiento, progreso, confianza.',
             interpretacion: "Habla de movimiento y colaboración. Confía en quienes te rodean y avanza hacia tus metas en compañía.",
             contenido_expandido: {
@@ -492,7 +495,7 @@
             }
         },
         {
-            nombre: 'Mannaz', simbolo: 'ᛗ', puede_invertirse: true,
+            nombre: 'Mannaz', simbolo: 'ᛗ',
             significado_corto: 'Humanidad, cooperación, autoconocimiento.',
             interpretacion: "Es la humanidad y el autoconocimiento. Reconoce tu valor y busca el apoyo de la comunidad.",
             contenido_expandido: {
@@ -504,7 +507,7 @@
             }
         },
         {
-            nombre: 'Laguz', simbolo: 'ᛚ', puede_invertirse: true,
+            nombre: 'Laguz', simbolo: 'ᛚ',
             significado_corto: 'Intuición, emociones, flujo.',
             interpretacion: "Fluye como el agua. Déjate llevar por la intuición y adapta tus emociones con sabiduría.",
             contenido_expandido: {
@@ -516,7 +519,7 @@
             }
         },
         {
-            nombre: 'Ingwaz', simbolo: 'ᛝ', puede_invertirse: false,
+            nombre: 'Ingwaz', simbolo: 'ᛝ',
             significado_corto: 'Potencial, paz interna, culminación.',
             interpretacion: "Simboliza paz y culminación. Es tiempo de finalizar procesos y disfrutar del merecido descanso.",
             contenido_expandido: {
@@ -528,7 +531,7 @@
             }
         },
         {
-            nombre: 'Othala', simbolo: 'ᛟ', puede_invertirse: true,
+            nombre: 'Othala', simbolo: 'ᛟ',
             significado_corto: 'Herencia, raíces, legado.',
             interpretacion: "Conecta con tus raíces. Honra tu herencia y construye tu propio legado a partir de ella.",
             contenido_expandido: {
@@ -540,7 +543,7 @@
             }
         },
         {
-            nombre: 'Dagaz', simbolo: 'ᛞ', puede_invertirse: false,
+            nombre: 'Dagaz', simbolo: 'ᛞ',
             significado_corto: 'Despertar, transformación, nuevos paradigmas.',
             interpretacion: "Es el despertar y la transformación. Estás a punto de vivir un cambio positivo y revelador.",
             contenido_expandido: {
@@ -553,7 +556,7 @@
         }
     ];
 
-    function openRunaModalByName(nombreRuna, estaInvertida = false) { // Acepta el estado de inversión
+    function openRunaModalByName(nombreRuna) {
         const r = runas.find(r => r.nombre === nombreRuna);
         if (!r) return;
 
@@ -563,32 +566,29 @@
         const modalSignificado = document.getElementById('runa-modal-significado');
         const modalInterpretacion = document.getElementById('runa-modal-interpretacion');
         
-        modalImg.innerHTML = `<span class="runa-glyph ${estaInvertida ? 'invertida' : ''}">${r.simbolo}</span>`;
-        modalNombre.textContent = r.nombre + (estaInvertida ? " (Invertida)" : "");
+        modalImg.innerHTML = `<span class="runa-glyph">${r.simbolo}</span>`;
+        modalNombre.textContent = r.nombre;
         modalSignificado.textContent = r.significado_corto || '';
-        
-        // Muestra la interpretación correcta (derecha o invertida)
-        if (estaInvertida && r.contenido_expandido.valor_invertido) {
-            modalInterpretacion.textContent = r.contenido_expandido.valor_invertido;
-        } else {
-            modalInterpretacion.textContent = r.interpretacion || '';
-        }
+        modalInterpretacion.textContent = r.interpretacion || '';
         
         const expandido = r.contenido_expandido;
-        document.getElementById('runa-modal-titulo').textContent = expandido.titulo || '';
-        document.getElementById('runa-modal-significado-profundo').textContent = expandido.significado_profundo || '';
+        const tituloH4 = document.getElementById('runa-modal-titulo');
+        const significadoProfundoP = document.getElementById('runa-modal-significado-profundo');
+        const invertidaP = document.getElementById('runa-modal-invertida');
+        const posturaP = document.getElementById('runa-modal-postura');
+        const ritualP = document.getElementById('runa-modal-ritual');
+
+        tituloH4.textContent = expandido.titulo || '';
+        significadoProfundoP.textContent = expandido.significado_profundo || '';
         
-        const invertidaWrapper = document.getElementById('runa-modal-invertida-wrapper');
-        invertidaWrapper.style.display = expandido.valor_invertido ? 'block' : 'none';
-        document.getElementById('runa-modal-invertida').textContent = expandido.valor_invertido || '';
+        document.getElementById('runa-modal-invertida-wrapper').style.display = expandido.valor_invertido ? 'block' : 'none';
+        invertidaP.textContent = expandido.valor_invertido || '';
 
-        const posturaWrapper = document.getElementById('runa-modal-postura-wrapper');
-        posturaWrapper.style.display = expandido.postura ? 'block' : 'none';
-        document.getElementById('runa-modal-postura').textContent = expandido.postura || '';
+        document.getElementById('runa-modal-postura-wrapper').style.display = expandido.postura ? 'block' : 'none';
+        posturaP.textContent = expandido.postura || '';
 
-        const ritualWrapper = document.getElementById('runa-modal-ritual-wrapper');
-        ritualWrapper.style.display = expandido.ritual ? 'block' : 'none';
-        document.getElementById('runa-modal-ritual').textContent = expandido.ritual || '';
+        document.getElementById('runa-modal-ritual-wrapper').style.display = expandido.ritual ? 'block' : 'none';
+        ritualP.textContent = expandido.ritual || '';
 
         modalOverlay.classList.add('active');
         document.body.style.overflow = "hidden";
@@ -599,14 +599,13 @@
         document.querySelectorAll('.tirada-runa-box').forEach(box => {
             const nombre = box.querySelector('.tirada-nombre')?.textContent;
             if (nombre) {
-                const estaInvertida = box.dataset.invertida === 'true';
                 box.style.cursor = "pointer";
                 box.setAttribute('role', 'button');
                 box.setAttribute('aria-label', `Ver detalles de la runa ${nombre}`);
                 box.tabIndex = 0;
-                box.addEventListener('click', () => openRunaModalByName(nombre, estaInvertida));
+                box.addEventListener('click', () => openRunaModalByName(nombre));
                 box.addEventListener('keydown', (e) => {
-                    if (e.key === "Enter" || e.key === " ") { openRunaModalByName(nombre, estaInvertida); e.preventDefault(); }
+                    if (e.key === "Enter" || e.key === " ") { openRunaModalByName(nombre); e.preventDefault(); }
                 });
             }
         });
@@ -634,8 +633,8 @@
         </div>
       `).join('');
       galeria.querySelectorAll('div[data-nombre]').forEach(div => {
-        div.addEventListener('click', () => openRunaModalByName(div.dataset.nombre, false)); // En la galería siempre derechas
-        div.addEventListener('keydown', e => { if (e.key === "Enter" || e.key === " ") { openRunaModalByName(div.dataset.nombre, false); e.preventDefault(); } });
+        div.addEventListener('click', () => openRunaModalByName(div.dataset.nombre));
+        div.addEventListener('keydown', e => { if (e.key === "Enter" || e.key === " ") { openRunaModalByName(div.dataset.nombre); e.preventDefault(); } });
       });
 
       const modalOverlay = document.getElementById('runa-modal-overlay');
@@ -679,18 +678,9 @@
 
       preguntaInput.addEventListener('input', () => { tirarBtn.disabled = preguntaInput.value.trim().length === 0; });
 
-      /* --- FUNCIÓN SACARRUNAS ACTUALIZADA --- */
       function sacarRunas(n) {
-        const baraja = [...runas]; 
-        let extraidas = [];
-        for (let i = 0; i < n && baraja.length > 0; i++) { 
-            const runaExtraida = baraja.splice(Math.floor(Math.random() * baraja.length), 1)[0];
-            let estaInvertida = false;
-            if (runaExtraida.puede_invertirse) {
-                estaInvertida = Math.random() < 0.5; // 50% de probabilidad de salir invertida
-            }
-            extraidas.push({ runa: runaExtraida, invertida: estaInvertida });
-        }
+        const baraja = [...runas]; let extraidas = [];
+        for (let i = 0; i < n && baraja.length > 0; i++) { extraidas.push(baraja.splice(Math.floor(Math.random() * baraja.length), 1)[0]); }
         return extraidas;
       }
 
@@ -698,16 +688,14 @@
         tiradaResultado.innerHTML = ''; tiradaResultado.style.opacity = 0;
         setTimeout(() => {
           if (tipoSeleccionado === 'simple') {
-            const [resultado] = sacarRunas(1);
-            tiradaResultado.innerHTML = `<div class="tirada-runas-flex"><div class="tirada-runa-box" data-invertida="${resultado.invertida}"><div class="tirada-pos">Tu Guía</div><span class="runa-glyph ${resultado.invertida ? 'invertida' : ''}">${resultado.runa.simbolo}</span><span class="tirada-nombre">${resultado.runa.nombre}</span></div></div>`;
+            const [runa] = sacarRunas(1);
+            tiradaResultado.innerHTML = `<div class="tirada-runas-flex"><div class="tirada-runa-box"><div class="tirada-pos">Tu Guía</div><span class="runa-glyph">${runa.simbolo}</span><span class="tirada-nombre">${runa.nombre}</span></div></div>`;
           } else if (tipoSeleccionado === 'tres') {
-            const resultados = sacarRunas(3); 
-            const pos = ['Pasado', 'Presente', 'Futuro'];
-            tiradaResultado.innerHTML = `<div class="tirada-runas-flex tres-runas">${resultados.map((r,i) => `<div class="tirada-runa-box" data-invertida="${r.invertida}"><div class="tirada-pos">${pos[i]}</div><span class="runa-glyph ${r.invertida ? 'invertida' : ''}">${r.runa.simbolo}</span><span class="tirada-nombre">${r.runa.nombre}</span></div>`).join('')}</div>`;
+            const [r1, r2, r3] = sacarRunas(3); const pos = ['Pasado', 'Presente', 'Futuro'];
+            tiradaResultado.innerHTML = `<div class="tirada-runas-flex tres-runas">${[r1,r2,r3].map((r,i) => `<div class="tirada-runa-box"><div class="tirada-pos">${pos[i]}</div><span class="runa-glyph">${r.simbolo}</span><span class="tirada-nombre">${r.nombre}</span></div>`).join('')}</div>`;
           } else if (tipoSeleccionado === 'cruz') {
-            const resultados = sacarRunas(5); 
-            const pos = [ { label: 'Tú / Ahora', class: 'tirada-cruz-centro' }, { label: 'Guía', class: 'tirada-cruz-arriba' }, { label: 'Raíz', class: 'tirada-cruz-abajo' }, { label: 'Obstáculo', class: 'tirada-cruz-izquierda' }, { label: 'Futuro', class: 'tirada-cruz-derecha' }];
-            tiradaResultado.innerHTML = `<div class="tirada-cruz-layout">${resultados.map((r, i) => `<div class="${pos[i].class} tirada-runa-box" data-invertida="${r.invertida}"><div class="tirada-pos">${pos[i].label}</div><span class="runa-glyph ${r.invertida ? 'invertida' : ''}">${r.runa.simbolo}</span><span class="tirada-nombre">${r.runa.nombre}</span></div>`).join('')}</div>`;
+            const extraidas = sacarRunas(5); const pos = [ { label: 'Tú / Ahora', class: 'tirada-cruz-centro' }, { label: 'Guía', class: 'tirada-cruz-arriba' }, { label: 'Raíz', class: 'tirada-cruz-abajo' }, { label: 'Obstáculo', class: 'tirada-cruz-izquierda' }, { label: 'Futuro', class: 'tirada-cruz-derecha' }];
+            tiradaResultado.innerHTML = `<div class="tirada-cruz-layout">${extraidas.map((r, i) => `<div class="${pos[i].class} tirada-runa-box"><div class="tirada-pos">${pos[i].label}</div><span class="runa-glyph">${r.simbolo}</span><span class="tirada-nombre">${r.nombre}</span></div>`).join('')}</div>`;
           }
           activarModalEnTiradas();
           tiradaResultado.style.transition = 'opacity 0.5s'; tiradaResultado.style.opacity = 1;
