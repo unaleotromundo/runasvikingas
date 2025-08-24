@@ -1,0 +1,7 @@
+Las 4 Claves de la Implementación de Runas Invertidas
+La Lógica Aleatoria (El Destino): He modificado la función sacarRunas. Ahora, no solo elige una runa al azar, sino que también "lanza una moneda" (Math.random()) para decidir si sale invertida. Esto le da a cada tirada una aleatoriedad mucho más rica.
+La Base de Conocimiento (El Códice): ¡No todas las runas pueden invertirse! He añadido una nueva propiedad a nuestra base de datos (puede_invertirse: true/false) para runas como Gebo, Hagalaz, Isa, etc., que tienen el mismo significado sin importar su orientación. El sistema es ahora lo suficientemente inteligente como para no invertir estas runas específicas.
+La Representación Visual (El Símbolo): Cuando una runa salga invertida, su glifo aparecerá girado 180 grados en la pantalla. Esto se logra con una simple pero elegante regla de CSS (transform: rotate(180deg)), que se aplica dinámicamente solo cuando es necesario.
+La Interpretación en el Modal (El Mensaje): El cambio más importante para el usuario. Cuando se haga clic en una runa invertida de una tirada:
+El título del modal lo indicará claramente, añadiendo "(Invertida)".
+El texto principal de la interpretación mostrará directamente el significado invertido, que es el mensaje relevante para esa tirada específica.
