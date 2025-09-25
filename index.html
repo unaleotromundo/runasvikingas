@@ -187,7 +187,563 @@
         <h2>La Saga: El Hilo de las Nornas</h2>
         <div style="max-width: 800px; margin: 0 auto; line-height: 1.7;">
           <p>En el fiordo de Bjørndal, la muerte de un Jarl sin heredero amenaza con desgarrar al clan. Una joven völva, Ingrid, debe interpretar una misteriosa tirada de runas para guiar a su gente a través de una tormenta de ambición, traición y guerra inminente. La fuerza del guerrero Björn y la astucia del comerciante Hakon se enfrentan, pero las runas susurran un secreto que ninguno de los dos puede ver...</p>
-          <p><em>(Aquí se podrá leer la saga completa, capítulo por capítulo, con sus ilustraciones)</em></p>
+<!-- Botones principales + botón de "Todos los Capítulos" -->
+<div class="parchment-buttons">
+  <button class="parchment-btn" onclick="openChapter(1)">Manuscrito Capítulo 1</button>
+  <button class="parchment-btn" onclick="openChapter(2)">Manuscrito Capítulo 2</button>
+  <button class="parchment-btn" onclick="openChapter(3)">Manuscrito Capítulo 3</button>
+  <button class="parchment-btn" onclick="openChapter(4)">Manuscrito Capítulo 4</button>
+  <button class="parchment-btn" onclick="openChapter(5)">Manuscrito Capítulo 5</button>
+  <button class="parchment-btn" onclick="openChapter(6)">Manuscrito Capítulo 6</button>
+  <button class="parchment-btn" onclick="toggleChapterMenu()">Todos los Capítulos</button>
+</div>
+
+<!-- Menú lateral deslizante desde la derecha -->
+<div id="chapter-menu" class="chapter-menu">
+  <div class="menu-header">
+    <h2>ᛟ</h2>
+
+
+  <div class="menu-content">
+    <!-- Se generará dinámicamente -->
+  </div>
+</div>
+
+<!-- Modal estilo cine -->
+<div id="modal" class="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="close-modal" onclick="closeModal()">&times;</button>
+    <h2 class="chapter-title" id="modal-title">Capítulo</h2>
+    <div id="modal-text"></div>
+  </div>
+</div>
+
+<style>
+  /* --- Estilos para los botones de pergamino --- */
+  .parchment-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 30px 0;
+  }
+
+  .parchment-btn {
+    background: #f5e6c8;
+    border: 1px solid #d4b08c;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-family: 'Georgia', serif;
+    font-size: 1em;
+    color: #5a3921;
+    cursor: pointer;
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    min-width: 180px;
+    text-align: center;
+    background-image: url("image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.8-1.1 8.2-1.8 13-1.8 16.7 0 29.8 6.6 40 18 10.2 11.4 16 27.6 16 45.2 0 17.6-5.8 33.8-16 45.2-10.2 11.4-23.3 18-40 18-4.8 0-9.2-.7-13-1.8-3.8-1.1-7.2-2.5-10.4-4.2C6.8 115.5 3.5 114 0 111.5V18.5c3.5-2.5 6.8-4 11-4.5z' fill='%23e8d7b5' fill-opacity='0.4'/%3E%3C/svg%3E");
+    background-size: 200% 200%;
+  }
+
+  .parchment-btn:hover {
+    background: #e8d7b5;
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+  }
+
+  /* --- Modal --- */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content {
+    background: #fdf6e3;
+    color: #333;
+    max-width: 800px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.7);
+    font-family: 'Georgia', serif;
+    line-height: 1.7;
+    position: relative;
+  }
+
+  .close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.8em;
+    color: #5a3921;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  .close-modal:hover {
+    color: #8b5a2b;
+  }
+
+  h2.chapter-title {
+    text-align: center;
+    margin-top: 0;
+    color: #5a3921;
+    font-size: 1.6em;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #d4b08c;
+    padding-bottom: 10px;
+  }
+
+  .modal-content p {
+    margin-bottom: 16px;
+    text-align: justify;
+  }
+
+  .modal-content strong {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 1.2em;
+    color: #4a2a15;
+  }
+
+  /* --- Menú lateral desde la derecha --- */
+  .chapter-menu {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 300px;
+    height: 100%;
+    background: #f0e0c5;
+    border-left: 2px solid #d4b08c;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+    z-index: 1001;
+    transition: right 0.4s ease;
+    overflow-y: auto;
+  }
+
+  .chapter-menu.open {
+    right: 0;
+  }
+
+  .menu-header {
+    padding: 20px;
+    background: #e8d7b5;
+    border-bottom: 1px solid #d4b08c;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .menu-header h3 {
+    margin: 0;
+    color: #5a3921;
+    font-family: 'Georgia', serif;
+  }
+
+  .close-menu {
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    color: #5a3921;
+    cursor: pointer;
+  }
+
+  .menu-content {
+    padding: 15px;
+  }
+
+  .menu-chapter-item {
+    display: block;
+    padding: 12px 15px;
+    margin: 8px 0;
+    background: #fdf6e3;
+    border: 1px solid #d4b08c;
+    border-radius: 8px;
+    color: #5a3921;
+    text-decoration: none;
+    font-family: 'Georgia', serif;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .menu-chapter-item:hover {
+    background: #e8d7b5;
+    transform: translateX(-3px);
+  }
+</style>
+
+<script>
+  // Textos de los capítulos 1 al 13 + epílogo
+  const chapters = {
+    1: `<p><strong>Manuscrito de "El Hilo de las Nornas"</strong><br><strong>Capítulo 1: La Pira del Jarl</strong></p>
+        <p>El aire era un cuchillo de hielo afilado por el viento que bajaba de las montañas. A orillas del fiordo de Bjørndal, el silencio era una bestia agazapada, pesada y expectante. Todo el clan se había reunido en la playa de guijarros negros, sus rostros curtidos por el sol y la sal tan inescrutables como las piedras bajo sus pies. En el centro de todo, varado sobre rodillos de abeto, descansaba el Ormen Kvik —la "Serpiente Rápida"—, el drakkar que había sido el orgullo del Jarl Agnar en vida y que ahora sería su pira funeraria.</p>
+        <p>Yo, Ingrid, observaba desde el linde del bosque, con mi bastón de fresno en la mano. El frío no era lo que me hacía temblar. Era el peso de las miradas. Sentían mi presencia más que verla, la joven völva que ahora debía llenar el vacío dejado por la sabiduría de mi abuela. Esperaban de mí una señal, una palabra de los dioses, una certeza en este mar de incertidumbre. Pero los dioses, esa mañana, guardaban silencio.</p>
+        <p>Dentro del barco, sobre un lecho de pieles de oso y de lobo, yacía el cuerpo de Agnar. Un gigante incluso en la muerte, con su barba gris trenzada sobre el pecho y sus manos callosas aferrando la empuñadura de su espada. A su alrededor se habían dispuesto sus bienes para el último viaje: su cota de malla bruñida, su escudo con el emblema del oso, cuencos de plata llenos de grano y carne seca, y a los pies del barco, la sombría silueta de su mejor semental, sacrificado al amanecer para que sirviera a su amo en la otra vida. El olor metálico de la sangre se mezclaba con el de la brea y el pino.</p>
+        <p>Astrid, la viuda del jarl, estaba junto a la proa. Su rostro, una máscara de dignidad, no traicionaba el torbellino que yo sabía que bullía en su interior. Era una roca contra la que las olas de la desesperación del clan chocaban y se rompían. Sus ojos se encontraron con los míos por un instante, y en ellos leí una orden silenciosa: Mantén a nuestra gente unida.</p>
+        <p>Más allá de ella, los dos polos que amenazaban con desgarrar nuestro mundo.<br>Björn "Puño de Hierro" dirigía a sus húskarlar con gestos bruscos y precisos mientras tensaban las cuerdas para el lanzamiento final. Era la encarnación de la fuerza de nuestro pueblo: ancho de hombros, con el pelo y la barba del color de la arena y los brazos como troncos de roble. Cada movimiento suyo era una declaración de poder, una afirmación de que él era el heredero natural de la espada de Agnar. Su mirada se posaba en el cuerpo del jarl con un dolor genuino, el de un hijo que pierde a un padre.</p>
+        <p>Apartado, cerca del muelle donde sus propios barcos mercantes se mecían perezosamente, estaba Hakon "El Zorro". No llevaba armas visibles, solo una túnica de lana azul oscuro, finamente tejida, adornada con broches de plata que delataban sus viajes a tierras lejanas. Estaba flanqueado por un par de capitanes de barco, hombres cuyos rostros hablaban más de mercados extranjeros que de campos de batalla. Hakon observaba el ritual con una calma analítica, casi distante. Cuando su mirada se cruzó con la de Björn, fue como el choque del hacha contra la moneda: la fuerza bruta contra el poder sutil del oro.</p>
+        <p>Nadie hablaba. El único sonido era el gemido del viento en los árboles y el suave lapeado de las olas. A una señal de Astrid, los hombres de Björn empujaron. Los rodillos gimieron bajo el inmenso peso y la Serpiente Rápida se deslizó por la playa hasta que su quilla besó el agua salada. Flotaba, majestuosa y sombría, un fantasma sobre las aguas oscuras del fiordo.</p>
+        <p>Era el momento. Björn tomó un arco largo de las manos de uno de sus hombres y una flecha con la punta envuelta en tela empapada en aceite. Un sirviente se acercó con una antorcha. Sin mirar a nadie, sin pedir permiso, Björn prendió la flecha. Estaba reclamando el derecho de enviar a su jarl en su último viaje. Un acto de liderazgo que nadie se atrevió a cuestionar en ese momento sagrado.</p>
+        <p>Tensó el arco. La llama anaranjada danzaba, un punto de calor desafiante en la fría luz gris. Por un instante, el mundo contuvo la respiración.</p>
+        <p>Ansuz, susurré para mis adentros, invocando la runa de Odín, el Padre de Todo. Guía esta flecha. Guía su alma. Guíanos a nosotros.</p>
+        <p>El arco silbó. La flecha trazó un arco perfecto y se clavó en el centro del barco, entre las pieles secas. El fuego prendió con una avidez hambrienta, trepando por la madera embreada. Una columna de humo negro y denso comenzó a ascender hacia el cielo plomizo, llevando el espíritu de Agnar hacia el gran salón de los dioses.</p>
+        <p>Mientras el barco se alejaba lentamente, envuelto en un sudario de llamas crepitantes, sentí un tirón en la bolsa de cuero que colgaba de mi cinturón. Mis dedos, casi sin pensar, se cerraron sobre la superficie fría y lisa de las piedras rúnicas. No había hecho una tirada, pero un mensaje, una sensación, se abrió paso a través de mi piel. No era una runa de despedida ni de luto la que pulsaba contra mis dedos.<br> Era Hagalaz. El granizo. La fuerza destructiva e incontrolable de la naturaleza. La crisis que llega sin aviso.</p>
+        <p>El fuego de la pira iluminaba los rostros del clan, pero una escarcha helada se deslizó por mi espina dorsal. La muerte del Jarl Agnar no era el final de nuestros problemas.<br> Era solo el principio de la tormenta.</p>`,
+
+    2: `<p><strong>Manuscrito de "El Hilo de las Nornas"</strong><br><strong>Capítulo 2: El Eco en la Sala Larga</strong></p>
+        <p>El fuego de la pira funeraria se había convertido en un punto anaranjado y distante en la inmensidad gris del fiordo cuando el clan se retiró al calor sofocante de la Sala Larga del jarl. El aire en el interior era denso, cargado con el olor a humo, carne asada, hidromiel y la pena no expresada de casi un centenar de personas. El gran hogar central crepitaba y lanzaba sombras danzantes sobre los pilares de madera tallados con las fauces de dragones y las intrincadas formas de la Gran Serpiente del Mundo. Pero el calor del fuego no lograba disipar el frío que se había instalado en los corazones.</p>
+        <p>El escaño del jarl, el hásæti, tallado con cabezas de oso y elevado sobre los demás, estaba dolorosamente vacío. Era un hueco en el universo, un centro de gravedad que había desaparecido, y todos sentíamos la atracción caótica de su ausencia.</p>
+        <p>Astrid, con una copa de cuerno en la mano, se puso de pie junto al escaño vacío. No se sentó en él; ese no era su lugar. Pero su presencia a su lado era una afirmación de autoridad. El murmullo de las conversaciones se apagó.</p>
+        <p>"Agnar ha comenzado su viaje", dijo, su voz clara y firme, sin rastro de la fragilidad del luto. "Navega hacia los salones de Odín con el honor que se ganó. Pero mientras su espíritu festeja, Bjørndal permanece. El fiordo no puede estar sin cabeza. La manada no puede estar sin líder".</p>
+        <p>Sus palabras cayeron en el silencio como piedras en un pozo profundo. Todos sabían lo que venía después.</p>
+        <p>Fue Björn quien se levantó primero, como era de esperar. Se deshizo de su capa de piel de lobo, revelando los anchos cinturones de cuero y el hacha que nunca abandonaba su costado. Sus ojos azules recorrieron la sala, deteniéndose en los rostros de los guerreros, sus hermanos de escudo.</p>
+        <p>"Astrid habla con verdad", retumbó su voz. "El invierno se acerca, y con él, los lobos. Tanto los de cuatro patas como los de dos. Los clanes vecinos vieron la pira de Agnar y ahora mismo están midiendo nuestra fuerza. No podemos mostrarles duda. No podemos mostrarles división. Necesitamos un jarl que pueda empuñar la espada de Agnar y mantener nuestras fronteras seguras. Propongo que el Þing se reúna con la primera luz del alba para aclamar a un nuevo líder".</p>
+        <p>El mensaje era inequívoco. Él era ese líder. Un rugido de aprobación surgió de la mitad de la sala, el sonido de los hombres de armas golpeando las mesas con sus jarras.</p>
+        <p>Entonces, una voz más tranquila, pero no menos segura, cortó el ruido. "Un hacha afilada en manos de un necio se corta a sí misma".</p>
+        <p>Hakon "El Zorro" se puso de pie, no con la brusquedad de Björn, sino con un movimiento fluido. Sostenía una copa de plata, un objeto claramente extranjero.</p>
+        <p>"El honor de Agnar no solo se forjó con el hacha", continuó, su mirada pasando por encima de los guerreros y fijándose en los granjeros, los artesanos y los comerciantes. "¿O hemos olvidado los inviernos en que los almacenes de los clanes vecinos estaban vacíos mientras los nuestros rebosaban? Eso no se logró con incursiones, sino con los acuerdos que Agnar, con buen juicio, me permitió negociar".</p>
+        <p>Hizo una pausa, dejando que sus palabras calaran. "Nuestra fuerza no reside solo en nuestros escudos, sino en nuestros barcos mercantes, en nuestras redes y en nuestros graneros. Elegir un líder en la prisa del luto es una invitación al error. Necesitamos un jarl que entienda tanto el precio del acero como el valor de la plata".</p>
+        <p>La otra mitad de la sala asintió en silencio, sus rostros mostrando la preocupación por el largo y oscuro invierno que se avecinaba. La sala se había dividido en dos mitades tan claramente como si un hacha la hubiera partido por la mitad. El aire se espesó, vibrando con una hostilidad contenida. Dos hombres se gritaron de un lado a otro. Una jarra se estrelló contra el suelo.</p>
+        <p>Fue entonces cuando intervine.</p>
+        <p>Me levanté de mi lugar en la sombra, cerca de uno de los pilares. Mi voz no era fuerte, pero en la creciente tensión, sonó como una campana.</p>
+        <p>"Ambos hablan con una parte de la verdad".</p>
+        <p>Todas las cabezas se giraron hacia mí. Sentí el escozor de su atención. Björn me miró con impaciencia; Hakon, con una curiosidad calculadora.</p>
+        <p>"La fuerza del Uro nos protege", dije, nombrando la runa que encarnaba a Björn, "pero la sabiduría de Odín nos guía". Nombré a Ansuz, la runa del aliento divino. "Poner una por encima de la otra es caminar cojeando hacia la batalla".</p>
+        <p>Avancé hacia el fuego central, mis pies descalzos sintiendo la tierra apisonada bajo las esteras. "Mientras la pira ardía, las Nornas me susurraron. No un nombre. No una respuesta. Me mostraron una advertencia". Hice una pausa, asegurándome de tener la atención de todos.</p>
+        <p>"Siento el aliento de Hagalaz sobre este valle. Una tormenta de granizo se está formando, una que no destrozará los tejados, sino los lazos de sangre y lealtad. Una crisis que nos pondrá a prueba a todos. Si elegimos un líder sin la bendición de los que tejen nuestro destino, esta sala no será lo suficientemente grande para contener la sangre que se derramará".</p>
+        <p>Un silencio sepulcral se apoderó de la sala. El miedo a los dioses y al destino era más profundo que la lealtad a cualquier hombre.</p>
+        <p>"Por lo tanto", continué, sintiendo que cada palabra solidificaba mi propósito, "no debemos actuar ni con la prisa del guerrero ni con la cautela del mercader, sino con el respeto que se debe a los poderes antiguos. Convoco un ritual de tirada completa. De aquí a tres noches, cuando la luna esté llena y la marea en su punto más alto, llevaré las runas al hörgr del bosque. Allí, y solo allí, preguntaremos a los dioses qué clase de líder necesita Bjørndal para sobrevivir a la tormenta que se avecina".</p>
+        <p>Mi propuesta quedó suspendida en el aire. No era un apoyo a ninguno de los dos hombres, sino una afirmación de un poder superior. Era una jugada arriesgada. Si las runas guardaban silencio, mi autoridad quedaría destrozada.</p>
+        <p>Astrid fue la primera en reaccionar. Se puso erguida y su voz resonó con la autoridad de la matriarca. "La völva ha hablado. Así se hará. Ninguna decisión se tomará. Ninguna lealtad será jurada hasta que las runas sean leídas. Honraremos a Agnar manteniendo la paz que él nos legó, al menos durante tres días".</p>
+        <p>Miró a Björn y luego a Hakon, desafiándolos a contradecirla. Björn apretó la mandíbula, pero asintió a regañadientes. Hakon hizo una leve inclinación de cabeza, una sonrisa casi imperceptible jugando en sus labios.</p>
+        <p>La tensión inmediata se había disipado, reemplazada por una tregua frágil. Pero mientras volvía a mi lugar en la sombra, sentí el verdadero peso de mis palabras. Le había dado al clan tres días de paz, pero me había cargado a mí misma con una responsabilidad aterradora: descifrar el destino de mi gente, mientras la sombra de Hagalaz se cernía, cada vez más oscura, sobre todos nosotros.</p>`,
+
+    3: `<p><strong>Manuscrito de "El Hilo de las Nornas"</strong><br><strong>Capítulo 3: El Peso de las Piedras</strong></p>
+        <p>El primer día de la tregua pasó en una calma antinatural. Los hombres reparaban redes y afilaban herramientas con una concentración hosca, evitando las miradas. Las mujeres gestionaban los almacenes, sus conversaciones reducidas a susurros. Bjørndal contenía la respiración, y yo, que había impuesto este silencio, sentía su peso en cada bocanada de aire.</p>
+        <p>Mi preparación había comenzado. Como mi abuela me enseñó, el cuerpo debe ser purificado para que el espíritu pueda ver. Ayunaba, permitiendo solo agua de un manantial sagrado que brotaba entre las raíces de un viejo roble. Me sumergí en las aguas heladas del fiordo al amanecer, el frío mordiente arrancando cualquier pensamiento que no fuera la pura supervivencia, dejando mi mente clara y vacía como un cuenco esperando ser llenado.</p>
+        <p>Pasé la mayor parte del día en el hörgr, el círculo de piedras en el bosque. No para realizar el ritual, sino para aclimatar el espacio y a mí misma a él. Me senté en el centro, sobre la piedra plana que servía de altar, y saqué mis runas de la bolsa. Eran veinticuatro piezas de madera de tejo, pulidas por generaciones de manos, cada símbolo tallado y teñido con ocre rojo. No las lancé. Simplemente las sostuve, una por una, sintiendo su textura, meditando en su significado, dejando que su energía se filtrara en mí. Fehu, la riqueza del ganado y del espíritu. Uruz, la fuerza indómita. Thurisaz, la espina del conflicto. Eran mi alfabeto, mi conexión con lo incognoscible.</p>
+        <p>El sol comenzaba a descender, tiñendo el fiordo de un color anaranjado y púrpura, cuando un crujido de hojas secas me sacó de mi trance. No fue el paso pesado de un guerrero, sino el andar mesurado y silencioso de un cazador.</p>
+        <p>Era Hakon.</p>
+        <p>Vino solo, sin la ostentación de sus ropajes de comerciante. Vestía de cuero y lana simple, como cualquier otro hombre del clan, pero la astucia en sus ojos no podía ocultarse. Se detuvo en el borde del círculo de piedras, mostrando respeto por el espacio sagrado.</p>
+        <p>"Völva", dijo con una leve inclinación de cabeza. Su voz era tranquila, persuasiva. "Te agradezco la paz que nos has concedido. Sin tu intervención, la sala larga se habría calentado con algo más que el fuego".</p>
+        <p>"La paz es frágil", respondí, sin moverme de mi sitio. Mis dedos se cerraron instintivamente sobre la runa Algiz, la runa de la protección.</p>
+        <p>"Precisamente", dijo él, dando un paso cauteloso hacia el círculo. "Y por eso vengo. Para hablar de la paz que vendrá después de estos tres días. La paz duradera". Se sentó en una roca fuera del círculo, adoptando una postura no amenazante. "Björn es un hombre honorable. Nadie lo duda. Su corazón late al ritmo de Bjørndal. Pero su ritmo es el del tambor de guerra. Nos llevará a incursiones gloriosas y a tumbas tempranas. Vaciará nuestros graneros para llenar las sagas con su nombre".</p>
+        <p>Su lógica era como una corriente suave que erosionaba la roca. "El mundo está cambiando, Ingrid. Más allá de nuestros fiordos, los reinos se unen bajo un solo rey, bajo un solo dios. La fuerza bruta ya no es suficiente. Se necesita visión. Se necesita plata. Se necesita saber cuándo comerciar en lugar de asaltar".</p>
+        <p>Abrió la mano. Sobre su palma descansaba un pequeño objeto: un trozo de ámbar lechoso, y dentro de él, perfectamente conservado, un insecto con alas delicadas. Nunca había visto algo así.</p>
+        <p>"Lo traje de las costas del sur", explicó. "Me lo dio un hombre que no adoraba a Thor ni a Odín. Su pueblo construye ciudades de piedra que empequeñecen nuestra sala larga. No lo hacen con hachas, sino con comercio y acuerdos". Me ofreció el ámbar. "El futuro no está en lo que podemos tomar, sino en lo que podemos construir".</p>
+        <p>No acepté el regalo. "Las runas no se preocupan por la plata ni por los dioses extranjeros, Hakon. Muestran el patrón que tejen las Nornas. Mi deber es leer ese patrón, no alterarlo".</p>
+        <p>Una sonrisa inteligente se dibujó en su rostro. "No te pediría que mintieras, völva. Eso sería un insulto a tu poder y al mío. Pero tú y yo sabemos que las runas son como la poesía de un skald: su significado depende de quién las interpreta. Raido puede ser un viaje a la batalla, o un viaje comercial. Ansuz puede ser la palabra de un dios furioso, o el mensaje de un diplomático astuto".</p>
+        <p>Se levantó, su punto ya establecido. "Las runas mostrarán posibilidades, no decretos. Una völva sabia no solo lee el futuro; guía a su gente hacia el mejor de los futuros posibles. Lo único que te pido es que, cuando leas el patrón, consideres todas las hebras".</p>
+        <p>Se dio la vuelta y se marchó tan silenciosamente como había llegado, dejando el ámbar sobre la roca en la que se había sentado.</p>
+        <p>Me quedé sola, el silencio del bosque ahora más profundo que antes. Las palabras de Hakon eran veneno envuelto en miel. No me había amenazado. No me había sobornado. Había hecho algo mucho peor: me había hecho dudar. Había sembrado en mi mente la idea de que mi interpretación no era un acto pasivo de recepción, sino un acto activo de elección.</p>
+        <p>Tomé el trozo de ámbar. Era cálido al tacto. Miré las runas esparcidas ante mí. Antes, eran llaves a la verdad divina. Ahora, gracias a Hakon, cada una de ellas parecía una puerta a un camino diferente, y la responsabilidad de elegir cuál abrir pesaba sobre mí con una fuerza aplastante.</p>
+        <p>Las piedras, de repente, se sentían mucho, mucho más pesadas.</p>`,
+
+    4: `<p><strong>Manuscrito de "El Hilo de las Nornas"</strong><br><strong>Capítulo 4: El Acero y la Sombra</strong></p>
+        <p>El segundo día amaneció bajo un cielo del color del hierro forjado. El aire era más frío, y una fina capa de escarcha cubría los tejados como un presagio del invierno que se agazapaba en las cumbres. Cumpliendo con mi ayuno, mi cuerpo se sentía ligero, pero mi mente estaba turbia, las palabras de Hakon se arremolinaban en ella como humo. Buscando anclarme en el mundo físico, me dirigí hacia el campo de entrenamiento, un claro de tierra apisonada entre la sala larga y el muelle.</p>
+        <p>El aire allí vibraba con una energía completamente distinta a la del silencioso hörgr. Olía a sudor, a cuero y al aliento metálico del esfuerzo. El sonido dominante era el rítmico y brutal choque de los escudos de madera y el silbido de las hachas de entrenamiento al cortar el aire. Jóvenes imberbes, bajo la atenta mirada de veteranos con cicatrices, practicaban los movimientos que un día podrían salvarles la vida o segar la de otro.</p>
+        <p>Y en el centro de todo, como una roca en medio de un río embravecido, estaba Björn.</p>
+        <p>Sin cota de malla, con el torso desnudo a pesar del frío, sus músculos se tensaban como cuerdas de un barco en plena tormenta. Instruía a dos jóvenes, corrigiendo la postura de uno con un golpe seco en el hombro, desviando el hacha del otro con el dorso de su antebrazo. No había sutileza en él, solo una economía de movimiento y una fuerza abrumadora. Era la personificación de la supervivencia.</p>
+        <p>Me vio. Dejó a los jóvenes con una orden gutural y caminó directamente hacia mí. No se detuvo en el borde del campo; avanzó hasta que casi pude sentir el calor que irradiaba su cuerpo. Sus ojos azules no tenían la astucia de los de Hakon; eran directos, como la punta de una lanza.</p>
+        <p>"Völva", dijo, su voz era un gruñido grave. No era una falta de respeto, era su naturaleza. "Espero que tus espíritus te estén dando respuestas claras. No tenemos tiempo para acertijos".</p>
+        <p>"Los que tejen el destino no se apresuran por la impaciencia de los hombres", respondí, mi voz sonando delgada en comparación con la suya.</p>
+        <p>Él soltó una risa corta, sin alegría. "Los saxones no esperan a que las Nornas terminen de tejer. Tampoco lo hacen el hambre ni el hielo". Señaló con la barbilla a los jóvenes que habían reanudado su torpe combate. "¿Ves eso? Esa es la única magia que mantiene a los lobos lejos de nuestras puertas. El acero, el sudor y la sangre derramada para aprender a no derramar la nuestra".</p>
+        <p>Se agachó y recogió un escudo de prácticas que había caído al suelo. Estaba abollado y astillado por innumerables golpes.</p>
+        <p>"Cuando yo era un niño", continuó, pasando un pulgar por una profunda muesca, "un clan del norte, los Jarnsmen, pensaron que éramos débiles. Su jarl era un hombre que escuchaba más a los mercaderes que a los guerreros. Una noche de invierno, mientras confiaban en sus alianzas y su oro, los incursores llegaron por mar. Quemaron su sala con las mujeres y los niños dentro. A los hombres los alinearon en la playa y los usaron para practicar el 'águila de sangre'".</p>
+        <p>Su mirada se clavó en la mía, dura y fría como el hielo del fiordo. "Pregúntale a tus runas, Ingrid, si alguna de ellas podría haber detenido esas hachas. Pregúntales si la riqueza de Hakon habría comprado la piedad de esos hombres".</p>
+        <p>Dejó caer el escudo con un ruido sordo. El sonido resonó en mi estómago vacío.</p>
+        <p>"Este clan necesita un puño, no una mano abierta contando monedas", dijo, acercándose un paso más. Su sombra me cubrió por completo. "Necesita un líder que inspire temor a nuestros enemigos y seguridad a nuestra gente. Cualquier otra cosa es una invitación a la masacre. Recuerda eso cuando estés lanzando tus huesos y susurrando a los vientos. El destino de esos niños", dijo, señalando de nuevo a los jóvenes guerreros, "está en tus manos tanto como en las mías. No dejes que la elocuencia de un zorro te haga olvidar el aullido del lobo".</p>
+        <p>No esperó una respuesta. Se dio la vuelta y su vozarrón resonó de nuevo en el campo, corrigiendo, ordenando, forjando armas humanas.</p>
+        <p>Me quedé allí, inmóvil, sintiendo un frío que no tenía nada que ver con la temperatura. Hakon había intentado seducir mi mente. Björn había agarrado mi corazón con el puño de hierro del miedo.</p>
+        <p>Ambos tenían razón. Y ambos estaban equivocados.</p>
+        <p>Me habían colocado en el centro de un tablero de hnefatafl, la pieza rey, asediada por todos los flancos. Uno me ofrecía un futuro de prosperidad construido sobre cimientos inciertos; el otro, un presente seguro anclado en un pasado brutal.</p>
+        <p>Y sobre mi cabeza, invisible para ellos pero cada vez más real para mí, la nube de Hagalaz giraba, lista para descargar su tormenta de hielo y furia. Ahora comprendía que la tormenta no venía de fuera.<br>Estaba a punto de estallar dentro de nosotros.</p>`,
+
+    5: `<p><strong>Manuscrito de "El Hilo de las Nornas"</strong><br><strong>Capítulo 5: El Hambre del Espíritu</strong></p>
+        <p>El tercer día fue un día de silencio y repliegue. El sol no se mostró; una neblina baja y lechosa se aferró al fiordo, amortiguando los sonidos y difuminando los bordes del mundo. Para mí, el velo entre lo visto y lo no visto nunca había sido tan delgado.</p>
+        <p>El hambre ya no era una molestia, sino un estado del ser. Había roído toda la grasa de mis pensamientos, dejando solo el hueso de mi propósito. Mi cuerpo se sentía hueco, un tambor resonante. Cada crujido de una rama en el bosque, cada graznido de un cuervo, llegaba a mis oídos con una claridad sobrenatural. Eran mensajes, un lenguaje que estaba empezando a recordar.</p>
+        <p>No busqué a nadie y nadie me buscó a mí. Evité la sala larga, el muelle, el campo de entrenamiento. Mi único camino me llevó lejos del asentamiento, siguiendo el arroyo que descendía de las montañas hasta el manantial sagrado que brotaba entre las raíces de un roble milenario. Mi abuela lo llamaba "la vena de Yggdrasil".</p>
+        <p>Allí, sentada sobre una roca cubierta de musgo, dejé que el gélido aire de la montaña me limpiara por dentro. Las palabras de Hakon y los gruñidos de Björn habían sido como barro arrojado sobre un lienzo limpio. Ahora, con la soledad como mi única compañera, tenía que rasparlo.</p>
+        <p>Cerré los ojos y recordé.</p>
+        <p>Era una niña, no más alta que el cinturón de mi abuela. Estábamos en este mismo lugar, y ella me había puesto en la mano mi primera runa tallada: Dagaz, la del día, la del amanecer. Mi dedo trazó el símbolo, una mariposa de líneas rectas.</p>
+        <p>"¿Qué dice?", le pregunté.</p>
+        <p>Mi abuela sonrió, sus ojos eran un mapa de arrugas llenas de sabiduría. "No 'dice', niña. Escucha lo que canta. Una runa nunca canta sola. Su canción cambia según la runa que se siente a su lado en el paño. Dagaz junto a Jera puede cantar sobre un amanecer de buena cosecha. Dagaz junto a Hagalaz puede cantar sobre la terrible claridad que sigue a una tormenta destructiva".</p>
+        <p>Luego, me tomó la barbilla con su mano áspera pero gentil. "Los hombres vendrán a ti. Te ofrecerán oro, te ofrecerán amenazas, te ofrecerán sus verdades envueltas en piel de cordero. Intentarán decirte cómo debe sonar la canción. Tu deber no es cantar para ellos. Tu deber es escuchar la música del universo y cantarla tal como es, sin importar si la melodía es dulce o amarga".</p>
+        <p>Me aferré a ese recuerdo como un hombre que se ahoga se aferra a un trozo de madera. La verdad de mi abuela. No era un instrumento para ser afinado por la ambición de los hombres. Era la voz.</p>
+        <p>Hakon me había ofrecido un camino de prosperidad. Björn, un camino de seguridad. Ambos eran senderos tentadores. Pero las runas no te dan un camino. Te muestran el cruce de caminos. Te revelan la geografía del destino en ese preciso instante. La elección de qué sendero tomar, la interpretación de ese mapa... esa era la carga y el poder de la völva. Y debía soportarla sola.</p>
+        <p>Me levanté, sintiendo una nueva resolución endurecer mi espíritu. El hambre, el frío, el miedo... eran solo herramientas. Eran el fuego de la forja que me templaba para la tarea que tenía por delante.</p>
+        <p>Regresé a mi pequeña cabaña al atardecer. La niebla se espesaba, y la luna llena era apenas un resplandor pálido y difuso tras las nubes. El mundo parecía un sueño. Encendí un único candil de aceite de foca. De un cofre de madera saqué los elementos para el ritual: un atado de hierbas secas —artemisa, milenrama y enebro—, un cuenco de bronce y un pequeño cuchillo de hierro.</p>
+        <p>Me despojé de mis ropas de lana del día a día y me vestí con la túnica de lino blanco sin teñir que solo usaba para las ceremonias. Estaba fría contra mi piel. Por último, tomé mi bastón de fresno, el seiðstafr, su madera pulida y oscura al tacto. En su punta, un enredo de serpientes de bronce parecía retorcerse a la luz parpadeante.</p>
+        <p>Abrí la bolsa de cuero. Las veinticuatro runas de tejo reposaban en la oscuridad. El destino de Bjørndal estaba contenido en esas pequeñas piezas de madera.</p>
+        <p>Salí a la noche. La niebla se arremolinaba a mis pies, tragándose el sonido de mis pasos. El asentamiento a mi espalda estaba en silencio, como si ya fuera un pueblo fantasma. Solo el resplandor anaranjado de los hogares de la sala larga perforaba la penumbra.</p>
+        <p>Me dirigí hacia el bosque, hacia el corazón de la oscuridad. No iba a suplicar una respuesta. Iba a exigirla.</p>`,
+
+    6: `<p><strong>Manuscrito de "El Hilo de las Nornas"</strong><br><strong>Capítulo 6: El Círculo de Hueso y Fuego</strong></p>
+        <p>El hörgr me recibió como una tumba abierta a las estrellas. La niebla se arremolinaba entre las piedras cubiertas de musgo, moviéndose como espíritus indecisos. El silencio del bosque era absoluto, un lienzo sobre el cual hasta el latido de mi propio corazón sonaba como un tambor de guerra. La luna llena, una mancha pálida y fantasmal tras el velo de nubes, ofrecía una luz espectral, suficiente para ver las formas, pero no los detalles.</p>
+        <p>Coloqué mi bastón de fresno en el centro del círculo. Actuaba como un ancla, un Yggdrasil en miniatura que conectaba la tierra bajo mis pies con el cielo invisible sobre mi cabeza. A su lado, sobre la piedra plana del altar, extendí un paño de lino blanco y sin teñir, la pureza sobre la que se revelaría el destino.</p>
+        <p>Usando pedernal y acero, encendí un pequeño fuego en el cuenco de bronce. La llama creció, débil al principio, y luego la alimenté con el atado de hierbas secas. La artemisa, la milenrama y el enebro prendieron con un chisporroteo, liberando un humo espeso y aromático. Era el aliento de la tierra, un incienso para los dioses viejos. El humo no ascendía en línea recta; se enroscaba a mi alrededor, aferrándose a mi túnica, llenando mis pulmones.</p>
+        <p>Respiré profundamente, dejando que el humo me purificara, que me vaciara de Ingrid, la muchacha asustada, y me llenara con la esencia de la völva.</p>
+        <p>Comencé el canto.</p>
+        <p>Al principio, era un susurro, apenas audible por encima del crepitar de las hierbas. Un galdr, una invocación en la lengua antigua. Llamé a las Nornas, a las tejedoras en el pozo de Urd.</p>
+        <p>"Oídme, doncellas del destino.<br>Urd, la que fue. Verdandi, la que es. Skuld, la que será.<br>La hija de vuestra hija os llama.<br>El hilo de Bjørndal se enreda.<br>El tejido de mi clan se deshace".</p>
+        <p>Mi voz se hizo más fuerte, ganando ritmo, volviéndose monótona y resonante. El mundo exterior comenzó a desvanecerse. Las piedras del círculo ya no eran rocas, eran los rostros de los ancestros. El viento que susurraba entre las copas de los árboles era la respiración de los Nueve Mundos. El fuego en el cuenco era un ojo de dragón mirándome desde la oscuridad.</p>
+        <p>El trance se apoderó de mí. Mi cuerpo se balanceaba al ritmo del canto, mis ojos fijos en la llama danzante. Ya no sentía el frío. Ya no sentía el hambre. Solo sentía la inmensa red del Wyrd, el destino, vibrando a mi alrededor, cada hilo conectado a cada vida, cada elección, cada muerte. Pude ver los hilos rojos de la vida de Björn, gruesos y directos. Vi los hilos plateados de Hakon, intrincados y llenos de nudos. Y vi el hilo oscuro de la crisis que se cernía sobre ellos, un hilo teñido con el color del granizo y la sangre.</p>
+        <p>Era el momento.</p>
+        <p>Tomé la bolsa de cuero. El corazón me martilleaba contra las costillas, un ritmo frenético contra el canto lento y profundo. Mis dedos temblaban al desatar el nudo. Vertí las veinticuatro runas de tejo sobre el centro del paño de lino. Se amontonaron, una pila de secretos silenciosos.</p>
+        <p>"¡Mostradme!", grité, mi voz rota y extraña a mis propios oídos. "¡Mostradme el camino para Bjørndal! ¡Mostradme la naturaleza del líder que debe guiarnos a través de la tormenta!".</p>
+        <p>Con los ojos cerrados, hundí ambas manos en la pila de madera fría y pulida. Las removí, mezclando el pasado, el presente y el futuro. El poder se acumulaba en mis palmas, una energía estática que me erizaba el vello de los brazos.</p>
+        <p>Luego, con un último aliento que vació mis pulmones, recogí un puñado de ellas y las lancé al aire sobre el paño.</p>
+        <p>Cayeron con un suave y terrible repiqueteo, como huesos sobre una piel de tambor.</p>
+        <p>Abrí los ojos. El mundo volvió a enfocarse con una claridad dolorosa. La llama del cuenco chisporroteó, arrojando una luz temblorosa sobre el paño blanco. La mayoría de las runas habían caído boca abajo, su secreto oculto. Pero tres de ellas yacían boca arriba, iluminadas por el fuego, formando un triángulo en el centro de la tela.</p>
+        <p>Mi aliento se heló en mi garganta. No era lo que esperaba. No era lo que temía. Era algo mucho peor.</p>
+        <p>La primera runa era Isa. El hielo. Una línea vertical, rígida e inmutable. Significaba estancamiento, parálisis, un bloqueo absoluto. Un invierno sin fin.</p>
+        <p>La segunda era Nauthiz. La necesidad. Dos palos cruzados, un símbolo de constricción y carencia. Significaba una crisis inevitable, la coacción del destino, el sufrimiento que enseña. El yugo de la necesidad.</p>
+        <p>Y la tercera, en el vértice del triángulo, la más terrible de todas en su ambigüedad. Perthro. La copa de dados, el misterio, el útero. Significaba un secreto, un destino oculto, algo desconocido que estaba a punto de revelarse. La runa de lo incognoscible.</p>
+        <p>El mensaje era brutalmente claro en su oscuridad.<br>Hielo. Necesidad. Secreto.<br>Las runas no me habían dado una elección entre la fuerza y la astucia. No me habían señalado un líder.<br>Me habían presentado un acertijo envuelto en una catástrofe. El camino hacia adelante estaba congelado, la crisis era inevitable, y la única salida era un secreto que aún no había sido revelado.</p>`,
+
+    7: `<p><strong>Manuscrito de "El Hilo de las Nornas"</strong><br><strong>Capítulo 7: La Lectura del Silencio</strong></p>
+        <p>El fuego en el cuenco de bronce se consumió hasta convertirse en brasas moribundas, y las brasas en cenizas grises. La noche alcanzó su punto más profundo y frío, ese momento antes del amanecer en que el mundo parece haber renunciado a volver a ver el sol. Y yo permanecí sentada, inmóvil, en el corazón del hörgr, con la mirada fija en las tres terribles runas.</p>
+        <p>Hielo. Necesidad. Secreto.</p>
+        <p>Mi primer impulso fue de pura desesperación. Era un fracaso. Le había prometido al clan una guía, una dirección, y los dioses me habían respondido con un muro de hielo. Me habían mostrado el problema, no la solución. ¿Cómo iba a presentarme ante Björn y Hakon con esto? "El destino dice que estamos atrapados, que sufriremos, y que hay un secreto". Me arrancarían la piel a tiras, verbalmente primero, y quizás literalmente después.</p>
+        <p>El pánico se apoderó de mí, un frío que nacía desde dentro y que era mucho peor que el de la noche. Mi abuela... ¿qué habría hecho ella?</p>
+        <p>Cerré los ojos, intentando silenciar el torbellino de mi propio miedo, y recordé su voz, no sus palabras exactas, sino el timbre, la cadencia con la que me enseñaba.</p>
+        <p>"Las runas no son un esclavo que te trae la respuesta que pides", me había dicho una vez, mientras remendaba una red de pesca. "Son un espejo. Te muestran lo que es, no necesariamente lo que quieres ver. Si le preguntas a un espejo cómo cruzar una montaña y te muestra que tienes la pierna rota, no culpes al espejo por no mostrarte un puente".</p>
+        <p>Mi pierna rota... ¿Cuál era la pierna rota de Bjørndal?</p>
+        <p>Miré las runas de nuevo, forzándome a ir más allá de su significado superficial y aterrador. No como símbolos aislados, sino como una frase, una canción cantada por las Nornas.</p>
+        <p>Isa. El hielo. El estancamiento. La fuerza que detiene todo movimiento. No era solo un presagio de un duro invierno. Era una descripción de nuestro estado actual. El clan estaba congelado. Dividido entre dos polos, Björn y Hakon, tan opuestos que se anulaban mutuamente, creando una parálisis perfecta. Ninguno de los dos podía moverse sin que el otro lo bloqueara. Estábamos atrapados en un punto muerto, un invierno político que precedía al invierno real. La elección de cualquiera de ellos no rompería el hielo, solo lo agrietaría, debilitando toda la estructura.</p>
+        <p>Nauthiz. La necesidad. La fricción que genera calor. El sufrimiento que obliga a la acción. Esta runa no era solo una advertencia de tiempos difíciles. Era la clave. Las Nornas estaban diciendo que la crisis, el sufrimiento que Hagalaz había prometido, era necesario. No era un castigo, era una herramienta. Una fuerza del destino que nos obligaría a hacer lo que no podíamos hacer por nosotros mismos. La necesidad nos forzaría a encontrar una solución porque el estancamiento significaba la muerte. Nos obligaría a generar nuestro propio calor para derretir el hielo.</p>
+        <p>Y eso me llevó a la última runa, la más enloquecedora de todas.</p>
+        <p>Perthro. El secreto. La copa de dados. Lo que está oculto. Si la necesidad era la herramienta para romper el hielo, Perthro era la solución. Pero era una solución oculta, una tercera vía que nadie estaba viendo. No era Björn. No era Hakon. Era algo o alguien que aún no había entrado en el juego. Mi abuela decía que Perthro era la runa del destino en su forma más pura: una oportunidad que puede o no ser aprovechada. Era una puerta cerrada. Y la llave... la llave estaba escondida.</p>
+        <p>Mi mente corría, revisando cada rostro del clan. ¿Un guerrero veterano que todos respetaban? No, ninguno tenía la influencia para unir a ambas facciones. ¿Un consejo de ancianos? Demasiado lento, demasiado indeciso para la crisis que se avecinaba. ¿Yo misma? Imposible. Mi poder era espiritual, no secular. Reclamar el liderazgo sería una blasfemia que me destruiría.</p>
+        <p>La respuesta no era evidente. Era un secreto. Y entonces, como un rayo de luna atravesando la niebla, una idea comenzó a formarse, tan audaz y peligrosa que me cortó la respiración.</p>
+        <p>El secreto no era una persona.</p>
+        <p>Quizás el secreto era una condición. Una prueba. Un sacrificio.</p>
+        <p>La tradición dictaba que el nuevo jarl debía ser aclamado en el Þing. ¿Y si las runas no estaban nombrando a un hombre, sino describiendo el acto que revelaría al verdadero líder? ¿Qué acto de necesidad podría romper el hielo del estancamiento?</p>
+        <p>Un nombre resonó en mi cabeza, no porque las runas lo dijeran, sino porque encajaba en el patrón de una manera que me aterrorizaba y me maravillaba al mismo tiempo.</p>
+        <p>Astrid.</p>
+        <p>No como jarl, una mujer no podía serlo. Pero como la encarnación de Othala, la herencia, la tierra ancestral. Ella era el corazón del clan, el único punto que tanto Björn como Hakon respetaban. Ella era la guardiana del hogar, el centro. El hielo había paralizado a los hombres de poder. La necesidad recaía sobre el centro para mantenerse firme. Y el secreto... el secreto era que el poder no siempre reside en la punta de la lanza o en el fondo de una bolsa de monedas. A veces, reside en la mano que sostiene las llaves del almacén.</p>
+        <p>No podía ser la líder permanente, pero ¿podría ser la solución temporal? Una regente. Una guardiana del escaño vacío hasta que un candidato digno, uno que pudiera unir ambas facciones, emergiera. No por elección, sino por sus actos frente a la crisis que Nauthiz prometía.</p>
+        <p>Me puse de pie, mis piernas entumecidas por el frío y la inmovilidad. El primer gris pálido del amanecer comenzaba a teñir el cielo oriental. Tenía mi interpretación. No era una respuesta fácil. No era la que nadie quería o esperaba. No complacería ni a Björn ni a Hakon, y probablemente enfurecería a ambos.</p>
+        <p>Era peligrosa. Era incierta.</p>
+        <p>Pero, por primera vez desde que las runas cayeron sobre el paño, sentí que la canción del universo tenía sentido. Era una melodía sombría y disonante, sí, pero era una melodía al fin.</p>
+        <p>Recogí las tres runas, su madera fría ahora zumbando con significado en mi palma. Guardé el resto. Apagué los últimos vestigios del ritual.</p>
+        <p>Mi ayuno había terminado. Mi vigilia había concluido. Ahora comenzaba la verdadera prueba: hacer que el clan del fiordo de Bjørndal escuchara una verdad que no querían oír.</p>`,
+
+    8: `<p><strong>Manuscrito de "El Hilo de las Nornas"</strong><br><strong>Capítulo 8: El Filo de la Verdad</strong></p>
+        <p>El sol había roto el abrazo de la niebla, aunque su luz era pálida y tímida, cuando regresé al asentamiento. La sala larga me esperaba, con su techo cubierto de musgo recortado contra el cielo gris. No había festones ni adornos, solo la sólida y silenciosa promesa de refugio y comunidad. Pero, lo sabía, en su interior se escondían la desconfianza, la ambición y el potencial de la violencia.</p>
+        <p>Me detuve un momento en la puerta, respirando profundamente el aire frío y salado. El olor a madera quemada flotaba en el aire, un recordatorio persistente de la pira funeraria de Agnar. En mi mano, apretaba mi bastón de fresno, su extremo de bronce frío contra mi palma. Era el único testigo de mi viaje a la oscuridad, mi ancla al poder que había invocado.</p>
+        <p>Empujé la puerta y entré.</p>
+        <p>El murmullo de las conversaciones se extinguió como una llama soplada por el viento. Todos estaban allí: los hombres de armas de Björn, con sus rostros curtidos y sus manos sobre las empuñaduras de sus espadas; los capitanes de barco de Hakon, con sus ropas finas y sus ojos calculadores; los granjeros, los artesanos, las mujeres, los ancianos, los niños... todos los que conformaban el tejido de Bjørndal. Todos me miraban, esperando, juzgando.</p>
+        <p>Astrid estaba sentada en el escaño del jarl, no en él, sino al borde, con una mano sobre el tallado de la cabeza del oso. Su rostro era una máscara, pero vi la pregunta en sus ojos. ¿Tenía una respuesta? ¿O solo había traído más confusión?</p>
+        <p>Avancé hacia el hogar central, donde el fuego crepitaba alegremente, lanzando sombras danzantes sobre las paredes. El calor era bienvenido sobre mi piel helada, pero no me relajó. El peligro en la sala era palpable, tan denso que casi podía tocarlo.</p>
+        <p>Me detuve frente a Astrid. Hice una reverencia, un reconocimiento de su autoridad temporal. Luego, levanté la vista y dejé que mi mirada recorriera la sala.</p>
+        <p>"Hombres y mujeres de Bjørndal", dije, mi voz sonando clara y fuerte a pesar del cansancio y el hambre. "He ido al hörgr. He ayunado. He cantado. He preguntado a las Nornas por el camino que tenemos por delante. Y ellas han respondido".</p>
+        <p>Hubo un leve murmullo, una contención de la respiración colectiva. Björn estaba de pie cerca del hogar, con los brazos cruzados sobre el pecho. Su mirada era intensa, impaciente. Hakon estaba en la parte trasera de la sala, apoyado contra un pilar, con una sonrisa enigmática en su rostro. Estaba seguro de que había logrado manipularme.</p>
+        <p>"Las runas no me han dado un nombre para proclamar como jarl", continué. "No han señalado a un guerrero ni a un mercader. No han ofrecido una solución fácil. Me han mostrado un acertijo, un desafío, una prueba que debemos superar para sobrevivir a la tormenta que se avecina".</p>
+        <p>Vi confusión en los rostros, y creciente frustración.</p>
+        <p>"Las runas dicen que estamos congelados", expliqué, señalando la idea de Isa. "Divididos entre dos caminos, incapaces de avanzar. Dicen que el sufrimiento vendrá, que Nauthiz, la necesidad, nos obligará a actuar. Y dicen que la clave para romper este hielo está oculta, que Perthro, un secreto, debe ser revelado".</p>
+        <p>Hice una pausa, dejando que mis palabras calaran.</p>
+        <p>"Por lo tanto, propongo esto", dije, mi voz resonando con una nueva confianza. "No proclamaremos un jarl hoy. No juraremos lealtad a ningún hombre. En cambio, proclamaremos una guardiana. Una regente que se sentará en el escaño de Agnar hasta que la necesidad nos muestre un camino mejor".</p>
+        <p>Un grito ahogado surgió de la sala. La incredulidad se reflejaba en los rostros. Era una herejía. Nunca antes se había oído hablar de algo así.</p>
+        <p>Björn dio un paso adelante, con el rostro enrojecido. "Estás proponiendo que dejemos el poder en manos de una mujer? ¿Que sigamos el consejo de una niña que juega con piedras? Esto es una locura".</p>
+        <p>"No estoy proponiendo que elijamos una líder permanente", respondí, enfrentándome a su mirada. "Estoy proponiendo que honremos la sabiduría de las Nornas. El hielo debe romperse. La necesidad debe guiarnos. Y el secreto debe ser revelado".</p>
+        <p>Me volví hacia Astrid, que permanecía sentada en silencio, observándome con una intensidad feroz.</p>
+        <p>"Astrid, viuda del Jarl Agnar, tú eres la encarnación de Othala, la herencia, la tierra que nos sustenta. Eres el corazón de este clan. A ti te confiamos la llave del almacén, la salud de nuestros hogares. Te pido que aceptes la carga de la regencia. Si aceptas, no gobernarás con la espada ni con el oro, sino con la sabiduría y la justicia. Mantendrás la paz entre nosotros. Y estarás preparada para dar un paso al lado cuando la necesidad revele al verdadero líder".</p>
+        <p>El silencio era tan pesado que podía sentirlo oprimiéndome el pecho. El destino de Bjørndal pendía de un hilo. Todo dependía de la respuesta de Astrid.</p>
+        <p>Ella me miró fijamente, sus ojos profundos e insondables. Luego, lentamente, se puso de pie.</p>
+        <p>"La völva ha hablado", dijo, su voz resonando con una autoridad que nunca antes había oído. "Las palabras de las Nornas no deben tomarse a la ligera. Este es un camino inusual, sí. Pero tiempos inusuales exigen medidas inusuales".</p>
+        <p>Se volvió hacia el clan. "Acepto la carga de la regencia. Mantendré la paz y la justicia entre nosotros. Gobernaré hasta que la necesidad revele al verdadero líder de Bjørndal".</p>
+        <p>Un murmullo recorrió la sala, un torbellino de sorpresa, incredulidad y... esperanza.</p>
+        <p>Björn abrió la boca para protestar, pero Astrid levantó la mano, silenciándolo. "Aquellos que se opongan a esto, que hablen ahora. Pero sepan que se oponen no solo a mí, sino también a los dioses".</p>
+        <p>Björn apretó la mandíbula, sus nudillos blancos sobre la empuñadura de su hacha. Pero no habló. No se atrevió.</p>
+        <p>Hakon sonrió, una sonrisa fría y calculadora. "Una decisión interesante", dijo. "Pero no puedo ver cómo esto resuelve nada. Solo retrasa lo inevitable".</p>
+        <p>"Quizás", respondí. "O quizás nos da el tiempo que necesitamos para ver la verdad".</p>
+        <p>Los dados habían sido lanzados. La sala larga de Bjørndal, que había estado al borde de la guerra civil, ahora se había embarcado en un nuevo y peligroso camino: un camino guiado por una mujer, por la magia y por la promesa de un secreto que cambiaría sus vidas para siempre.</p>`,
+
+    9: `<p><strong>Manuscrito de "El Hilo de las Nornas"</strong><br><strong>Capítulo 9: El Juramento del Thing</strong></p>
+        <p>La propuesta, audaz y sin precedentes, quedó suspendida en el aire denso de la sala larga. No era una solución; era un aplazamiento, un delicado puente de hielo tendido sobre un abismo de conflicto. Y ahora, los hombres del clan debían decidir si caminarían sobre él o lo harían añicos.</p>
+        <p>El silencio fue roto, no por Björn, sino por uno de sus guerreros más antiguos, un hombre llamado Kael, cuya cara era un mapa de cicatrices y cuya barba gris caía sobre su pecho.</p>
+        <p>"Una regente", dijo, su voz áspera como la grava. "Astrid tiene nuestro respeto. Siempre lo ha tenido. Pero un clan no se defiende con respeto, se defiende con acero. ¿Quién liderará la muralla de escudos si los Jarnsmen regresan? ¿Quién planeará la incursión que llene nuestros almacenes para el invierno? ¿Una mujer? Con todo el debido respeto, Astrid, eso no está en la tradición".</p>
+        <p>Varias cabezas asintieron enérgicamente. El argumento de Kael era simple, práctico y resonaba con la lógica de un pueblo guerrero.</p>
+        <p>Antes de que Astrid pudiera responder, Hakon tomó la palabra, con su habitual calma irónica. "La tradición también dicta que sigamos la guía de los dioses, ¿no es así, Kael? O acaso tu hacha sabe más que las Nornas". Se detuvo, dejando que su pulla surtiera efecto. "Sin embargo, el viejo guerrero tiene razón en una cosa. La gestión diaria del clan necesita una mano firme. Propongo que, bajo la regencia de Astrid, se forme un consejo. Uno para la guerra, uno para el comercio. Björn podría supervisar la defensa del fiordo, y yo podría encargarme de asegurar las provisiones y las alianzas comerciales".</p>
+        <p>Era una jugada brillante. Hakon se presentaba como un hombre razonable, un constructor de puentes. Aceptaba la regencia de Astrid, pero se insertaba a sí mismo y a su rival en una estructura de poder que, inevitablemente, seguiría dividiendo al clan. Sería la misma parálisis, solo que oficializada.</p>
+        <p>Björn bufó, un sonido de puro desdén. "Un 'consejo'", escupió la palabra como si fuera veneno. "Mientras nosotros entrenamos, tú estarás contando tus monedas y conspirando. No compartiré el poder con un hombre cuya única lealtad es a su propia bolsa".</p>
+        <p>La tensión volvió a dispararse, afilada como la punta de una flecha. Las dos facciones volvían a gruñirse, y el frágil puente de mi interpretación amenazaba con derrumbarse.</p>
+        <p>Fue entonces cuando Astrid demostró por qué las runas, de una manera misteriosa, la habían señalado. Se puso completamente de pie y golpeó la base del escaño del jarl con la palma de la mano. El sonido, seco y autoritario, silenció la sala.</p>
+        <p>"¡Basta!", su voz no era un grito, pero tenía el peso del acero. Sus ojos se clavaron primero en Björn. "Tú, Björn, hijo de nadie, criado en esta misma sala por mi esposo como si fueras de su sangre. ¿Dudas de mi fuerza? He dirigido esta hacienda durante veinte inviernos. He dado a luz a herederos y los he enterrado. He administrado los recursos que te han permitido tener hombres que alimentar y armas que forjar. Mi batalla no se libra en el campo, se libra aquí, entre estas paredes, y es una que he ganado cada día. Tú te encargarás de la defensa, sí, porque es tu deber, no tu derecho. Y me responderás a mí".</p>
+        <p>Luego, su mirada giró y se posó en Hakon. "Y tú, Hakon, el viajero astuto. Crees que tu propuesta es sabia, pero solo sirve para mantener la herida abierta. No habrá dos cabezas para este clan, pues un cuerpo con dos cabezas es un monstruo destinado a destruirse. Te encargarás del comercio y las provisiones, sí, porque es tu talento, no tu privilegio. Y me responderás a mí".</p>
+        <p>Se irguió, y por un momento, en la luz del fuego, pareció tan imponente como Agnar.</p>
+        <p>"No habrá consejo. No habrá facciones. Habrá un clan. El clan de Bjørndal. Y yo soy su guardiana. Mi palabra, bajo la guía de la völva y la memoria de mi esposo, será la ley hasta que el destino nos muestre al verdadero jarl". Su voz bajó, volviéndose más personal, más suplicante. "Os pido que juréis. No a mí. Jurad a Bjørndal. Jurad sobre este fuego, ante los ojos de los dioses y de nuestros ancestros, que mantendréis la paz y obedeceréis las decisiones tomadas por el bien del clan, hasta que la prueba de las Nornas se cumpla".</p>
+        <p>Fue un golpe maestro de liderazgo. No había pedido lealtad personal, sino un juramento a la idea misma de su comunidad, a su hogar. Rechazarlo sería declararse un traidor, un paria.</p>
+        <p>Un largo silencio se apoderó de la sala. Los hombres se miraban unos a otros, sopesando sus lealtades.</p>
+        <p>Entonces, Kael, el viejo guerrero que había sido el primero en protestar, dio un paso adelante. Desenvainó su seax, un cuchillo largo, y lo sostuvo con la punta hacia arriba. "Por mi honor y mi sangre", dijo con voz ronca, "juro por Bjørndal".</p>
+        <p>Ese fue el momento en que el hielo se rompió. Otro guerrero dio un paso adelante y repitió el juramento. Luego otro. Un granjero, un herrero. Pronto, un flujo constante de hombres se acercaba al fuego, desenvainando sus cuchillos o hachas y haciendo su juramento.</p>
+        <p>Björn observaba, con el rostro impasible, mientras sus propios hombres juraban lealtad a la nueva estructura. Finalmente, con un suspiro que pareció arrancarle el alma, desenvainó su magnífica hacha y dio un paso adelante. "Por Bjørndal", gruñó, y el juramento pareció costarle un gran esfuerzo.</p>
+        <p>Hakon sonrió y, con un gesto elegante, sacó una daga adornada con plata de su cinturón. "Por la prosperidad de Bjørndal", dijo, su voz suave y llena de matices.</p>
+        <p>La crisis inmediata se había evitado. Se había forjado un pacto, sellado por el honor y el miedo a los dioses. Pero mientras observaba la escena, no sentí una victoria total. Sentí que solo habíamos ganado un respiro.</p>
+        <p>Había puesto a Astrid en el poder, pero también la había convertido en el blanco de dos hombres poderosos y frustrados. La necesidad, Nauthiz, seguía ahí, esperando en las sombras. La prueba aún no había llegado. Y el secreto, Perthro, seguía encerrado en el corazón del destino, esperando el momento adecuado para revelarse.</p>
+        <p>El juramento del Þing no era el final de la historia. Era el comienzo del verdadero juego.</p>`,
+
+    10: `<p><strong>Manuscrito de "El Hilo de las Nornas"</strong><br><strong>Capítulo 10: El Primer Amanecer (de un Invierno Incierto)</strong></p>
+        <p>Pasaron varias semanas. La paz impuesta en la sala larga se mantuvo, pero era una paz frágil, como una fina capa de hielo sobre aguas profundas y turbulentas. El otoño avanzó, pintando las laderas de las montañas con tonos de óxido y oro, y cada atardecer robaba unos minutos más de luz al día. El aliento helado del invierno ya se sentía en el viento del norte.</p>
+        <p>Astrid gobernaba con una mano sorprendentemente firme. No se sentaba en el escaño alto del jarl —ese permanecía simbólicamente vacío—, sino que dirigía las asambleas diarias desde una silla junto al fuego, convirtiendo el corazón de la sala larga en su centro de poder. Su autoridad no provenía de la fuerza física ni de la riqueza, sino de un profundo conocimiento de la maquinaria del clan. Sabía cuántos barriles de pescado salado quedaban, qué familia tenía una vaca enferma, qué techo necesitaba ser reparado antes de las primeras nieves. Su liderazgo era práctico, terrenal y, por ello, innegable.</p>
+        <p>Fiel a su juramento, Björn se dedicó a su tarea con una ferocidad sombría. Llevaba a sus hombres a patrullas agotadoras a lo largo de las fronteras del bosque y organizaba ejercicios de combate implacables en la playa. El sonido de los escudos chocando se convirtió en la banda sonora de nuestros días. No desafió a Astrid abiertamente, pero su resentimiento era una nube oscura que lo seguía a todas partes. Cumplía sus órdenes al pie de la letra, pero con una brusquedad que dejaba claro que consideraba aquello una farsa temporal.</p>
+        <p>Hakon, por su parte, jugaba un juego mucho más sutil. Despachó dos de sus barcos en viajes comerciales de última hora antes de que los mares se volvieran intransitables, prometiendo grano y hierro de reinos del sur. Se movía por el asentamiento con una sonrisa fácil, ofreciendo consejos a los artesanos y pequeños préstamos a los granjeros que habían tenido una mala cosecha. No estaba construyendo un ejército de guerreros, sino una red de deudas y gratitud. A diferencia de Björn, participaba activamente en las asambleas de Astrid, ofreciendo siempre soluciones inteligentes y razonables que, de alguna manera, aumentaban sutilmente su propia influencia.</p>
+        <p>Yo observaba todo esto desde mi posición única, a la vez dentro y fuera del tejido del poder. Me convertí en la consejera silenciosa de Astrid. Nos reuníamos al caer la noche, no como regente y völva, sino como dos mujeres que compartían una carga inmensa. Ella me hablaba de las tensiones del día, de las miradas desafiantes de Björn y de las palabras melosas de Hakon. Yo le hablaba de las runas, no como una predicción, sino como un mapa del estado espiritual del clan.</p>
+        <p>"Fehu está inquieta", le dije una noche, mientras observábamos las llamas del hogar. "La riqueza, la prosperidad. Hakon promete llenarnos los almacenes, y la gente le escucha. Pero la verdadera riqueza del clan, nuestra unidad, se está erosionando".</p>
+        <p>"Lo sé", respondió Astrid, frotándose las sienes. "Cada día es una batalla para mantenerlos separados. Son como dos lobos que se disputan una presa, y yo tengo que interponerme entre ellos".</p>
+        <p>A pesar de la aparente calma, las runas no mentían. El hielo de Isa no se había derretido; simplemente nos habíamos acostumbrado a vivir sobre él. La necesidad de Nauthiz se acercaba, podía sentirla en el aire, en el viento cada vez más frío. Sabía que esta paz no podía durar. El frágil equilibrio se rompería con la primera prueba real.</p>
+        <p>Y la prueba llegó una mañana gris, traída por un explorador que regresó de las colinas del norte, sin aliento, con los ojos desorbitados por el pánico y una herida de flecha en el hombro.</p>
+        <p>Irrumpió en la sala larga, donde Astrid supervisaba el reparto de lana para el tejido de invierno, y se desplomó en el suelo.</p>
+        <p>"Los Jarnsmen", jadeó, mientras la gente se arremolinaba a su alrededor. "Una partida de guerra... no son incursores, es un ejército. Llevan el estandarte del jarl, Ulf el Sangriento. Quemaron la granja de la frontera. Vienen por el valle. Estarán aquí en dos días".</p>
+        <p>Un silencio mortal cayó sobre la sala. Era el escenario que Kael había predicho, la pesadilla que Björn había advertido. La crisis que Nauthiz había prometido no era una tormenta de nieve ni una hambruna.</p>
+        <p>Era una guerra.</p>
+        <p>En ese instante, todos los ojos, como uno solo, se apartaron de Astrid y se posaron en Björn. Su momento había llegado. Su rostro era una máscara de furia sombría y una terrible validación. Era como si dijera: "Os lo advertí".</p>
+        <p>Astrid se puso de pie, su rostro pálido pero resuelto. "Björn", dijo, su voz firme a pesar de la conmoción. "Prepara a los hombres".</p>
+        <p>Pero la pregunta flotaba en el aire, tan real como el olor a miedo que comenzaba a impregnar la sala: ¿Lucharían los hombres por una regente y una völva que los habían llevado por un camino incierto? ¿O seguirían al único hombre que les había prometido la única cosa que importaba ahora: la supervivencia a través del acero?</p>
+        <p>El primer amanecer de nuestro incierto invierno había terminado. La noche de la batalla estaba a punto de caer. Y el secreto de Perthro seguía oculto, enterrado en algún lugar bajo la inminente amenaza de la sangre y el fuego.</p>`,
+
+    11: `<p><strong>Manuscrito de "El Hilo de las Nornas"</strong><br><strong>Capítulo 11: El Acero Pide Paso</strong></p>
+        <p>El pánico que siguió al anuncio del explorador fue como un chispazo en un pajar. Duró apenas un instante antes de ser sofocado por una fuerza de la naturaleza aún más imponente: la voluntad de Björn.</p>
+        <p>Ya no era el guerrero resentido que se sentaba a la sombra en las asambleas. En el momento en que la amenaza se hizo real, una transformación se apoderó de él. Se movió hacia el centro de la sala, y el espacio pareció reordenarse a su alrededor. Ya no había facciones ni debates. Solo había un centro de mando. Su voz, que antes era un gruñido de frustración, se convirtió en un rugido de autoridad clara y cortante que atravesó el miedo.</p>
+        <p>"¡SILENCIO!", bramó. Y el silencio se hizo.</p>
+        <p>"El miedo es un veneno. El pánico es una tumba. Lo que se acerca es solo un hombre, y los hombres mueren". Sus ojos recorrieron la sala, no para intimidar, sino para encender algo en el corazón de cada persona. "Hemos enfrentado a los Jarnsmen antes. Conocemos su sed de sangre. ¡Y ellos conocerán nuestro acero!".</p>
+        <p>Se volvió hacia sus húskarlar, y las órdenes brotaron de él, rápidas, precisas, sin un ápice de duda.</p>
+        <p>"¡Kael! ¡Toma diez de los hombres más rápidos y vigila el paso del este! ¡Si intentan rodearnos, quiero saberlo antes de que den el primer paso! ¡Erik! ¡Las trampas de foso en el linde del bosque, ahora! ¡Quiero que ese sendero sea un lecho de estacas! ¡Las mujeres, los ancianos y los niños al refugio de la colina! ¡Llevad agua y comida! ¡Astrid se encargará!". Con esto último, le otorgó a Astrid su dominio, reconociendo su papel sin ceder un ápice de su autoridad militar.</p>
+        <p>Luego, su mirada barrió a todos los hombres restantes. "Cualquiera que pueda sostener un hacha, que se reúna conmigo en el muelle en media hora. Formaremos la muralla de escudos en la playa. ¡Ahí es donde los recibiremos! ¡Ahí es donde morirán!".</p>
+        <p>Los hombres, que momentos antes estaban paralizados por el miedo, ahora se movían con un propósito febril. El liderazgo de Björn era un torbellino que los arrastraba, dándoles una dirección, un propósito y, lo más importante, esperanza.</p>
+        <p>En medio del caos organizado, vi a Hakon acercarse a Astrid. No intentó dar órdenes ni competir con la autoridad de Björn; eso habría sido un suicidio. Su enfoque fue, como siempre, lateral.</p>
+        <p>"Mi señora", dijo en voz baja, asegurándose de que nadie más lo oyera. "Ulf el Sangriento es un carnicero, pero no es tonto. Su fuerza principal atacará la playa, como predice Björn. Es obvio. Pero enviará un pequeño destacamento por la ruta de los acantilados del sur. Es difícil, pero no imposible de escalar. Llegarán por nuestra retaguardia mientras toda nuestra fuerza está contenida en la playa. Es lo que yo haría para saquear el almacén sin oposición".</p>
+        <p>Astrid lo miró, procesando sus palabras. Era una visión estratégica que el enfoque directo de Björn podría haber pasado por alto. "Díselo a Björn", ordenó ella.</p>
+        <p>Hakon negó con la cabeza, una sonrisa amarga en su rostro. "No me escuchará. Cree que solo pienso en mis bienes. Pero tú, Astrid... él te escucha. Adviértele. Que deje una pequeña guardia en el almacén. Cinco hombres buenos podrían ser la diferencia entre la victoria y la aniquilación".</p>
+        <p>Astrid asintió, su rostro sombrío, y se dirigió a buscar a Björn.</p>
+        <p>Yo me quedé atrás, observando. Las runas se arremolinaban en mi mente. La crisis de Nauthiz estaba aquí, forzándonos a actuar. Björn era la encarnación de Uruz, la fuerza bruta necesaria para la supervivencia. Hakon era Ansuz, la sabiduría, la comunicación, la estrategia. Astrid era Othala, el hogar, el centro que debía mantenerse.</p>
+        <p>Y yo... yo era Perthro. El secreto.</p>
+        <p>Y en ese momento, lo entendí. El secreto no era una persona o una solución mágica. El secreto era la propia revelación: que ningún líder era suficiente por sí solo. La fuerza de Björn nos mantendría en pie en la muralla de escudos, pero sin la astucia de Hakon, nos apuñalarían por la espalda. Y sin el liderazgo central de Astrid para unir estas fuerzas opuestas, se destruirían mutuamente.</p>
+        <p>La victoria no dependía de elegir a un líder. Dependía de si estos tres líderes dispares podían, bajo la presión de la aniquilación, funcionar como uno solo.</p>
+        <p>Subí a la pequeña colina que dominaba el fiordo, mi corazón martilleando contra mi pecho. Abajo, en la playa, la muralla de escudos se estaba formando. Cincuenta hombres de Bjørndal, hombro con hombro, una delgada línea de madera y acero contra la marea que se avecinaba.</p>
+        <p>Y entonces los vi.</p>
+        <p>Primero uno, luego tres, luego una docena. Los drakkars de los Jarnsmen emergieron de la bruma en la boca del fiordo como tiburones surgiendo de las profundidades. Sus velas eran de un rojo sangre desvaído, y las proas talladas con cabezas de lobo parecían gruñir de hambre.</p>
+        <p>Un cuerno de guerra sonó desde la playa, un largo y lúgubre gemido que fue respondido por un coro de aullidos salvajes desde los barcos que se acercaban.</p>
+        <p>La tormenta de acero estaba a punto de romper. Y yo, que no podía empuñar un hacha, tenía que aferrarme a la terrible esperanza de que el secreto que había descubierto no fuera revelado demasiado tarde.</p>`,
+
+    12: `<p><strong>Manuscrito de "El Hilo de las Nornas"</strong><br><strong>Capítulo 12: La Canción del Acero y el Secreto</strong></p>
+        <p>Desde mi posición en la colina, la playa era un escenario terrible. Los drakkars de los Jarnsmen encallaron en la orilla con el crujido de la madera torturada. Un centenar de hombres, el doble de los nuestros, saltaron a las aguas poco profundas, un muro de escudos redondos pintados con lobos y calaveras. Sus gritos eran un estruendo inhumano, una promesa de aniquilación. A su cabeza, un gigante con una cota de malla negra y un yelmo con cuernos de jabalí —Ulf el Sangriento— blandía un hacha de dos manos tan grande como un timón.</p>
+        <p>La muralla de escudos de Bjørndal se mantuvo firme. Cincuenta hombres. Granjeros, pescadores, herreros, convertidos en una sola bestia con escamas de madera y dientes de acero. Y en su centro, Björn. No gritaba. Estaba extrañamente tranquilo, su rostro era una máscara de concentración mortal. Era un ancla de calma en un mar de caos.</p>
+        <p>El choque, cuando llegó, fue un trueno que sacudió la tierra. El sonido de la madera astillándose, el grito agudo del acero contra el acero, y debajo de todo, los gruñidos de esfuerzo y los gritos ahogados de los heridos.</p>
+        <p>Mi vista no se centró en la carnicería general, sino en los momentos que importaban. Vi a Björn moverse. No era un berserker ciego; era un maestro. Su hacha no se blandía, danzaba. Cada movimiento era letalmente eficiente. Desviaba un golpe, rompía un escudo, hundía su hoja y retrocedía a su posición, todo en el espacio de un latido. Su presencia inspiraba a los hombres a su alrededor a mantenerse firmes, a aguantar un segundo más, a empujar con más fuerza. Él era el corazón de la muralla, y mientras latiera, la muralla no caería.</p>
+        <p>Mientras tanto, en la retaguardia, Astrid se había convertido en un tipo diferente de comandante. No gritaba órdenes de batalla, sino de supervivencia. Organizaba a las mujeres y a los hombres mayores, creando una cadena humana para llevar cubos de agua a los combatientes sedientos y para arrastrar a los heridos lejos de la línea de batalla. Su rostro estaba manchado de hollín y sangre, pero sus ojos estaban claros. Mantenía unido el alma del clan mientras Björn mantenía unida la línea de defensa.</p>
+        <p>Pero yo sabía que no era suficiente. Éramos superados en número. La muralla de escudos, por muy valiente que fuera, se estaba desgastando. Se abrieron brechas. Vi a Kael, el viejo guerrero, caer con una lanza en el pecho. Vi a jóvenes que apenas se habían afeitado ser arrollados.</p>
+        <p>Y entonces, mi mirada se desvió hacia el acantilado del sur. y allí estaban.</p>
+        <p>Tal como Hakon había predicho. Una docena de Jarnsmen, trepando como arañas por la roca, evitando la batalla principal. Su objetivo era claro: el almacén, el corazón de nuestras reservas invernales, y la retaguardia de nuestra línea.</p>
+        <p>"¡El acantilado!", grité, pero mi voz se perdió en el estruendo. Nadie me oyó.</p>
+        <p>Mi corazón se hundió. Aquí era. El momento en que la astucia de Hakon debía entrar en juego. ¿Le había hecho caso Astrid? ¿Había escuchado Björn?</p>
+        <p>Los Jarnsmen llegaron a la cima del acantilado y corrieron hacia el almacén, con sus hachas en alto, listos para una masacre fácil.</p>
+        <p>Y entonces, la puerta del granero de al lado se abrió de golpe. De ella no salieron cinco guardias apostados, sino casi veinte hombres. Pescadores con arpones, carpinteros con hachas de mano y, a su cabeza, con una espada corta en una mano y una daga en la otra, estaba Hakon.</p>
+        <p>No se había quedado atrás para contar monedas. Había reunido a los hombres que no eran guerreros de primera línea, los que Björn podría haber considerado inútiles en la muralla principal, y los había convertido en una emboscada mortal.</p>
+        <p>Los Jarnsmen, sorprendidos, se vieron abrumados. La lucha allí no fue un choque de murallas, sino una pelea brutal y desesperada entre los edificios. Hakon no luchaba como Björn. Era un oportunista. Esquivaba, se agachaba, usaba el entorno a su favor, apuñalando desde ángulos inesperados. Su gente, siguiendo su ejemplo, convirtió sus herramientas en armas letales. La amenaza de la retaguardia fue neutralizada en un estallido de violencia corta y salvaje.</p>
+        <p>Abajo en la playa, la marea estaba empezando a cambiar. Ulf el Sangriento, viendo que su flanco no llegaba y que la muralla de escudos seguía en pie, redobló su furia. Abrió una brecha él mismo y se enfrentó a Björn en un duelo que silenció la batalla a su alrededor.</p>
+        <p>Fue una lucha de titanes. El hacha de Ulf era pura fuerza bruta; la de Björn era habilidad y resistencia. Chocaron una y otra vez. Ulf comenzó a cansarse, su arma pesada se volvió una carga. Björn, más ligero y rápido, esperó su momento. Cuando Ulf levantó su hacha para un golpe final y desesperado, Björn no bloqueó. Se lanzó hacia adelante, dentro del arco del golpe, y su propia hacha encontró el hueco sin protección bajo el brazo de Ulf.</p>
+        <p>El gigante se congeló. El hacha de dos manos cayó de sus dedos. Miró a Björn con incredulidad y luego se desplomó en la arena ensangrentada.</p>
+        <p>Un rugido surgió de los hombres de Bjørndal. Al ver caer a su líder, el corazón de los Jarnsmen se rompió. Su ataque flaqueó, se convirtió en una retirada desorganizada hacia sus barcos. La batalla se había ganado.</p>
+        <p>Cuando el último drakkar enemigo se alejó cojeando, un extraño silencio cayó sobre la playa, roto solo por los gemidos de los heridos. Björn, cubierto de sangre y mugre, se apoyó en su hacha, jadeando. Su mirada se encontró a través del campo de carnicería con la de Hakon, que emergía de entre los edificios, con un corte en la mejilla pero vivo.</p>
+        <p>No hubo un grito de victoria. No hubo un abrazo. Solo un momento de reconocimiento silencioso y exhausto. Habían sobrevivido.</p>
+        <p>Y de pie entre ellos, supervisando a los heridos, estaba Astrid.</p>
+        <p>El secreto de Perthro ya no era un secreto. Se había manifestado en la playa ensangrentada para que todos lo vieran. El liderazgo no era una sola persona. Era un trípode. La fuerza del guerrero, la astucia del estratega y el corazón del hogar. Si faltaba una pata, todo se derrumbaba.</p>
+        <p>La prueba de Nauthiz había terminado. Ahora solo quedaba ver qué construirían sobre los cimientos de esa terrible revelación.</p>`,
+
+    13: `<p><strong>Manuscrito de "El Hilo de las Nornas"</strong><br><strong>Capítulo 13: El Tejido Reparado</strong></p>
+        <p>Los días que siguieron a la batalla no fueron de celebración, sino de luto y reconstrucción. Quemamos a nuestros muertos en una pira comunal, sus espíritus ascendiendo juntos hacia los grandes salones. Vendamos a nuestros heridos. Reconstruimos las secciones dañadas de la empalizada. Cada hombre, mujer y niño trabajó desde el amanecer hasta el anochecer, unidos por el recuerdo fresco de la casi aniquilación.</p>
+        <p>La atmósfera en la sala larga había cambiado irrevocablemente. La tensión entre las facciones se había disipado, reemplazada por un respeto sombrío y ganado a pulso. Los guerreros de Björn habían visto a los "comerciantes" de Hakon salvarles la vida, y los hombres de Hakon habían sido protegidos por la muralla de escudos de Björn. Se contaban historias de la batalla, no para alardear, sino para honrar a los caídos y reconocer el valor de los demás.</p>
+        <p>En la tercera noche después de la victoria, Astrid convocó a una asamblea. La sala estaba abarrotada, pero el silencio era reverente. El escaño alto del jarl seguía vacío, un hueco en el centro de la sala que ahora representaba no una falta de liderazgo, sino una pregunta.</p>
+        <p>Astrid se levantó, su rostro cansado pero sus ojos llenos de una nueva fuerza. "Hemos sobrevivido", dijo, su voz resonando en la quietud. "La prueba que las Nornas predijeron ha llegado y se ha ido. Hemos sangrado juntos. Ahora, debemos construir juntos. La pregunta del liderazgo permanece".</p>
+        <p>Todas las miradas se posaron en Björn. Se había ganado el derecho, sin duda alguna. Su valor había sido el ancla de su victoria. Se puso de pie, pero en lugar de caminar hacia el escaño del jarl, miró a través de la sala hacia Hakon.</p>
+        <p>"Luchaste bien", dijo Björn, y las dos palabras, dichas con su voz grave, fueron más elocuentes que cualquier discurso.</p>
+        <p>Hakon asintió, un gesto de reconocimiento mutuo. "Tú mantuviste la muralla, Björn. Sin ella, mi plan no habría servido de nada".</p>
+        <p>Entonces Björn hizo algo que nadie esperaba. Se volvió hacia mí. "Völva. Tus runas nos hablaron de un secreto. Nos hablaron de una necesidad. Creo que ahora todos hemos visto la verdad en tus palabras. ¿Qué dicen las runas ahora? ¿Cuál es el camino a seguir?".</p>
+        <p>Me había preparado para este momento. Saqué de mi bolsa las tres runas del ritual: Isa, Nauthiz, Perthro. Las sostuve en mi palma abierta para que todos las vieran.</p>
+        <p>"Isa, el hielo del estancamiento, se ha roto por el fuego de la batalla", dije, mi voz clara. "Nauthiz, la necesidad, nos obligó a enfrentar esa batalla y a aprender una dura lección. Y Perthro, el secreto, se ha revelado. El secreto es que ninguna pata puede sostener un caldero. Se necesitan tres para mantenerlo estable sobre el fuego".</p>
+        <p>Miré a Björn, luego a Hakon y finalmente a Astrid.</p>
+        <p>"Las runas no nombran a un jarl. Nombran una estructura. Un liderazgo como el que nos dio la victoria. Se necesita un Puño de Guerra para dirigir el acero, un Ojo del Mundo para guiar el comercio y la estrategia, y un Corazón del Hogar para mantener al clan unido y próspero. Las tres cosas. Juntas. Ninguna por encima de la otra".</p>
+        <p>Hice una pausa, mi propuesta tan radical como la primera. "Propongo que se cree un consejo de tres. Björn, como Puño de Guerra. Hakon, como Ojo del Mundo. Y Astrid, como Corazón del Hogar y guardiana de la ley. Las decisiones importantes se tomarán juntas. El escaño del jarl permanecerá vacío, como un recordatorio de que el poder no reside en un solo hombre, sino en la unidad del clan".</p>
+        <p>Un murmullo recorrió la sala. Era una idea sin precedentes, nacida de una circunstancia sin precedentes.</p>
+        <p>Fue Hakon quien habló primero. "Es... lógico", dijo, con una genuina sorpresa en su voz. "Equilibra nuestras fortalezas y debilidades. Lo apoyo".</p>
+        <p>Todos los ojos se volvieron hacia Björn. Él era el que más tenía que perder, el que más cerca había estado de reclamar el poder absoluto. Miró el escaño vacío, luego a la gente del clan, a los rostros de los hombres que habían luchado a su lado, a las viudas de los que habían caído.</p>
+        <p>"Mi honor es para Bjørndal", dijo finalmente, con una humildad que nunca antes le había oído. "Si este es el camino que asegura nuestra fuerza, entonces lo recorreré".</p>
+        <p>Un suspiro colectivo de alivio llenó la sala. Astrid asintió lentamente, una sonrisa cansada pero genuina iluminando su rostro.</p>
+        <p>Esa noche, no hubo una aclamación para un nuevo jarl. En su lugar, hubo un juramento. Björn, Hakon y Astrid se pararon frente al fuego del hogar y juraron ante el clan no gobernarlos, sino servirlos, juntos.</p>
+        <p><strong>Epílogo</strong></p>
+        <p>El invierno llegó, duro y blanco, pero no nos encontró divididos. Bajo el liderazgo del consejo, Bjørndal no solo sobrevivió, sino que prosperó. Las patrullas de Björn mantuvieron las fronteras seguras. Los barcos de Hakon regresaron antes de que el hielo cerrara el fiordo, sus bodegas llenas de grano. Y la sabia administración de Astrid aseguró que cada familia tuviera suficiente para pasar los meses oscuros.</p>
+        <p>Yo volví a mi papel de völva, la observadora, la guía espiritual. Mi lugar ya no estaba en el centro de la política, sino en el borde, donde podía ver el tejido del destino con mayor claridad.</p>
+        <p>Una tarde, mientras la nieve caía suavemente fuera de mi ventana, saqué mis runas para una última lectura, no para el clan, sino para mí. No hice una pregunta. Simplemente dejé que las piedras me hablaran. Una sola runa cayó boca arriba sobre el paño.</p>
+        <p>Jera. La cosecha. El ciclo. La recompensa por un trabajo bien hecho y un equilibrio encontrado.</p>
+        <p>El hilo de las Nornas, que había estado tan peligrosamente enredado, había sido reparado. No era un hilo recto y simple, sino un tejido complejo, trenzado con los hilos de la fuerza, la astucia y el hogar. Era más fuerte que nunca.</p>
+        <p>Y en el silencio de mi cabaña, mientras el mundo se cubría de blanco, sonreí. La canción del universo, por fin, era una de paz.</p>
+        <p><strong>Continuará...</strong></p>`
+  };
+
+  function openChapter(num) {
+    const titleMatch = chapters[num].match(/<strong>Capítulo \d+: ([^<]+)<\/strong>/);
+    const title = titleMatch ? titleMatch[1] : `Capítulo ${num}`;
+    document.getElementById('modal-title').innerText = `Capítulo ${num}: ${title}`;
+    document.getElementById('modal-text').innerHTML = chapters[num];
+    document.getElementById('modal').style.display = 'flex';
+    document.getElementById('chapter-menu').classList.remove('open');
+  }
+
+  function closeModal(e) {
+    if (e && e.target.id !== 'modal') return;
+    document.getElementById('modal').style.display = 'none';
+  }
+
+  function toggleChapterMenu() {
+    document.getElementById('chapter-menu').classList.toggle('open');
+    if (document.getElementById('chapter-menu').classList.contains('open')) {
+      generateChapterList();
+    }
+  }
+
+  function generateChapterList() {
+    const container = document.querySelector('.menu-content');
+    container.innerHTML = '';
+    for (let i = 7; i <= 13; i++) {
+      const item = document.createElement('a');
+      item.href = '#';
+      item.className = 'menu-chapter-item';
+      item.textContent = `Capítulo ${i}`;
+      item.onclick = (e) => {
+        e.preventDefault();
+        openChapter(i);
+      };
+      container.appendChild(item);
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+      document.getElementById('chapter-menu').classList.remove('open');
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('chapter-menu');
+    if (menu.classList.contains('open') && !menu.contains(e.target) && !e.target.closest('.parchment-btn')) {
+      menu.classList.remove('open');
+    }
+  });
+</script>
         </div>
       </section>
     </main>
